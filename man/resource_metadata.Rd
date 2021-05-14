@@ -13,6 +13,7 @@ resource_metadata(
   file_type = NULL,
   date_range_start = NULL,
   date_range_end = NULL,
+  upload = NULL,
   version = NULL,
   `hxl-ated` = NULL,
   process_status = NULL,
@@ -34,6 +35,8 @@ resource_metadata(
 \item{date_range_start}{Data collection first date(*) - Use yyyy-mm-dd format.}
 
 \item{date_range_end}{Data collection last date(*) - Use yyyy-mm-dd format.}
+
+\item{upload}{File to upload. Passed using \code{httr::upload_file()}.}
 
 \item{version}{Version(*).}
 

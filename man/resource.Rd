@@ -3,15 +3,12 @@
 \name{resource}
 \alias{resource}
 \alias{resource_create}
-\alias{resource_upload}
 \alias{resource_update}
 \alias{resource_patch}
 \alias{resource_delete}
 \title{Work with RIDL resources (files)}
 \usage{
 resource_create(pkgid, metadata)
-
-resource_upload(id, path)
 
 resource_update(id, metadata)
 

@@ -125,6 +125,7 @@
   file_type <span class='op'>=</span> <span class='cn'>NULL</span>,
   date_range_start <span class='op'>=</span> <span class='cn'>NULL</span>,
   date_range_end <span class='op'>=</span> <span class='cn'>NULL</span>,
+  upload <span class='op'>=</span> <span class='cn'>NULL</span>,
   version <span class='op'>=</span> <span class='cn'>NULL</span>,
   `hxl-ated` <span class='op'>=</span> <span class='cn'>NULL</span>,
   process_status <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -162,6 +163,10 @@
     <tr>
       <th>date_range_end</th>
       <td><p>Data collection last date(*) - Use yyyy-mm-dd format.</p></td>
+    </tr>
+    <tr>
+      <th>upload</th>
+      <td><p>File to upload. Passed using <code><a href='https://httr.r-lib.org/reference/upload_file.html'>httr::upload_file()</a></code>.</p></td>
     </tr>
     <tr>
       <th>version</th>
