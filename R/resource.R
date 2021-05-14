@@ -7,7 +7,7 @@
 #' Fields marked with a (*) are required for \code{\link{resource_create()}} and \code{\link{resource_update()}} operations.
 #' @param type Resource type(*) - The kind of file you want to upload. Allowed values: `data` (Data file), `attachment` (Additional attachment).
 #' @param url Upload - The file name as it will be recorded in the system.
-#' @param multipart_name Name - eg. January 2011 Gold Prices.
+#' @param name Name - eg. January 2011 Gold Prices.
 #' @param description Description - Some usefule notes about the data.
 #' @param format File format - eg. CSV, XML, or JSON.
 #' @param file_type File type(*) - Indicates what is contained in the file. Allowed values: `microdata` (Microdata), `questionnaire` (Questionnaire), `report` (Report), `sampling_methodology` (Sampling strategy & methodology Description), `infographics` (Infographics & Dashboard), `script` (Script), `concept note` (Concept Note), `other` (Other).
