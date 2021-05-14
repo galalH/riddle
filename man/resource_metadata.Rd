@@ -26,6 +26,8 @@ resource_metadata(
 
 \item{url}{Upload - The file name as it will be recorded in the system.}
 
+\item{name}{Name - eg. January 2011 Gold Prices.}
+
 \item{description}{Description - Some usefule notes about the data.}
 
 \item{format}{File format - eg. CSV, XML, or JSON.}
@@ -45,8 +47,6 @@ resource_metadata(
 \item{identifiability}{Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: \code{personally_identifiable} (Personally identifiable), \code{anonymized_enclave} (Anonymized 1st level: Data Enclave - only removed direct identifiers), \code{anonymized_scientific} (Anonymized 2st level: Scientific Use File (SUF)), \code{anonymized_public} (Anonymized 3st level: Public Use File (PUF)).}
 
 \item{...}{ignored.}
-
-\item{multipart_name}{Name - eg. January 2011 Gold Prices.}
 
 \item{`hxl-ated`}{HXL-ated. Allowed values: \code{False} (No), \code{True} (Yes).}
 }
