@@ -171,7 +171,12 @@ package_delete <- function(id) { ridl("package_delete", id = id) }
 #' @return A tibble with the search results.
 #' @export
 package_search <- function(q = NULL, rows = NULL, start = NULL) {
-  ridl("package_search", !!!(as.list(match.call()[-1])))$results %>%
+  r <- ridl("package_search", !!!(as.list(match.call()[-1])))$results
+
+  if (purrr::is_empty(r))
+    return(tibble())
+
+  r %>%
     dplyr::mutate(dplyr::across(tidyselect::vars_select_helpers$where(is.data.frame),
                                 ~purrr::pmap(., ~tibble::tibble(...)))) %>%
     tibble::as_tibble()
