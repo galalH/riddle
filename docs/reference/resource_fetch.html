@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • riddle</title>
+<title>Fetch resource from RIDL — resource_fetch • riddle</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Fetch resource from RIDL — resource_fetch" />
+<meta property="og:description" content="Fetch resource from RIDL" />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -100,84 +101,37 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Fetch resource from RIDL</h1>
+    
+    <div class="hidden name"><code>resource_fetch.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Fetch resource from RIDL</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>resource_fetch</span><span class='op'>(</span><span class='va'>url</span>, path <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempfile</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="apihelper.html">ridl()</a></code> </p>
-        </td>
-        <td><p>Helper function to make API calls</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="keywords.html">keywords</a></code> </p>
-        </td>
-        <td><p>Package keywords</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="package.html">package_create()</a></code> <code><a href="package.html">package_show()</a></code> <code><a href="package.html">package_update()</a></code> <code><a href="package.html">package_patch()</a></code> <code><a href="package.html">package_delete()</a></code> </p>
-        </td>
-        <td><p>Work with RIDL datasets (packages)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="package_metadata.html">package_metadata()</a></code> </p>
-        </td>
-        <td><p>Convenience function to record package metadata</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="resource.html">resource_create()</a></code> <code><a href="resource.html">resource_update()</a></code> <code><a href="resource.html">resource_patch()</a></code> <code><a href="resource.html">resource_delete()</a></code> </p>
-        </td>
-        <td><p>Work with RIDL resources (files)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="resource_fetch.html">resource_fetch()</a></code> </p>
-        </td>
-        <td><p>Fetch resource from RIDL</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="resource_metadata.html">resource_metadata()</a></code> </p>
-        </td>
-        <td><p>Convenience function to record resource metadata</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="search.html">package_search()</a></code> <code><a href="search.html">resource_search()</a></code> </p>
-        </td>
-        <td><p>Searches for packages and resources satisfying a given criteria.</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>url</th>
+      <td><p>The URL of the resource to fetch</p></td>
+    </tr>
+    <tr>
+      <th>path</th>
+      <td><p>Location to store the resource</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Path to the downloaded file</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

@@ -102,3 +102,17 @@ resource_delete <- function(id) { ridl("resource_delete", id = id) }
 resource_search <- function(query = NULL, rows = NULL, start = NULL) {
   ridl("resource_search", !!!(as.list(match.call()[-1])))$results %>% tibble::as_tibble()
 }
+
+#' Fetch resource from RIDL
+#' @param url The URL of the resource to fetch
+#' @param path Location to store the resource
+#'
+#' @return Path to the downloaded file
+#' @export
+resource_fetch <- function(url, path = tempfile()) {
+  httr::GET(url,
+            httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_KEY")),
+            httr::write_disk(path))
+
+  path
+}
