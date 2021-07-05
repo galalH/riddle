@@ -174,7 +174,7 @@ package_search <- function(q = NULL, rows = NULL, start = NULL) {
   r <- ridl("package_search", !!!(as.list(match.call()[-1])))$results
 
   if (purrr::is_empty(r))
-    return(tibble())
+    return(tibble::tibble())
 
   r %>%
     dplyr::mutate(dplyr::across(tidyselect::vars_select_helpers$where(is.data.frame),
