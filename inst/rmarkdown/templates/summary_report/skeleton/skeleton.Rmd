@@ -1,0 +1,205 @@
+---
+title: "RIDL Factsheet"
+subtitle:  " "  
+date: "`r format(Sys.Date(),  '%d %B %Y')`"
+params:
+  bureau: "The Americas"
+  year: 2021
+output:
+  unhcrdown::paged_simple:
+    back_html: true
+paged-footnotes: true
+links-to-footnotes: true
+classoption: twocolumn
+# uncomment this line to produce HTML and PDF in RStudio:
+#knit: pagedown::chrome_print
+---
+
+```{css, echo=FALSE}
+.col-ruler {
+  column-rule: 2px solid #0072bc;
+  column-gap: 30px;
+}
+
+.center {
+  text-align: center;
+}
+
+
+```
+
+```{r echo = FALSE}
+# `r paste0(params$country, " - ",params$year) `
+knitr::opts_chunk$set(echo = FALSE,
+                      comment = "#>",
+                      message=FALSE, 
+                      warning=FALSE,
+                      fig.width = 6.3,
+                      fig.height = 4.4,
+                      fig.retina = 2,
+                      fig.align = "center",
+                      fig.showtext = TRUE,
+                      dev = "ragg_png",
+                      dpi = 300)
+library(testthat)
+library(ggplot2)
+library(unhcrthemes)
+library(unhcrdatapackage)
+theme_set( unhcrthemes::theme_unhcr())
+
+options(knitr.table.format = "html")  
+library(fontawesome)
+library(tidyverse)
+library(janitor)
+# remotes::install_gitlab("dickoa/ridl")
+library(ridl)
+library(riddle)
+library(popdata)
+
+```
+
+**Data are organisational ASSETS & *RIDL.unhcr.org* is THE strongbox**
+
+
+When your operation is recording and documenting datasets in RIDL, you are:
+
+ * showcasing all your data collection initiative, 
+ 
+ * ensuring proper archiving for yourself and successor, and  
+ 
+ * benefiting from a platform to get statistical analysis support 
+
+
+```{r}
+thisbureau <- params$bureau
+
+### Get the list of countries name, iso3 and unhcr code
+country_name <- filter(popdata::pd_countries,
+                       bureau == thisbureau) |>
+                 pull(nameShort)
+country_name <- make_clean_names(country_name)
+country_name <- str_replace_all(country_name, "\\_", "\\-")
+country_name <- paste0("^", country_name)
+#country_name
+
+iso3_code <- filter(pd_countries,
+                    bureau == thisbureau) |>
+  pull(iso)
+iso3_code <- make_clean_names(iso3_code)
+iso3_code <- str_replace_all(iso3_code, "\\_", "\\-")
+iso3_code <- paste0("^", iso3_code, "-")
+#iso3_code
+
+unhcr_code <- filter(pd_countries,
+                     bureau == thisbureau) |>
+  pull(code)
+unhcr_code <- make_clean_names(unhcr_code)
+unhcr_code <- str_replace_all(unhcr_code, "\\_", "\\-")
+unhcr_code <- paste0("^", unhcr_code, "-")
+#unhcr_code
+```
+
+
+```{r}
+### Get the names of all containers
+cl_nm <- ridl_container_list()
+#cl_nm
+
+## Filter the container name to select the one matching name, iso3 or unhcr code
+cl_nm_amr <- grep(paste0(unique(c(country_name,
+                              iso3_code,
+                              unhcr_code)),
+                     collapse = "|"),
+              cl_nm,
+              value = TRUE)
+#cl_nm_amr
+
+### List all dataset in container with at least on datasets
+ds_nm <- map(cl_nm_amr, function(ct) {
+  ct <- rc_show(ct)
+  if (ct$data$package_count > 0) {
+    rs <- rd_list(container = ct)
+  } else {
+    rs <- NA_character_
+  }
+})
+
+ds_nm <- na.omit(unlist(ds_nm))
+#ds_nm
+
+all <- map_dfr(ds_nm, \(dataset_name) as_tibble(rd_show(dataset_name)))
+#all
+```
+
+
+```{r}
+### Pull RIDLContainer
+cl <- map(cl_nm_amr, ridl_container_show)
+### RIDLContainer to tibble then filter it
+cl_df <- map_dfr(cl, as_tibble)
+cl_df <- cl_df |>
+  filter(num_datasets > 0) |>
+  arrange(desc(num_datasets))
+#cl_df
+```
+
+
+```{r}
+### Pull all the data listed in the container object
+ds_df <- cl_df |>
+  mutate(dataset = map(container, \(ct)
+                       tibble(dataset_title = map_chr(ct$data$packages,
+                                                      \(pkg) pkg$title),
+                              dataset_name = map_chr(ct$data$packages,
+                                                     \(pkg) pkg$name)))) |>
+  unnest(dataset)
+
+ridlsummary <- dplyr::left_join(ds_df , all , by = c( "dataset_name"= "name" ) )
+ridlsummaryframe <- ridlsummary |>
+                           dplyr::select(title.x, name, description,                
+                            visible_external, num_datasets, container_url,              
+                            #container, 
+                            country, geographic_area,            
+                            population, tag_string, sectoral_area,              
+                            dataset_title, dataset_name, title.y,                    
+                            notes, owner_org, private,                    
+                            visibility, external_access_level, original_id,                
+                            data_collector, date_range_start, date_range_end,             
+                            keywords, unit_of_measurement, process_status,             
+                            identifiability, data_collection_technique, geographies,                
+                            archived, sampling_procedure_notes, data_collection_notes,      
+                            clean_ops_notes, dataset_url, num_resources,              
+                            #dataset, 
+                            short_title, url,                        
+                            data_sensitivity, sampling_procedure,
+                            operational_purpose_of_data,
+                            geog_coverage, admin_notes, response_rate_notes,        
+                             weight_notes, data_accs_notes, kobo_asset_id, linked_datasets)
+ 
+#write.csv( as.data.frame(ridlsummaryframe) , here::here("ridlsummary.csv"), row.names = FALSE)
+
+```
+
+
+
+# How many dataset we have per country?
+
+> *RIDL can accommodate any type of data*
+
+
+# Data set collected at household level
+
+# Data set collected at Community level
+
+# Data by Access type
+
+# Data over time
+
+# Data Collection Mode
+
+# Data by Topic
+
+# Data linked to Kobo in RIDL
+
+# By Sampling type 
+

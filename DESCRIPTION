@@ -1,23 +1,33 @@
 Package: riddle
 Title: Minimal Client for the UNHCR RIDL Platform
-Version: 0.0.0.9000
-Authors@R: 
-    person(given = "Hisham",
-           family = "Galal",
-           role = c("aut", "cre"),
-           email = "galal@unhcr.org")
+Version: 0.0.1
+Authors@R: c(
+    person("Hisham", "Galal", , "galalh@unhcr.org", role = c("aut", "cre")),
+    person("Edouard", "Legoupil", , "legoupil@unhcr.org", role = "ctb")
+  )
 Description: Wrapper functions to work with the RIDL API from R
 License: MIT + file LICENSE
+URL: https://galalH.github.io/riddle/
+BugReports: https://github.com/galalH/riddle/issues
+Depends: 
+    R (>= 2.10)
+Imports: 
+    dplyr,
+    glue,
+    httr,
+    magrittr,
+    purrr,
+    rlang,
+    stringr,
+    tibble,
+    tidyselect
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder: 
+    knitr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
-Imports: 
-    purrr,
-    stringr,
-    httr,
-    magrittr,
-    glue,
-    rlang
-Depends: 
-    R (>= 2.10)
+RoxygenNote: 7.2.1

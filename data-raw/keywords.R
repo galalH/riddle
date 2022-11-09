@@ -1,3 +1,5 @@
+
+library(tidyverse)
 keywords <-
   jsonlite::fromJSON("https://raw.githubusercontent.com/okfn/ckanext-unhcr/master/ckanext/unhcr/schemas/dataset.json") %>%
   purrr::pluck("dataset_fields") %>%
@@ -6,3 +8,4 @@ keywords <-
   tibble::deframe()
 
 usethis::use_data(keywords, overwrite = TRUE)
+#sinew::makeOxygen(keywords, add_fields = "source")

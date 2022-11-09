@@ -1,0 +1,621 @@
+---
+title: "ridlle functions"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r development, include=FALSE}
+library(testthat)
+```
+
+```{r development-load}
+# Load already included functions if relevant
+pkgload::load_all(export_all = FALSE)
+```
+
+
+# ridl
+    
+```{r function-ridl}
+#' Helper function to make API calls
+#'
+#' @description
+#'
+#' @name apihelper
+#'
+#' @param action Operation to execute. See [CKAN's API documentation](https://docs.ckan.org/en/2.9/api/) for details.
+#' @param .encoding HTTP POST encoding to use - one of `json`, `form`, or `multipart`.
+#'
+#'
+#' @return `httr::response` object with the result of the call.
+#' @export
+ridl <- function(action, ..., .encoding = "json") {
+  if(Sys.getenv("USE_UAT") == "")
+    baseurl <- "https://ridl.unhcr.org/"
+  else
+    baseurl <- "https://ridl-uat.unhcr.org/"
+
+  r <-
+    httr::POST(baseurl,
+               path = glue::glue("/api/action/{action}"),
+               httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY")),
+               body = rlang::list2(...),
+               encode = .encoding) %>%
+    httr::content(simplifyVector = TRUE)
+
+  if (!r$success)
+    stop(r$error %>%
+           purrr::imap(~glue::glue("{.y}: {.x}")) %>%
+           unlist() %>%
+           stringr::str_c(collapse = "\n"))
+
+  r$result
+}
+```
+  
+```{r example-ridl}
+#ridl()
+```
+  
+```{r tests-ridl}
+test_that("ridl works", {
+  expect_true(inherits(ridl, "function")) 
+})
+```
+
+
+# keywords
+
+
+```{r function-keywords}
+#' dataset keywords
+#'
+#' As extracted from the \href{https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json}{dataset schema}.
+#'
+#' @format A named character vector mapping user-visible labels (the names) to their corresponding codes in the system (the values).
+"keywords"
+
+```
+  
+```{r example-keywords}
+## here is a list of all keywords used for dataset documentation
+knitr::kable(keywords)
+```
+
+
+# dataset_metadata
+
+```{r function-dataset_metadata}
+#' Convenience function to record dataset metadata
+#'
+#' @description
+#'
+#' @details All arguments are of type character. Fields `tag_string`, `data_collector`, `keywords`, `sampling_procedure`, and `operational_purpose_of_data` accept vectors of multiple values.
+#'
+#' Fields marked with a (*) are required for \code{\link{dataset_create()}} and \code{\link{dataset_update()}} operations.
+#'
+#' @param title Title(*) - Make sure to include: 'Survey name/title', 'Location', 'Country', and 'Year(s)' in the order indicated.
+#' @param name URL(*) - The canonical name of the dataset, eg. my-dataset.
+#' @param short_title Short title - eg. Short title for the project.
+#' @param notes Description(*) - Some useful notes about the data. Please include the number of observations.
+#' @param tag_string Tags - eg. economy, mental health, government.
+#' @param url Project URL - Website URL associated with this data project (if applicable).
+#' @param owner_org Data container(*) - Use the canonical name for the container.
+#' @param private Visibility (Private/Public).
+#' @param visibility Internal Access Level(*). Allowed values: `restricted` (Private), `public` (Internally Visible).
+#' @param external_access_level External access level(*). Allowed values: `not_available` (Not available), `direct_access` (Direct access), `public_use` (Public use), `licensed_use` (Licensed use), `data_enclave` (Data enclave), `open_access` (Open access).
+#' @param data_sensitivity Data sensitivity - Apply to both Anonymized and Personally identifiable data. Allowed values: `yes` (Yes), `no` (No).
+#' @param original_id Original ID - If the dataset already has an ID from the source org, DDI, etc...
+#' @param data_collector Data Collector(*) - Which organization owns / collected the data. Multiple values are allowed.
+#' @param date_range_start Date collection first date - Use dd/mm/yyyy format.
+#' @param date_range_end Date collection last date - Use dd/mm/yyyy format.
+#' @param keywords Topic classifications(*) - Tags useful for searching for the datasets. Multiple values are allowed. See \code{\link{keywords}}
+#' @param unit_of_measurement Unit of measurement(*) - Unit of measurement / observation for the dataset.
+#' @param sampling_procedure Sampling Procedure. Multiple values are allowed. Allowed values: `total_universe_complete_enumeration` (Total universe/Complete enumeration), `probability_simple_random` (Probability: Simple random), `probability_systematic_random` (Probability: Systematic random), `probability_stratified` (Probability: Stratified), `probability_stratified_proportional` (Probability: Stratified: Proportional), `probability_stratified_disproportional` (Probability: Stratified: Disproportional), `probability_cluster` (Probability: Cluster), `probability_cluster_simple_random` (Probability: Cluster: Simple random ), `probability_cluster_stratified_random` (Probability: Cluster: Stratified random), `probability_multistage` (Probability: Multistage), `nonprobability` (Non-probability), `nonprobability_availability` (Non-probability: Availability), `nonprobability_purposive` (Non-probability: Purposive), `nonprobability_quota` (Non-probability: Quota), `nonprobability_respondentassisted` (Non-probability: Respondent-assisted), `mixed_probability_nonprobability` (Mixed probability and non-probability), `other_other` (Use if the sampling procedure is known, but not found in the list..).
+#' @param operational_purpose_of_data Operational purpose of data - Classification of the type of data contained in the file. Multiple values are allowed. Allowed values: `participatory_assessments` (Participatory assessments), `baseline_household_survey` (Baseline Household Survey), `rapid_needs_assessment` (Rapid Needs Assessment), `protection_monitoring` (Protection Monitoring), `programme_monitoring` (Programme monitoring), `population_data` (Population Data), `cartography` (Cartography, Infrastructure & GIS).
+#' @param `hxl-ated` HXL-ated.
+#' @param process_status Dataset Process Status. Allowed values: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
+#' @param identifiability Identifiability. Allowd values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3rd level: Public Use File (PUF)).
+#' @param geog_coverage Geographic Coverage - eg. National coverage, or name of the area, etc.
+#' @param data_collection_technique Data collection technique(*). Allowed values: `nf` (Not specified), `f2f` (Face-to-face interview), `capi` (Face-to-face interview: Computerised), `cami` (Face-to-face interview: Mobile), `papi` (Face-to-face interview: Paper-and-pencil), `tri` (Telephone interview), `eri` (E-mail interview), `wri` (Web-based interview: audio-visual technology enabling the interviewer(s) and interviewee(s) to communicate in real time), `easi` (Self-administered questionnaire: E-mail), `pasi` (Self-administered questionnaire: Paper), `sasi` (Self-administered questionnaire: SMS/MMS), `casi` (Self-administered questionnaire: Computer-assisted), `cawi` (Self-administered questionnaire: Web-based), `foc` (Face-to-face focus group), `tfoc` (Telephone focus group), `obs` (Observation), `oth` (Other).
+#' @param linked_datasets Linked Datasets - Links to other RIDL datasets. It supports multiple selections.
+#' @param archived Archived(*) - Allows users to indicate if the dataset is archived or active. Allowed values: `False` (No), `True` (Yes).
+#' @param admin_notes Admin Notes - General. You can use Markdown formatting here.
+#' @param sampling_procedure_notes Admin Notes - Sampling Procedure. You can use Markdown formatting here.
+#' @param response_rate_notes Admin Notes - Response Rate. You can use Markdown formatting here.
+#' @param data_collection_notes Admin Notes - Data Collection. You can use Markdown formatting here.
+#' @param weight_notes Admin Notes - Weighting. You can use Markdown formatting here.
+#' @param clean_ops_notes Admin Notes - Cleaning. You can use Markdown formatting here.
+#' @param data_accs_notes Admin Notes - Access authority. You can use Markdown formatting here.
+#' @param ddi DDI.
+#' @param ... ignored.
+#'
+#' @return A list with the provided metadata.
+#' @export
+dataset_metadata <- function(title = NULL,
+                             name = NULL,
+                             short_title = NULL,
+                             notes = NULL,
+                             tag_string  = NULL,
+                             url = NULL,
+                             owner_org = NULL,
+                             private = NULL,
+                             visibility = NULL,
+                             external_access_level  = NULL,
+                             data_sensitivity = NULL,
+                             original_id = NULL,
+                             data_collector = NULL,
+                             date_range_start = NULL,
+                             date_range_end = NULL,
+                             keywords = NULL,
+                             unit_of_measurement = NULL,
+                             sampling_procedure = NULL,
+                             operational_purpose_of_data = NULL,
+                             `hxl-ated` = NULL,
+                             process_status = NULL,
+                             identifiability = NULL,
+                             geog_coverage = NULL,
+                             data_collection_technique = NULL,
+                             linked_datasets = NULL,
+                             archived = NULL,
+                             admin_notes = NULL,
+                             sampling_procedure_notes = NULL,
+                             response_rate_notes = NULL,
+                             data_collection_notes = NULL,
+                             weight_notes = NULL,
+                             clean_ops_notes = NULL,
+                             data_accs_notes = NULL,
+                             ddi = NULL,
+                             ...) {
+  list(title = title,
+       name = name,
+       short_title = short_title,
+       notes = notes,
+       tag_string = tag_string,
+       url = url,
+       owner_org = owner_org,
+       private = private,
+       visibility = visibility,
+       external_access_level = external_access_level,
+       data_sensitivity = data_sensitivity,
+       original_id = original_id,
+       data_collector = data_collector,
+       date_range_start = date_range_start,
+       date_range_end = date_range_end,
+       keywords = keywords,
+       unit_of_measurement = unit_of_measurement,
+       sampling_procedure = sampling_procedure,
+       operational_purpose_of_data = operational_purpose_of_data,
+       `hxl-ated` = `hxl-ated`,
+       process_status = process_status,
+       identifiability = identifiability,
+       geog_coverage = geog_coverage,
+       data_collection_technique = data_collection_technique,
+       linked_datasets = linked_datasets,
+       archived = archived,
+       admin_notes = admin_notes,
+       sampling_procedure_notes = sampling_procedure_notes,
+       response_rate_notes = response_rate_notes,
+       data_collection_notes = data_collection_notes,
+       weight_notes = weight_notes,
+       clean_ops_notes = clean_ops_notes,
+       data_accs_notes = data_accs_notes,
+       ddi = ddi) %>%
+    purrr::discard(purrr::is_empty)
+}
+
+# Helper function to package API results as a  tibble
+dataset_tibblify <- function(x) {
+  x %>%
+    purrr::modify_if(rlang::is_empty, ~NA) %>%
+    purrr::modify_if(rlang::is_list, tibble::as_tibble) %>%
+    purrr::modify_if(purrr::negate(rlang::is_atomic), list) %>%
+    purrr::modify_if(~rlang::is_atomic(.) & length(.) > 1, list) %>%
+    tibble::as_tibble()
+}
+```
+  
+```{r example-dataset_metadata}
+m <- dataset_metadata(title = "Motor Trend Car Road Tests",
+                      name = "mtcars",
+                      notes = "The data was extracted from the 1974 Motor Trend 
+                      US magazine, and comprises fuel consumption and 10 aspects
+                      of automobile design and performance for 32 automobiles 
+                      (1973–74 models).",
+                      owner_org = "exercise-container",
+                      visibility = "public",
+                      external_access_level = "open_access",
+                      data_collector = "Motor Trend",
+                      keywords = keywords[c("Environment", "Other")],
+                      unit_of_measurement = "car",
+                      data_collection_technique = "oth",
+                      archived = "False")
+m
+
+```
+  
+```{r tests-dataset_metadata}
+test_that("dataset_metadata works", {
+  expect_true(inherits(dataset_metadata, "function")) 
+})
+```
+  
+  
+# dataset
+
+```{r function-dataset}
+#' Work with RIDL datasets (datasets)
+#'
+#' @name dataset
+#' @details You must have the necessary permissions to create, edit, or delete datasets.
+#'
+#' Note that several fields are required for `dataset_create()` and `dataset_update()` operations to succeed. Consult \code{\link{dataset_metadata()}} for the details.
+#'
+#' For `dataset_update()`/`dataset_patch()` operations, it is recommended to call `dataset_show()`, make the desired changes to the result, and then call `dataset_update()`/`dataset_patch()` with it.
+#'
+#' The difference between the update and patch methods is that the patch will perform an update of the provided parameters, while leaving all other parameters unchanged, whereas the update methods deletes all parameters not explicitly provided in the `metadata`.
+#'
+#' @param metadata Metadata created by \code{\link{dataset_metadata()}}.
+#' @param id The id or name of the dataset.
+#'
+#' @return The dataset.
+#' @export
+dataset_create <- function(metadata) { ridl("package_create", !!!metadata) %>% dataset_tibblify() }
+
+#' @rdname dataset
+#' @export
+dataset_show <- function(id) { ridl("package_show", id = id) %>% dataset_tibblify() }
+
+#' @rdname dataset
+#' @export
+dataset_update <- function(id, metadata) { ridl("package_update", id = id, !!!metadata) %>% dataset_tibblify() }
+
+#' @rdname dataset
+#' @export
+dataset_patch <- function(id, metadata) { ridl("package_patch", id = id, !!!metadata) %>% dataset_tibblify() }
+
+#' @rdname dataset
+#' @export
+dataset_delete <- function(id) { ridl("package_delete", id = id) }
+```
+  
+```{r example-dataset}
+
+library(riddle)
+Sys.setenv(USE_UAT=1)
+m <- dataset_metadata(title = "Motor Trend Car Road Tests",
+                      name = "mtcars",
+                      notes = "The data was extracted from the 1974 Motor Trend 
+                      US magazine, and comprises fuel consumption and 10 aspects
+                      of automobile design and performance for 32 automobiles 
+                      (1973–74 models).",
+                      owner_org = "exercise-container",
+                      visibility = "public",
+                      external_access_level = "open_access",
+                      data_collector = "Motor Trend",
+                      keywords = keywords[c("Environment", "Other")],
+                      unit_of_measurement = "car",
+                      data_collection_technique = "oth",
+                      archived = "False")
+## For the above to work - you need to make sure you have at least editor access
+# to the corresponding container - i.e. owner_org = "exercise-container"
+p <- dataset_create(m)
+# The return value is a representation of the dataset we just created in
+# RIDL that you could inspect like any other R object.
+p
+
+```
+  
+```{r tests-dataset}
+test_that("dataset works", {
+  expect_true(inherits(dataset, "function")) 
+})
+```
+
+  
+# dataset_search
+    
+```{r function-dataset_search}
+#' Searches for datasets and resources satisfying a given criteria.
+#'
+#' @name search
+#'
+#' @param q,query The search query.
+#' @param rows The maximum number of matching rows (datasets) to return. (optional, default: 10, upper limit: 1000)
+#' @param start The offset in the complete result for where the set of returned datasets should begin.
+#'
+#' @return A tibble with the search results.
+#' @export
+dataset_search <- function(q = NULL, rows = NULL, start = NULL) {
+  r <- ridl("package_search", !!!(as.list(match.call()[-1])))$results
+
+  if (purrr::is_empty(r))
+    return(tibble::tibble())
+
+  r %>%
+    dplyr::mutate(dplyr::across(tidyselect::vars_select_helpers$where(is.data.frame),
+                                ~purrr::pmap(., ~tibble::tibble(...)))) %>%
+    tibble::as_tibble()
+}
+
+```
+  
+```{r example-dataset_search}
+p <- dataset_search("tests")
+p
+p$id
+```
+  
+```{r tests-dataset_search}
+test_that("search works", {
+  expect_true(inherits(dataset_search, "function")) 
+})
+```
+  
+# resource_metadata
+
+```{r function-resource_metadata}
+#' Convenience function to record resource metadata
+#'
+#' @description
+#'
+#' @details All arguments are of type character.
+#'
+#' Fields marked with a (*) are required for \code{\link{resource_create()}} and \code{\link{resource_update()}} operations.
+#' @param type Resource type(*) - The kind of file you want to upload. Allowed values: `data` (Data file), `attachment` (Additional attachment).
+#' @param url Upload - The file name as it will be recorded in the system.
+#' @param name Name - eg. January 2011 Gold Prices.
+#' @param description Description - Some usefule notes about the data.
+#' @param format File format - eg. CSV, XML, or JSON.
+#' @param file_type File type(*) - Indicates what is contained in the file. Allowed values: `microdata` (Microdata), `questionnaire` (Questionnaire), `report` (Report), `sampling_methodology` (Sampling strategy & methodology Description), `infographics` (Infographics & Dashboard), `script` (Script), `concept note` (Concept Note), `other` (Other).
+#' @param date_range_start Data collection first date(*) - Use yyyy-mm-dd format.
+#' @param date_range_end Data collection last date(*) - Use yyyy-mm-dd format.
+#' @param upload File to upload. Passed using `httr::upload_file()`.
+#' @param visibility should be either
+#' @param version Version(*).
+#' @param `hxl-ated` HXL-ated. Allowed values: `False` (No), `True` (Yes).
+#' @param process_status File process status(*) - Indicates the processing stage of the data. 'Raw' means that the data has not been cleaned since collection. 'In process' means that it is being cleaned. 'Final' means that the dataset is final and ready for use in analytical products. Allowed valued: `raw` (Raw-Uncleaned), `cleaned` (Cleaned Only), `anonymized` (Cleaned & Anonymized).
+#' @param identifiability Identifiability(*) - Indicates if personally identifiable data is contained in the dataset. Allowed values: `personally_identifiable` (Personally identifiable), `anonymized_enclave` (Anonymized 1st level: Data Enclave - only removed direct identifiers), `anonymized_scientific` (Anonymized 2st level: Scientific Use File (SUF)), `anonymized_public` (Anonymized 3st level: Public Use File (PUF)).
+#' @param ... ignored.
+#'
+#' @return A list with the provided metadata.
+#' @export
+resource_metadata <- function(type = NULL,
+                              url = NULL,
+                              name = NULL,
+                              description = NULL,
+                              format = NULL,
+                              file_type = NULL,
+                              date_range_start = NULL,
+                              date_range_end = NULL,
+                              upload = NULL,
+                              visibility = NULL,
+                              version = NULL,
+                              `hxl-ated` = NULL,
+                              process_status = NULL,
+                              identifiability = NULL,
+                              ...) {
+  list(type = type,
+       url = url,
+       name = name,
+       description = description,
+       format = format,
+       file_type = file_type,
+       date_range_start = date_range_start,
+       date_range_end = date_range_end,
+       upload = upload,
+       visibility = visibility,
+       version = version,
+       `hxl-ated` = `hxl-ated`,
+       process_status = process_status,
+       identifiability = identifiability) %>%
+    purrr::discard(purrr::is_empty)
+}
+
+# Helper function to package API results as a  tibble
+resource_tibblify <- function(x) {
+  x %>% purrr::modify_if(rlang::is_empty, ~NA) %>% tibble::as_tibble()
+}
+```
+  
+```{r example-resource_metadata}
+#resource_metadata()
+m <- resource_metadata(type = "data",
+                       url = "mtcars.csv",
+                       name = "mtcars.csv",
+                       format = "csv",
+                       file_type = "microdata",
+                       date_range_start = "1973-01-01",
+                       date_range_end = "1973-12-31",
+                       version = "1",
+                       visibility = "public",
+                       process_status = "raw",
+                       identifiability = "anonymized_public")
+m
+```
+  
+```{r tests-resource_metadata}
+test_that("resource_metadata works", {
+  expect_true(inherits(resource_metadata, "function")) 
+})
+```
+
+# ressource
+
+```{r function-ressource}
+#' Work with RIDL resources (files)
+#'
+#' @name resource
+#' @details You must have the necessary permissions to create, edit, or delete datasets and their resources.
+#'
+#' Note that several fields are required for `resource_create()` and `resource_update()` operations to succeed. Consult \code{\link{resource_metadata()}} for the details.
+#'
+#' For `resource_update()`/`resource_patch()` operations, it is recommended to call `resource_show()`, make the desired changes to the result, and then call `resource_update()`/`resource_patch()` with it.
+#'
+#' The difference between the update and patch methods is that the patch will perform an update of the provided parameters, while leaving all other parameters unchanged, whereas the update methods deletes all parameters not explicitly provided in the `metadata`.
+#'
+#' @param metadata Metadata created by \code{\link{resource_metadata()}}.
+#' @param id The id or name of the resource.
+#' @param pkgid The id or name of the dataset to which this resource belongs to.
+#'
+#' @return The resource.
+#' @export
+resource_create <- function(pkgid, metadata) {
+  enc <- if(is.null(metadata$upload)) "json" else "multipart"
+  ridl("resource_create", dataset_id = pkgid, !!!metadata, .encoding = enc) %>% resource_tibblify()
+}
+
+#' @rdname resource
+#' @export
+resource_update <- function(id, metadata) {
+  enc <- if(is.null(metadata$upload)) "json" else "multipart"
+  ridl("resource_update", id = id, !!!metadata, .encoding = enc) %>% resource_tibblify()
+}
+
+#' @rdname resource
+#' @export
+resource_patch <- function(id, metadata) {
+  enc <- if(is.null(metadata$upload)) "json" else "multipart"
+  ridl("resource_patch", id = id, !!!metadata, .encoding = enc) %>% resource_tibblify()
+}
+
+#' @rdname resource
+#' @export
+resource_delete <- function(id) { ridl("resource_delete", id = id) }
+
+#' @rdname search
+#' @export
+resource_search <- function(query = NULL, rows = NULL, start = NULL) {
+  ridl("resource_search", !!!(as.list(match.call()[-1])))$results %>% tibble::as_tibble()
+}
+
+#' Fetch resource from RIDL
+#' @param url The URL of the resource to fetch
+#' @param path Location to store the resource
+#'
+#' @return Path to the downloaded file
+#' @export
+resource_fetch <- function(url, path = tempfile()) {
+  httr::GET(url,
+            httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_KEY")),
+            httr::write_disk(path))
+
+  path
+}
+
+```
+  
+```{r example-ressource}
+library(riddle)
+Sys.setenv(USE_UAT=1)
+## let's get again the details of the dataset we want to add the resource in..
+p <- dataset_search("tests")
+m <- resource_metadata(type = "data",
+                       url = "mtcars.csv",
+                       name = "mtcars.csv",
+                       format = "csv",
+                       file_type = "microdata",
+                       date_range_start = "1973-01-01",
+                       date_range_end = "1973-12-31",
+                       version = "1",
+                       visibility = "public",
+                       process_status = "raw",
+                       identifiability = "anonymized_public")
+## let's get again the details of the dataset we want to add the resource in..
+r <- resource_create(p$id, m)
+# Like before, the return value is a tibble representation of the
+# resource.
+
+r
+
+# But so far we’ve only created the metadata for the resource. The next
+# step is to upload the data.
+resource_upload(r$id, path = system.file("extdata/mtcars.csv", package = "readr"))
+## and now can search for it - checking it is correctly there... 
+resource_search("name:mtcars")
+
+# And once we’re done experimenting with the API, we should take down our
+# toy dataset since we don’t really need it on RIDL.
+dataset_delete(p$id)
+
+```
+  
+```{r tests-ressource}
+test_that("ressource works", {
+  expect_true(inherits(ressource, "function")) 
+})
+```
+
+
+# summary_report
+    
+```{r function-summary_report}
+
+
+# usethis::use_rmarkdown_template(
+#   template_name = "Summary_Report",
+#   template_dir = NULL,
+#   template_description = "Summary information of RIDL Dataset",
+#   template_create_dir = TRUE
+# )
+
+#' Generate a RIDL factsheet 
+#' 
+#' @param year Numeric value of the year (for instance 2020)
+#' @param container list of container to generate the factsheet to generate
+#' @importFrom unhcrdown paged_simple
+#' 
+#' @export
+#'
+
+summary_report <- function(year = 2022,
+                                   region = "Americas") {
+  
+  #  ctr <- dplyr::left_join( x= unhcrdatapackage::end_year_population_totals_long, 
+  #                               y= unhcrdatapackage::reference, 
+  #                               by = c("CountryAsylumCode" = "iso_3")) %>%
+  #       filter(Year == year & 
+  #                UNHCRBureau == region ) %>%
+  #       group_by( CountryAsylumName, CountryAsylumCode   ) %>%
+  #       summarise(Value = sum(Value) ) %>%
+  #       ungroup() %>%
+  #       filter( Value  > 1000 )
+  # 
+  # for ( i in (1:nrow(ctr))) {
+  #   ctrname = ctr[i ,1 ]
+  #   ctrcode = ctr[i ,2 ]
+  # 
+  # rmarkdown::render(
+  #   system.file("rmarkdown/templates/summary_report/skeleton/skeleton.Rmd", package = "riddle"),
+  #   output_file = here::here(paste0('StatFactsheet-', ctrcode, '-', year, '.html') ),
+  #   params = list(countryname= ctrname,
+  #                 country =ctrcode, 
+  #                 year = year)  )
+  # 
+  # }
+   
+}
+
+
+```
+  
+```{r example-summary_report}
+# summary_report(year = 2022,
+#                                    region = "Americas")
+```
+  
+```{r tests-summary_report}
+test_that("summary_report works", {
+  expect_true(inherits(summary_report, "function")) 
+})
+```
+      
+
+
+```{r development-inflate, eval=FALSE}
+# Run but keep eval=FALSE to avoid infinite loop
+# Execute in the console directly
+fusen::inflate(flat_file = "dev/ridlle_dev.Rmd", vignette_name = "Package Functions")
+```
+

@@ -16,5 +16,8 @@ ridl(action, ..., .encoding = "json")
 \code{httr::response} object with the result of the call.
 }
 \description{
-
+Helper function to make API calls
+}
+\examples{
+#ridl()
 }

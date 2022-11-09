@@ -17,7 +17,7 @@ resource_patch(id, metadata)
 resource_delete(id)
 }
 \arguments{
-\item{pkgid}{The id or name of the package to which this resource belongs to.}
+\item{pkgid}{The id or name of the dataset to which this resource belongs to.}
 
 \item{metadata}{Metadata created by \code{\link{resource_metadata()}}.}
 
@@ -30,11 +30,53 @@ The resource.
 Work with RIDL resources (files)
 }
 \details{
-You must have the necessary permissions to create, edit, or delete packages and their resources.
+You must have the necessary permissions to create, edit, or delete datasets and their resources.
 
 Note that several fields are required for \code{resource_create()} and \code{resource_update()} operations to succeed. Consult \code{\link{resource_metadata()}} for the details.
 
 For \code{resource_update()}/\code{resource_patch()} operations, it is recommended to call \code{resource_show()}, make the desired changes to the result, and then call \code{resource_update()}/\code{resource_patch()} with it.
 
 The difference between the update and patch methods is that the patch will perform an update of the provided parameters, while leaving all other parameters unchanged, whereas the update methods deletes all parameters not explicitly provided in the \code{metadata}.
+}
+\examples{
+library(riddle)
+Sys.setenv(USE_UAT=1)
+m <- dataset_metadata(title = "Motor Trend Car Road Tests",
+                      name = "mtcars",
+                      notes = "The data was extracted from the 1974 Motor Trend 
+                      US magazine, and comprises fuel consumption and 10 aspects
+                      of automobile design and performance for 32 automobiles 
+                      (1973–74 models).",
+                      owner_org = "exercise-container",
+                      visibility = "public",
+                      external_access_level = "open_access",
+                      data_collector = "Motor Trend",
+                      keywords = keywords[c("Environment", "Other")],
+                      unit_of_measurement = "car",
+                      data_collection_technique = "oth",
+                      archived = "False")
+
+p <- dataset_create(m)
+m <- resource_metadata(type = "data",
+                       url = "mtcars.csv",
+                       name = "mtcars.csv",
+                       format = "csv",
+                       file_type = "microdata",
+                       date_range_start = "1973-01-01",
+                       date_range_end = "1973-12-31",
+                       version = "1",
+                       process_status = "raw",
+                       identifiability = "anonymized_public")
+r <- resource_create(p$id, m)
+# Like before, the return value is a tibble representation of the
+# resource.
+
+r
+
+# But so far we’ve only created the metadata for the resource. The next
+# step is to upload the data.
+resource_upload(r$id, path = system.file("extdata/mtcars.csv", package = "readr"))
+
+resource_search("name:mtcars")
+
 }
