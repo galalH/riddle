@@ -69,14 +69,14 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="riddle">riddle<a class="anchor" aria-label="anchor" href="#riddle"></a>
+<div class="page-header"><h1 id="warning-this-package-is-under-development---a-recent-api-update-requires-code-update--">
+<strong>WARNING</strong> This package is under development - a recent API update requires code update -<a class="anchor" aria-label="anchor" href="#warning-this-package-is-under-development---a-recent-api-update-requires-code-update--"></a>
 </h1></div>
-<p>This is a minimal package for programatically interacting with the <a href="https://ridl.unhcr.org" class="external-link">UNHCR Raw Internal Data Library (RIDL)</a>. The main purpose served by this package is to make the RIDL API documentation more readily accessible within an R ecosystem for better automation.</p>
 </div>
 <div class="section level1">
-<h1 id="warning-this-package-is-under-development---a-recent-api-update-requires-code-update--">
-<strong>WARNING</strong> This package is under development - a recent API update requires code update -<a class="anchor" aria-label="anchor" href="#warning-this-package-is-under-development---a-recent-api-update-requires-code-update--"></a>
+<h1 id="riddle">riddle<a class="anchor" aria-label="anchor" href="#riddle"></a>
 </h1>
+<p>This is a minimal package for programatically interacting with the <a href="https://ridl.unhcr.org" class="external-link">UNHCR Raw Internal Data Library (RIDL)</a>. The main purpose served by this package is to make the RIDL API documentation more readily accessible within an R ecosystem for better automation.</p>
 <div class="section level2">
 <h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
 </h2>
@@ -120,9 +120,10 @@
 <div class="section level2">
 <h2 id="use-case">Use case<a class="anchor" aria-label="anchor" href="#use-case"></a>
 </h2>
-<p>The package is supporting specific use cases where automation can save time. For instance:</p>
+<p>The package is supporting 2 specific use cases where automation can save time, i.e. <strong>attaching either <code>data</code> or <code>ressource</code></strong>.</p>
+<p>For instance:</p>
 <ol style="list-style-type: decimal">
-<li><p>Ideally, data resources from kobotoolbox should be added using the API connection as described in <a href="https://im.unhcr.org/ridl" class="external-link">Part 4 of the documentation</a>. There might be cases where you are building an operational dataset, scrapping an official data source from the web or within a PDF and want to add this on a regular basis as a new <code>data</code> resource within an existing dataset. You can check a practical example of such use case here:<a href="https://github.com/unhcr-americas/darien_gap_human_mobility/tree/main/R" class="external-link">darien_gap_human_mobility</a></p></li>
+<li><p>Ideally, data resources from kobotoolbox should be added using the API connection as described in <a href="https://im.unhcr.org/ridl/#Link_kobo_ridl" class="external-link">Part 4 of the documentation</a>. Though, there might be specific cases where you are building an operational dataset, scrapping an official data source from the web or within a PDF and want to add this on a regular basis as a new <code>data</code> resource within an existing dataset. You can check a practical example of such use case here:<a href="https://github.com/unhcr-americas/darien_gap_human_mobility/tree/main/R" class="external-link">darien_gap_human_mobility</a></p></li>
 <li><p>You want to add your own initial data exploration, data interpretation presentation and/or data story telling report as a new <code>attachement</code> resource within a dataset. You can check a practical example of such use case here:<a href="https://edouard-legoupil.github.io/kobocruncher/" class="external-link">kobocruncher</a></p></li>
 </ol>
 </div>

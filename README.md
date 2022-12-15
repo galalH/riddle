@@ -1,3 +1,9 @@
+
+
+# __WARNING__ This package is under development - a recent API update requires code update - 
+
+
+
 riddle
 ================
 
@@ -7,8 +13,6 @@ The main purpose served by this package is to make the RIDL API
 documentation more readily accessible within an R ecosystem for better automation.
 
 
-
-# __WARNING__ This package is under development - a recent API update requires code update - 
 
 ## Install
 
@@ -80,10 +84,12 @@ https://ridl.unhcr.org/dataset/`__name_of_dataset__`/resource/`__id_of_the_resso
 
 ## Use case
 
-The package is supporting specific use cases where automation can save time. For instance:
+The package is supporting 2 specific use cases where automation can save time, i.e. __attaching either `data` or `ressource`__. 
+
+For instance:
 
   1. Ideally, data resources from kobotoolbox should be added using the API connection as described in 
-[Part 4 of the documentation](https://im.unhcr.org/ridl). There might be cases where you
+[Part 4 of the documentation](https://im.unhcr.org/ridl/#Link_kobo_ridl). Though, there might be specific cases where you
 are building an operational dataset, scrapping an official data source from the web or 
   within a PDF and want to add this on a regular basis as a new `data` resource 
   within an existing dataset.   You can check a practical example of such use case here:[darien_gap_human_mobility](https://github.com/unhcr-americas/darien_gap_human_mobility/tree/main/R)
