@@ -57,7 +57,7 @@ resource_metadata(
 A list with the provided metadata.
 }
 \description{
-Convenience function to record resource metadata
+This functions create the resource metadata
 }
 \details{
 All arguments are of type character.
@@ -74,6 +74,7 @@ m <- resource_metadata(type = "data",
                        date_range_start = "1973-01-01",
                        date_range_end = "1973-12-31",
                        version = "1",
+                       visibility = "public",
                        process_status = "raw",
                        identifiability = "anonymized_public")
 m

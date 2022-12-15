@@ -40,27 +40,39 @@ For \code{dataset_update()}/\code{dataset_patch()} operations, it is recommended
 The difference between the update and patch methods is that the patch will perform an update of the provided parameters, while leaving all other parameters unchanged, whereas the update methods deletes all parameters not explicitly provided in the \code{metadata}.
 }
 \examples{
-#dataset()
+
 library(riddle)
 Sys.setenv(USE_UAT=1)
-m <- dataset_metadata(title = "Motor Trend Car Road Tests",
-                      name = "mtcars",
-                      notes = "The data was extracted from the 1974 Motor Trend 
-                      US magazine, and comprises fuel consumption and 10 aspects
-                      of automobile design and performance for 32 automobiles 
-                      (1973–74 models).",
-                      owner_org = "exercise-container",
-                      visibility = "public",
-                      external_access_level = "open_access",
-                      data_collector = "Motor Trend",
-                      keywords = keywords[c("Environment", "Other")],
-                      unit_of_measurement = "car",
-                      data_collection_technique = "oth",
-                      archived = "False")
+#Sys.unsetenv("USE_UAT")
 
-p <- dataset_create(m)
+### TO FIX -- geographies: Missing value
+## __type: Validation Error ---
+## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682
+
+# m <- dataset_metadata(title = "Motor Trend Car Road Test two",
+#                       name = "mtcars",
+#                       notes = "The data was extracted from the 1974 Motor Trend
+#                       US magazine, and comprises fuel consumption and 10 aspects
+#                       of automobile design and performance for 32 automobiles
+#                       (1973–74 models).",
+#                       owner_org = "exercise-container",
+#                       visibility = "public",
+#                       geographies = "UNSPECIFIED",
+#                       external_access_level = "open_access",
+#                       data_collector = "Motor Trend",
+#                       keywords = keywords[c("Environment", "Other")],
+#                       unit_of_measurement = "car",
+#                       data_collection_technique = "oth",
+#                       archived = "False")
+# ## For the above to work - you need to make sure you have at least editor access
+# # to the corresponding container - i.e. owner_org = "exercise-container"
+# p <- dataset_create(m)
 # The return value is a representation of the dataset we just created in
 # RIDL that you could inspect like any other R object.
-p
+#p
+
+
+
+#dataset_show("unhcr-cbi-americas-quarterly-report")
 
 }

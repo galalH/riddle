@@ -2,7 +2,8 @@
 
 #' Convenience function to record resource metadata
 #'
-#' @description
+#' @description This functions create the resource metadata
+#' 
 #'
 #' @details All arguments are of type character.
 #'
@@ -35,6 +36,7 @@
 #'                        date_range_start = "1973-01-01",
 #'                        date_range_end = "1973-12-31",
 #'                        version = "1",
+#'                        visibility = "public",
 #'                        process_status = "raw",
 #'                        identifiability = "anonymized_public")
 #' m

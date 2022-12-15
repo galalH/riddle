@@ -3,14 +3,17 @@ riddle
 
 This is a minimal package for programatically interacting with the
 [UNHCR Raw Internal Data Library (RIDL)](https://ridl.unhcr.org). 
-The main
-purpose served by this package is to make the RIDL API
-documentation more readily accessible within an R ecosystem.
+The main purpose served by this package is to make the RIDL API
+documentation more readily accessible within an R ecosystem for better automation.
+
+
+
+# __WARNING__ This package is under development - a recent API update requires code update - 
 
 ## Install
 
 ``` r
-remotes::install_github("galalH/riddle") 
+remotes::install_github("edouard-legoupil/riddle") 
 ```
 
 The `riddle` package requires you to add your API key and store it for further use. 
@@ -59,7 +62,7 @@ data files and use them.
 
 
 Datasets URL are typically  formatted as:
-https://ridl.unhcr.org/dataset//`__name_of_dataset__`
+https://ridl.unhcr.org/dataset/`__name_of_dataset__`
 
 Data files, e.g an Excel file, as well as any supporting documentation are called
 `resource` and are shared as either `data` or `attachment`  within a specific
@@ -75,26 +78,27 @@ the metata from the project itself.
 Resources URL are typically  formatted as:
 https://ridl.unhcr.org/dataset/`__name_of_dataset__`/resource/`__id_of_the_ressource__`
 
-## How to - Use case
+## Use case
 
-The package is supporting the logic above.
+The package is supporting specific use cases where automation can save time. For instance:
+
+  1. Ideally, data resources from kobotoolbox should be added using the API connection as described in 
+[Part 4 of the documentation](https://im.unhcr.org/ridl). There might be cases where you
+are building an operational dataset, scrapping an official data source from the web or 
+  within a PDF and want to add this on a regular basis as a new `data` resource 
+  within an existing dataset.   You can check a practical example of such use case here:[darien_gap_human_mobility](https://github.com/unhcr-americas/darien_gap_human_mobility/tree/main/R)
+  
+  2. You want to add your own initial data exploration, data interpretation 
+  presentation and/or data story telling report as a new `attachement` resource within a dataset. 
+  You can check a practical example of such use case here:[kobocruncher](https://edouard-legoupil.github.io/kobocruncher/)
+
+## How to 
 
 As a UNHCR staff, you should have access to a series of containers based on where you are working.
-Within each container, if you have editor or admin right, you can create a dataset.
-
+Within each container, if you have editor or admin right, you can create a dataset. 
 To create a dataset, you need first to document the dataset metadata, including the 
 reference to the container where you would like the new dataset to be created.
-
 Once the dataset is created, you can add as many resources as required (either `data` or `attachment`). 
-
-Ideally, data resources from kobotoolbox should be added using the API connection as described in 
-[Part 4 of the documentation](https://im.unhcr.org/ridl). 
-
-There might be use case, where a data resource could be created from the scrapping of a PDF document, see this example.
-
-The interesting part can to use package to conveniently publish your data crunching report, notebook and analysis plan as demonstrated in 
-[kobocruncher]().
-
 
 Below is simple example using the `mtcars` dataset as an example..
 
@@ -156,5 +160,7 @@ resource_search("name:mtcars")
 # And once we’re done experimenting with the API, we should take down our
 # toy dataset since we don’t really need it on RIDL.
 dataset_delete(p$id)
+# Get back to Prod Environment
+Sys.unsetenv("USE_UAT")
 
 ```

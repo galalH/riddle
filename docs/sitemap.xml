@@ -10,6 +10,12 @@
     <loc>/LICENSE.html</loc>
   </url>
   <url>
+    <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/package-functions.html</loc>
+  </url>
+  <url>
     <loc>/authors.html</loc>
   </url>
   <url>
@@ -22,6 +28,12 @@
     <loc>/reference/apihelper.html</loc>
   </url>
   <url>
+    <loc>/reference/dataset.html</loc>
+  </url>
+  <url>
+    <loc>/reference/dataset_metadata.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
@@ -32,6 +44,9 @@
   </url>
   <url>
     <loc>/reference/package_metadata.html</loc>
+  </url>
+  <url>
+    <loc>/reference/pipe.html</loc>
   </url>
   <url>
     <loc>/reference/resource.html</loc>
@@ -47,5 +62,8 @@
   </url>
   <url>
     <loc>/reference/search.html</loc>
+  </url>
+  <url>
+    <loc>/reference/summary_report.html</loc>
   </url>
 </urlset>

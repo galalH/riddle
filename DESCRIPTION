@@ -3,7 +3,7 @@ Title: Minimal Client for the UNHCR RIDL Platform
 Version: 0.0.1
 Authors@R: c(
     person("Hisham", "Galal", , "galalh@unhcr.org", role = c("aut", "cre")),
-    person("Edouard", "Legoupil", , "legoupil@unhcr.org", role = "ctb")
+    person("Edouard", "Legoupil", , "legoupil@unhcr.org", role = "aut")
   )
 Description: Wrapper functions to work with the RIDL API from R
 License: MIT + file LICENSE
@@ -20,7 +20,8 @@ Imports:
     rlang,
     stringr,
     tibble,
-    tidyselect
+    tidyselect,
+    unhcrdown
 Suggests: 
     knitr,
     rmarkdown,
@@ -30,4 +31,4 @@ VignetteBuilder:
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.2

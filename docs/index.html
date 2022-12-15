@@ -9,8 +9,8 @@
 <title>Minimal Client for the UNHCR RIDL Platform • riddle</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="deps/Lato-0.4.2/font.css" rel="stylesheet">
-<link href="deps/Source_Code_Pro-0.4.2/font.css" rel="stylesheet">
+<script src="deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="deps/Lato-0.4.4/font.css" rel="stylesheet">
+<link href="deps/Source_Code_Pro-0.4.4/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Minimal Client for the UNHCR RIDL Platform">
@@ -71,12 +71,17 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="riddle">riddle<a class="anchor" aria-label="anchor" href="#riddle"></a>
 </h1></div>
-<p>This is a minimal package for programatically interacting with the <a href="https://ridl.unhcr.org" class="external-link">UNHCR Raw Internal Data Library (RIDL)</a>. The main purpose served by this package is to make the RIDL API documentation more readily accessible within an R ecosystem.</p>
+<p>This is a minimal package for programatically interacting with the <a href="https://ridl.unhcr.org" class="external-link">UNHCR Raw Internal Data Library (RIDL)</a>. The main purpose served by this package is to make the RIDL API documentation more readily accessible within an R ecosystem for better automation.</p>
+</div>
+<div class="section level1">
+<h1 id="warning-this-package-is-under-development---a-recent-api-update-requires-code-update--">
+<strong>WARNING</strong> This package is under development - a recent API update requires code update -<a class="anchor" aria-label="anchor" href="#warning-this-package-is-under-development---a-recent-api-update-requires-code-update--"></a>
+</h1>
 <div class="section level2">
 <h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"galalH/riddle"</span><span class="op">)</span> </span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"edouard-legoupil/riddle"</span><span class="op">)</span> </span></code></pre></div>
 <p>The <code>riddle</code> package requires you to add your API key and store it for further use. The easiest way to do that is to store your API key in your <code>.Renviron</code> file which is automatically read by R on startup.</p>
 <p>You can retrieve your <code>API key</code> in your <a href="https://ridl.unhcr.org/user/" class="external-link">user page</a>.</p>
 <div class="figure">
@@ -101,7 +106,7 @@
 <code>Dataset</code><a class="anchor" aria-label="anchor" href="#dataset"></a>
 </h3>
 <p>A <code>dataset</code> is a placeholder where we can share a serie of data files (<code>resources</code>) linked to a data collection project. In a dataset page there’s some metadata (using the <a href="https://ddialliance.org/" class="external-link">data documentation initiative (DDI) format</a>) that give you enough context on the project and information to properly store the data files and use them.</p>
-<p>Datasets URL are typically formatted as: <a href="https://ridl.unhcr.org/dataset//%60__name_of_dataset__" class="external-link uri">https://ridl.unhcr.org/dataset//`__name_of_dataset__</a>`</p>
+<p>Datasets URL are typically formatted as: <a href="https://ridl.unhcr.org/dataset/%60__name_of_dataset__" class="external-link uri">https://ridl.unhcr.org/dataset/`__name_of_dataset__</a>`</p>
 <p>Data files, e.g an Excel file, as well as any supporting documentation are called <code>resource</code> and are shared as either <code>data</code> or <code>attachment</code> within a specific <code>dataset</code> page.</p>
 </div>
 <div class="section level3">
@@ -113,15 +118,18 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="how-to---use-case">How to - Use case<a class="anchor" aria-label="anchor" href="#how-to---use-case"></a>
+<h2 id="use-case">Use case<a class="anchor" aria-label="anchor" href="#use-case"></a>
 </h2>
-<p>The package is supporting the logic above.</p>
-<p>As a UNHCR staff, you should have access to a series of containers based on where you are working. Within each container, if you have editor or admin right, you can create a dataset.</p>
-<p>To create a dataset, you need first to document the dataset metadata, including the reference to the container where you would like the new dataset to be created.</p>
-<p>Once the dataset is created, you can add as many resources as required (either <code>data</code> or <code>attachment</code>).</p>
-<p>Ideally, data resources from kobotoolbox should be added using the API connection as described in <a href="https://im.unhcr.org/ridl" class="external-link">Part 4 of the documentation</a>.</p>
-<p>There might be use case, where a data resource could be created from the scrapping of a PDF document, see this example.</p>
-<p>The interesting part can to use package to conveniently publish your data crunching report, notebook and analysis plan as demonstrated in <a href="">kobocruncher</a>.</p>
+<p>The package is supporting specific use cases where automation can save time. For instance:</p>
+<ol style="list-style-type: decimal">
+<li><p>Ideally, data resources from kobotoolbox should be added using the API connection as described in <a href="https://im.unhcr.org/ridl" class="external-link">Part 4 of the documentation</a>. There might be cases where you are building an operational dataset, scrapping an official data source from the web or within a PDF and want to add this on a regular basis as a new <code>data</code> resource within an existing dataset. You can check a practical example of such use case here:<a href="https://github.com/unhcr-americas/darien_gap_human_mobility/tree/main/R" class="external-link">darien_gap_human_mobility</a></p></li>
+<li><p>You want to add your own initial data exploration, data interpretation presentation and/or data story telling report as a new <code>attachement</code> resource within a dataset. You can check a practical example of such use case here:<a href="https://edouard-legoupil.github.io/kobocruncher/" class="external-link">kobocruncher</a></p></li>
+</ol>
+</div>
+<div class="section level2">
+<h2 id="how-to">How to<a class="anchor" aria-label="anchor" href="#how-to"></a>
+</h2>
+<p>As a UNHCR staff, you should have access to a series of containers based on where you are working. Within each container, if you have editor or admin right, you can create a dataset. To create a dataset, you need first to document the dataset metadata, including the reference to the container where you would like the new dataset to be created. Once the dataset is created, you can add as many resources as required (either <code>data</code> or <code>attachment</code>).</p>
 <p>Below is simple example using the <code>mtcars</code> dataset as an example..</p>
 <pre class="{r}"><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://galalH.github.io/riddle/" class="external-link">riddle</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>USE_UAT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
@@ -179,9 +187,12 @@
 <span></span>
 <span><span class="co"># And once we’re done experimenting with the API, we should take down our</span></span>
 <span><span class="co"># toy dataset since we don’t really need it on RIDL.</span></span>
-<span><span class="fu"><a href="reference/dataset.html">dataset_delete</a></span><span class="op">(</span><span class="va">p</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></code></pre>
+<span><span class="fu"><a href="reference/dataset.html">dataset_delete</a></span><span class="op">(</span><span class="va">p</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span>
+<span><span class="co"># Get back to Prod Environment</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"USE_UAT"</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
+
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
@@ -210,7 +221,7 @@
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Hisham Galal <br><small class="roles"> Author, maintainer </small>  </li>
-<li><a href="authors.html">More about authors...</a></li>
+<li>Edouard Legoupil <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
@@ -222,7 +233,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Hisham Galal.</p>
+<p>Developed by Hisham Galal, Edouard Legoupil.</p>
 </div>
 
 <div class="pkgdown-footer-right">

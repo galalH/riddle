@@ -12,6 +12,7 @@ dataset_metadata(
   tag_string = NULL,
   url = NULL,
   owner_org = NULL,
+  geographies = "UNSPECIFIED",
   private = NULL,
   visibility = NULL,
   external_access_level = NULL,
@@ -56,6 +57,8 @@ dataset_metadata(
 \item{url}{Project URL - Website URL associated with this data project (if applicable).}
 
 \item{owner_org}{Data container(*) - Use the canonical name for the container.}
+
+\item{geographies}{defaults is geographies - pulling from a webservice from geoserver}
 
 \item{private}{Visibility (Private/Public).}
 
@@ -117,7 +120,7 @@ dataset_metadata(
 A list with the provided metadata.
 }
 \description{
-Convenience function to record dataset metadata
+This function create a metadata object used to then interact with the API
 }
 \details{
 All arguments are of type character. Fields \code{tag_string}, \code{data_collector}, \code{keywords}, \code{sampling_procedure}, and \code{operational_purpose_of_data} accept vectors of multiple values.
@@ -125,9 +128,6 @@ All arguments are of type character. Fields \code{tag_string}, \code{data_collec
 Fields marked with a (*) are required for \code{\link{dataset_create()}} and \code{\link{dataset_update()}} operations.
 }
 \examples{
-#dataset_metadata()
-library(riddle)
-Sys.setenv(USE_UAT=1)
 m <- dataset_metadata(title = "Motor Trend Car Road Tests",
                       name = "mtcars",
                       notes = "The data was extracted from the 1974 Motor Trend 
@@ -136,6 +136,7 @@ m <- dataset_metadata(title = "Motor Trend Car Road Tests",
                       (1973–74 models).",
                       owner_org = "exercise-container",
                       visibility = "public",
+                      geographies = "UNSPECIFIED",
                       external_access_level = "open_access",
                       data_collector = "Motor Trend",
                       keywords = keywords[c("Environment", "Other")],

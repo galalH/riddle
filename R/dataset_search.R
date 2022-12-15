@@ -11,9 +11,14 @@
 #' @return A tibble with the search results.
 #' @export
 #' @examples
-#' dataset_search("tests")
+#' 
+#' # library(riddle)
+#' # Sys.setenv(USE_UAT=1)
+#' # p <- dataset_search("tests")
+#' # p
+#' # p$id
 dataset_search <- function(q = NULL, rows = NULL, start = NULL) {
-  r <- ridl("dataset_search", !!!(as.list(match.call()[-1])))$results
+  r <- ridl("package_search", !!!(as.list(match.call()[-1])))$results
 
   if (purrr::is_empty(r))
     return(tibble::tibble())

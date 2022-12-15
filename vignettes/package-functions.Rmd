@@ -32,28 +32,11 @@ library(riddle)
 
   
 
-# keywords
-
-  
-
-```{r example-keywords}
-keywords
-```
-
-  
-
-    
-    
-
-
 # dataset_metadata
 
   
 
 ```{r example-dataset_metadata}
-#dataset_metadata()
-library(riddle)
-Sys.setenv(USE_UAT=1)
 m <- dataset_metadata(title = "Motor Trend Car Road Tests",
                       name = "mtcars",
                       notes = "The data was extracted from the 1974 Motor Trend 
@@ -62,6 +45,7 @@ m <- dataset_metadata(title = "Motor Trend Car Road Tests",
                       (1973–74 models).",
                       owner_org = "exercise-container",
                       visibility = "public",
+                      geographies = "UNSPECIFIED",
                       external_access_level = "open_access",
                       data_collector = "Motor Trend",
                       keywords = keywords[c("Environment", "Other")],
@@ -82,29 +66,60 @@ m
   
 
 ```{r example-dataset}
-#dataset()
+
 library(riddle)
 Sys.setenv(USE_UAT=1)
-m <- dataset_metadata(title = "Motor Trend Car Road Tests",
-                      name = "mtcars",
-                      notes = "The data was extracted from the 1974 Motor Trend 
-                      US magazine, and comprises fuel consumption and 10 aspects
-                      of automobile design and performance for 32 automobiles 
-                      (1973–74 models).",
-                      owner_org = "exercise-container",
-                      visibility = "public",
-                      external_access_level = "open_access",
-                      data_collector = "Motor Trend",
-                      keywords = keywords[c("Environment", "Other")],
-                      unit_of_measurement = "car",
-                      data_collection_technique = "oth",
-                      archived = "False")
+#Sys.unsetenv("USE_UAT")
 
-p <- dataset_create(m)
+### TO FIX -- geographies: Missing value
+## __type: Validation Error ---
+## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682
+
+# m <- dataset_metadata(title = "Motor Trend Car Road Test two",
+#                       name = "mtcars",
+#                       notes = "The data was extracted from the 1974 Motor Trend
+#                       US magazine, and comprises fuel consumption and 10 aspects
+#                       of automobile design and performance for 32 automobiles
+#                       (1973–74 models).",
+#                       owner_org = "exercise-container",
+#                       visibility = "public",
+#                       geographies = "UNSPECIFIED",
+#                       external_access_level = "open_access",
+#                       data_collector = "Motor Trend",
+#                       keywords = keywords[c("Environment", "Other")],
+#                       unit_of_measurement = "car",
+#                       data_collection_technique = "oth",
+#                       archived = "False")
+# ## For the above to work - you need to make sure you have at least editor access
+# # to the corresponding container - i.e. owner_org = "exercise-container"
+# p <- dataset_create(m)
 # The return value is a representation of the dataset we just created in
 # RIDL that you could inspect like any other R object.
-p
+#p
 
+
+
+#dataset_show("unhcr-cbi-americas-quarterly-report")
+
+```
+
+  
+
+  
+
+# dataset_search
+
+    
+
+  
+
+```{r example-dataset_search}
+
+# library(riddle)
+# Sys.setenv(USE_UAT=1)
+# p <- dataset_search("tests")
+# p
+# p$id
 ```
 
   
@@ -125,6 +140,7 @@ m <- resource_metadata(type = "data",
                        date_range_start = "1973-01-01",
                        date_range_end = "1973-12-31",
                        version = "1",
+                       visibility = "public",
                        process_status = "raw",
                        identifiability = "anonymized_public")
 m
@@ -137,62 +153,56 @@ m
   
 
 ```{r example-ressource}
-library(riddle)
-Sys.setenv(USE_UAT=1)
-m <- dataset_metadata(title = "Motor Trend Car Road Tests",
-                      name = "mtcars",
-                      notes = "The data was extracted from the 1974 Motor Trend 
-                      US magazine, and comprises fuel consumption and 10 aspects
-                      of automobile design and performance for 32 automobiles 
-                      (1973–74 models).",
-                      owner_org = "exercise-container",
-                      visibility = "public",
-                      external_access_level = "open_access",
-                      data_collector = "Motor Trend",
-                      keywords = keywords[c("Environment", "Other")],
-                      unit_of_measurement = "car",
-                      data_collection_technique = "oth",
-                      archived = "False")
+# library(riddle)
+# Sys.setenv(USE_UAT=1)
+# ## let's get again the details of the dataset we want to add the resource in..
+# p <- dataset_search("tests")
+# ridlid <- as.character(p[1, c("id")])
 
-p <- dataset_create(m)
 m <- resource_metadata(type = "data",
                        url = "mtcars.csv",
-                       name = "mtcars.csv",
+                       name = "mtcars.csv v2",
                        format = "csv",
                        file_type = "microdata",
                        date_range_start = "1973-01-01",
                        date_range_end = "1973-12-31",
                        version = "1",
+                       visibility = "public",
                        process_status = "raw",
-                       identifiability = "anonymized_public")
-r <- resource_create(p$id, m)
+                       identifiability = "anonymized_public",
+                       upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")))
+## let's get again the details of the dataset we want to add the resource in..
+#r <- resource_create(ridlid, m)
 # Like before, the return value is a tibble representation of the
 # resource.
 
-r
+#r
+ 
+## and now can search for it - checking it is correctly there... 
+#resource_search("name:mtcars")
 
-# But so far we’ve only created the metadata for the resource. The next
-# step is to upload the data.
-resource_upload(r$id, path = system.file("extdata/mtcars.csv", package = "readr"))
-
-resource_search("name:mtcars")
+# And once we’re done experimenting with the API, we should take down our
+# toy dataset since we don’t really need it on RIDL.
+#dataset_delete(p$id)
 
 ```
 
   
 
-    
-  
-
-# dataset_search
+# summary_report
 
     
 
   
 
-```{r example-dataset_search}
-dataset_search("tests")
+```{r example-summary_report}
+# summary_report(year = 2022,
+#                                    region = "Americas")
 ```
 
   
+
+      
+
+
 

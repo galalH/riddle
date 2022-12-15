@@ -2,7 +2,7 @@
 
 #' Convenience function to record dataset metadata
 #'
-#' @description
+#' @description This function create a metadata object used to then interact with the API
 #'
 #' @details All arguments are of type character. Fields `tag_string`, `data_collector`, `keywords`, `sampling_procedure`, and `operational_purpose_of_data` accept vectors of multiple values.
 #'
@@ -15,6 +15,7 @@
 #' @param tag_string Tags - eg. economy, mental health, government.
 #' @param url Project URL - Website URL associated with this data project (if applicable).
 #' @param owner_org Data container(*) - Use the canonical name for the container.
+#' @param geographies  defaults is geographies - pulling from a webservice from geoserver
 #' @param private Visibility (Private/Public).
 #' @param visibility Internal Access Level(*). Allowed values: `restricted` (Private), `public` (Internally Visible).
 #' @param external_access_level External access level(*). Allowed values: `not_available` (Not available), `direct_access` (Direct access), `public_use` (Public use), `licensed_use` (Licensed use), `data_enclave` (Data enclave), `open_access` (Open access).
@@ -43,13 +44,14 @@
 #' @param data_accs_notes Admin Notes - Access authority. You can use Markdown formatting here.
 #' @param ddi DDI.
 #' @param ... ignored.
+#' 
+#' @importFrom purrr discard modify_if negate  
+#' @importFrom rlang is_empty is_atomic
+#' @importFrom tibble as_tibble
 #'
 #' @return A list with the provided metadata.
 #' @export
 #' @examples
-#' #dataset_metadata()
-#' library(riddle)
-#' Sys.setenv(USE_UAT=1)
 #' m <- dataset_metadata(title = "Motor Trend Car Road Tests",
 #'                       name = "mtcars",
 #'                       notes = "The data was extracted from the 1974 Motor Trend 
@@ -58,6 +60,7 @@
 #'                       (1973–74 models).",
 #'                       owner_org = "exercise-container",
 #'                       visibility = "public",
+#'                       geographies = "UNSPECIFIED",
 #'                       external_access_level = "open_access",
 #'                       data_collector = "Motor Trend",
 #'                       keywords = keywords[c("Environment", "Other")],
@@ -73,6 +76,7 @@ dataset_metadata <- function(title = NULL,
                              tag_string  = NULL,
                              url = NULL,
                              owner_org = NULL,
+                             geographies = "UNSPECIFIED",
                              private = NULL,
                              visibility = NULL,
                              external_access_level  = NULL,
@@ -123,6 +127,7 @@ dataset_metadata <- function(title = NULL,
        `hxl-ated` = `hxl-ated`,
        process_status = process_status,
        identifiability = identifiability,
+       geographies = geographies,
        geog_coverage = geog_coverage,
        data_collection_technique = data_collection_technique,
        linked_datasets = linked_datasets,

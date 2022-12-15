@@ -14,49 +14,43 @@
 #' @param metadata Metadata created by \code{\link{resource_metadata()}}.
 #' @param id The id or name of the resource.
 #' @param pkgid The id or name of the dataset to which this resource belongs to.
+#' 
+#' @importFrom httr upload_file
 #'
 #' @return The resource.
 #' @export
 #' @examples
-#' library(riddle)
-#' Sys.setenv(USE_UAT=1)
-#' m <- dataset_metadata(title = "Motor Trend Car Road Tests",
-#'                       name = "mtcars",
-#'                       notes = "The data was extracted from the 1974 Motor Trend 
-#'                       US magazine, and comprises fuel consumption and 10 aspects
-#'                       of automobile design and performance for 32 automobiles 
-#'                       (1973–74 models).",
-#'                       owner_org = "exercise-container",
-#'                       visibility = "public",
-#'                       external_access_level = "open_access",
-#'                       data_collector = "Motor Trend",
-#'                       keywords = keywords[c("Environment", "Other")],
-#'                       unit_of_measurement = "car",
-#'                       data_collection_technique = "oth",
-#'                       archived = "False")
+#' # library(riddle)
+#' # Sys.setenv(USE_UAT=1)
+#' # ## let's get again the details of the dataset we want to add the resource in..
+#' # p <- dataset_search("tests")
+#' # ridlid <- as.character(p[1, c("id")])
 #' 
-#' p <- dataset_create(m)
 #' m <- resource_metadata(type = "data",
 #'                        url = "mtcars.csv",
-#'                        name = "mtcars.csv",
+#'                        name = "mtcars.csv v2",
 #'                        format = "csv",
 #'                        file_type = "microdata",
 #'                        date_range_start = "1973-01-01",
 #'                        date_range_end = "1973-12-31",
 #'                        version = "1",
+#'                        visibility = "public",
 #'                        process_status = "raw",
-#'                        identifiability = "anonymized_public")
-#' r <- resource_create(p$id, m)
+#'                        identifiability = "anonymized_public",
+#'                        upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")))
+#' ## let's get again the details of the dataset we want to add the resource in..
+#' #r <- resource_create(ridlid, m)
 #' # Like before, the return value is a tibble representation of the
 #' # resource.
 #' 
-#' r
+#' #r
+#'  
+#' ## and now can search for it - checking it is correctly there... 
+#' #resource_search("name:mtcars")
 #' 
-#' # But so far we’ve only created the metadata for the resource. The next
-#' # step is to upload the data.
-#' resource_upload(r$id, path = system.file("extdata/mtcars.csv", package = "readr"))
-#' 
-#' resource_search("name:mtcars")
+#' # And once we’re done experimenting with the API, we should take down our
+#' # toy dataset since we don’t really need it on RIDL.
+#' #dataset_delete(p$id)
 #' 
 resource_create <- function(pkgid, metadata) {
   enc <- if(is.null(metadata$upload)) "json" else "multipart"

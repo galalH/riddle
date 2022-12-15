@@ -24,5 +24,10 @@ A tibble with the search results.
 Searches for datasets and resources satisfying a given criteria.
 }
 \examples{
-dataset_search("tests")
+
+# library(riddle)
+# Sys.setenv(USE_UAT=1)
+# p <- dataset_search("tests")
+# p
+# p$id
 }

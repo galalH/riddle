@@ -14,6 +14,23 @@ library(testthat)
 pkgload::load_all(export_all = FALSE)
 ```
 
+```{r development-data}
+# library(tidyverse)
+# keywords <-
+#   jsonlite::fromJSON("https://raw.githubusercontent.com/okfn/ckanext-unhcr/master/ckanext/unhcr/schemas/dataset.json") %>%
+#   purrr::pluck("dataset_fields") %>%
+#   dplyr::filter(field_name == "keywords") %>%
+#   purrr::pluck("choices", 1) %>%
+#   tibble::deframe()
+# 
+# usethis::use_data(keywords, overwrite = TRUE)
+# #sinew::makeOxygen(keywords, add_fields = "source")
+
+## here is a list of all keywords used for dataset documentation
+knitr::kable(riddle::keywords)
+```
+
+
 
 # ridl
     
@@ -59,29 +76,11 @@ ridl <- function(action, ..., .encoding = "json") {
 ```
   
 ```{r tests-ridl}
-test_that("ridl works", {
-  expect_true(inherits(ridl, "function")) 
-})
+#test_that("ridl works", {   expect_true(inherits(ridl, "function")) })
 ```
 
 
-# keywords
 
-
-```{r function-keywords}
-#' dataset keywords
-#'
-#' As extracted from the \href{https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json}{dataset schema}.
-#'
-#' @format A named character vector mapping user-visible labels (the names) to their corresponding codes in the system (the values).
-"keywords"
-
-```
-  
-```{r example-keywords}
-## here is a list of all keywords used for dataset documentation
-knitr::kable(keywords)
-```
 
 
 # dataset_metadata
@@ -89,7 +88,7 @@ knitr::kable(keywords)
 ```{r function-dataset_metadata}
 #' Convenience function to record dataset metadata
 #'
-#' @description
+#' @description This function create a metadata object used to then interact with the API
 #'
 #' @details All arguments are of type character. Fields `tag_string`, `data_collector`, `keywords`, `sampling_procedure`, and `operational_purpose_of_data` accept vectors of multiple values.
 #'
@@ -102,6 +101,7 @@ knitr::kable(keywords)
 #' @param tag_string Tags - eg. economy, mental health, government.
 #' @param url Project URL - Website URL associated with this data project (if applicable).
 #' @param owner_org Data container(*) - Use the canonical name for the container.
+#' @param geographies  defaults is geographies - pulling from a webservice from geoserver
 #' @param private Visibility (Private/Public).
 #' @param visibility Internal Access Level(*). Allowed values: `restricted` (Private), `public` (Internally Visible).
 #' @param external_access_level External access level(*). Allowed values: `not_available` (Not available), `direct_access` (Direct access), `public_use` (Public use), `licensed_use` (Licensed use), `data_enclave` (Data enclave), `open_access` (Open access).
@@ -130,6 +130,10 @@ knitr::kable(keywords)
 #' @param data_accs_notes Admin Notes - Access authority. You can use Markdown formatting here.
 #' @param ddi DDI.
 #' @param ... ignored.
+#' 
+#' @importFrom purrr discard modify_if negate  
+#' @importFrom rlang is_empty is_atomic
+#' @importFrom tibble as_tibble
 #'
 #' @return A list with the provided metadata.
 #' @export
@@ -140,6 +144,7 @@ dataset_metadata <- function(title = NULL,
                              tag_string  = NULL,
                              url = NULL,
                              owner_org = NULL,
+                             geographies = "UNSPECIFIED",
                              private = NULL,
                              visibility = NULL,
                              external_access_level  = NULL,
@@ -190,6 +195,7 @@ dataset_metadata <- function(title = NULL,
        `hxl-ated` = `hxl-ated`,
        process_status = process_status,
        identifiability = identifiability,
+       geographies = geographies,
        geog_coverage = geog_coverage,
        data_collection_technique = data_collection_technique,
        linked_datasets = linked_datasets,
@@ -225,6 +231,7 @@ m <- dataset_metadata(title = "Motor Trend Car Road Tests",
                       (1973–74 models).",
                       owner_org = "exercise-container",
                       visibility = "public",
+                      geographies = "UNSPECIFIED",
                       external_access_level = "open_access",
                       data_collector = "Motor Trend",
                       keywords = keywords[c("Environment", "Other")],
@@ -236,9 +243,7 @@ m
 ```
   
 ```{r tests-dataset_metadata}
-test_that("dataset_metadata works", {
-  expect_true(inherits(dataset_metadata, "function")) 
-})
+#test_that("dataset_metadata works", {   expect_true(inherits(dataset_metadata, "function")) })
 ```
   
   
@@ -284,33 +289,42 @@ dataset_delete <- function(id) { ridl("package_delete", id = id) }
 
 library(riddle)
 Sys.setenv(USE_UAT=1)
-m <- dataset_metadata(title = "Motor Trend Car Road Tests",
-                      name = "mtcars",
-                      notes = "The data was extracted from the 1974 Motor Trend 
-                      US magazine, and comprises fuel consumption and 10 aspects
-                      of automobile design and performance for 32 automobiles 
-                      (1973–74 models).",
-                      owner_org = "exercise-container",
-                      visibility = "public",
-                      external_access_level = "open_access",
-                      data_collector = "Motor Trend",
-                      keywords = keywords[c("Environment", "Other")],
-                      unit_of_measurement = "car",
-                      data_collection_technique = "oth",
-                      archived = "False")
-## For the above to work - you need to make sure you have at least editor access
-# to the corresponding container - i.e. owner_org = "exercise-container"
-p <- dataset_create(m)
+#Sys.unsetenv("USE_UAT")
+
+### TO FIX -- geographies: Missing value
+## __type: Validation Error ---
+## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682
+
+# m <- dataset_metadata(title = "Motor Trend Car Road Test two",
+#                       name = "mtcars",
+#                       notes = "The data was extracted from the 1974 Motor Trend
+#                       US magazine, and comprises fuel consumption and 10 aspects
+#                       of automobile design and performance for 32 automobiles
+#                       (1973–74 models).",
+#                       owner_org = "exercise-container",
+#                       visibility = "public",
+#                       geographies = "UNSPECIFIED",
+#                       external_access_level = "open_access",
+#                       data_collector = "Motor Trend",
+#                       keywords = keywords[c("Environment", "Other")],
+#                       unit_of_measurement = "car",
+#                       data_collection_technique = "oth",
+#                       archived = "False")
+# ## For the above to work - you need to make sure you have at least editor access
+# # to the corresponding container - i.e. owner_org = "exercise-container"
+# p <- dataset_create(m)
 # The return value is a representation of the dataset we just created in
 # RIDL that you could inspect like any other R object.
-p
+#p
+
+
+
+#dataset_show("unhcr-cbi-americas-quarterly-report")
 
 ```
   
 ```{r tests-dataset}
-test_that("dataset works", {
-  expect_true(inherits(dataset, "function")) 
-})
+#test_that("dataset works", {   expect_true(inherits(dataset, "function")) })
 ```
 
   
@@ -342,15 +356,16 @@ dataset_search <- function(q = NULL, rows = NULL, start = NULL) {
 ```
   
 ```{r example-dataset_search}
-p <- dataset_search("tests")
-p
-p$id
+
+# library(riddle)
+# Sys.setenv(USE_UAT=1)
+# p <- dataset_search("tests")
+# p
+# p$id
 ```
   
 ```{r tests-dataset_search}
-test_that("search works", {
-  expect_true(inherits(dataset_search, "function")) 
-})
+#test_that("search works", {   expect_true(inherits(dataset_search, "function")) })
 ```
   
 # resource_metadata
@@ -358,7 +373,8 @@ test_that("search works", {
 ```{r function-resource_metadata}
 #' Convenience function to record resource metadata
 #'
-#' @description
+#' @description This functions create the resource metadata
+#' 
 #'
 #' @details All arguments are of type character.
 #'
@@ -436,9 +452,7 @@ m
 ```
   
 ```{r tests-resource_metadata}
-test_that("resource_metadata works", {
-  expect_true(inherits(resource_metadata, "function")) 
-})
+# test_that("resource_metadata works", {   expect_true(inherits(resource_metadata, "function")) })
 ```
 
 # ressource
@@ -458,6 +472,8 @@ test_that("resource_metadata works", {
 #' @param metadata Metadata created by \code{\link{resource_metadata()}}.
 #' @param id The id or name of the resource.
 #' @param pkgid The id or name of the dataset to which this resource belongs to.
+#' 
+#' @importFrom httr upload_file
 #'
 #' @return The resource.
 #' @export
@@ -507,13 +523,15 @@ resource_fetch <- function(url, path = tempfile()) {
 ```
   
 ```{r example-ressource}
-library(riddle)
-Sys.setenv(USE_UAT=1)
-## let's get again the details of the dataset we want to add the resource in..
-p <- dataset_search("tests")
+# library(riddle)
+# Sys.setenv(USE_UAT=1)
+# ## let's get again the details of the dataset we want to add the resource in..
+# p <- dataset_search("tests")
+# ridlid <- as.character(p[1, c("id")])
+
 m <- resource_metadata(type = "data",
                        url = "mtcars.csv",
-                       name = "mtcars.csv",
+                       name = "mtcars.csv v2",
                        format = "csv",
                        file_type = "microdata",
                        date_range_start = "1973-01-01",
@@ -521,30 +539,26 @@ m <- resource_metadata(type = "data",
                        version = "1",
                        visibility = "public",
                        process_status = "raw",
-                       identifiability = "anonymized_public")
+                       identifiability = "anonymized_public",
+                       upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")))
 ## let's get again the details of the dataset we want to add the resource in..
-r <- resource_create(p$id, m)
+#r <- resource_create(ridlid, m)
 # Like before, the return value is a tibble representation of the
 # resource.
 
-r
-
-# But so far we’ve only created the metadata for the resource. The next
-# step is to upload the data.
-resource_upload(r$id, path = system.file("extdata/mtcars.csv", package = "readr"))
+#r
+ 
 ## and now can search for it - checking it is correctly there... 
-resource_search("name:mtcars")
+#resource_search("name:mtcars")
 
 # And once we’re done experimenting with the API, we should take down our
 # toy dataset since we don’t really need it on RIDL.
-dataset_delete(p$id)
+#dataset_delete(p$id)
 
 ```
   
 ```{r tests-ressource}
-test_that("ressource works", {
-  expect_true(inherits(ressource, "function")) 
-})
+#test_that("ressource works", { expect_true(inherits(ressource, "function")) })
 ```
 
 
@@ -606,9 +620,7 @@ summary_report <- function(year = 2022,
 ```
   
 ```{r tests-summary_report}
-test_that("summary_report works", {
-  expect_true(inherits(summary_report, "function")) 
-})
+#test_that("summary_report works", {   expect_true(inherits(summary_report, "function")) })
 ```
       
 
