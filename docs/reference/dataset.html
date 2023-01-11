@@ -57,26 +57,21 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dataset_create</span><span class="op">(</span><span class="va">metadata</span>, uat <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">dataset_create</span><span class="op">(</span><span class="va">metadata</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">dataset_show</span><span class="op">(</span><span class="va">id</span>, uat <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">dataset_show</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">dataset_update</span><span class="op">(</span><span class="va">id</span>, <span class="va">metadata</span>, uat <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">dataset_update</span><span class="op">(</span><span class="va">id</span>, <span class="va">metadata</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">dataset_patch</span><span class="op">(</span><span class="va">id</span>, <span class="va">metadata</span>, uat <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">dataset_patch</span><span class="op">(</span><span class="va">id</span>, <span class="va">metadata</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">dataset_delete</span><span class="op">(</span><span class="va">id</span>, uat <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">dataset_delete</span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>metadata</dt>
 <dd><p>Metadata created by <code><a href="dataset_metadata.html">dataset_metadata()</a></code>.</p></dd>
-
-
-<dt>uat</dt>
-<dd><p>Boolean TRUE /FALSE tells whether to use https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
-FALSE per default</p></dd>
 
 
 <dt>id</dt>
@@ -107,45 +102,9 @@ not explicitly provided in the <code>metadata</code>.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">### TO FIX -- geographies: Missing value</span></span></span>
-<span class="r-in"><span><span class="co">## __type: Validation Error ---</span></span></span>
-<span class="r-in"><span><span class="co">## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="dataset_metadata.html">dataset_metadata</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Motor Trend Car Road Test two"</span>,</span></span>
-<span class="r-in"><span>                      name <span class="op">=</span> <span class="st">"mtcars_ed"</span>,</span></span>
-<span class="r-in"><span>                      notes <span class="op">=</span> <span class="st">"The data was extracted from the 1974 Motor Trend</span></span></span>
-<span class="r-in"><span><span class="st">                      US magazine, and comprises fuel consumption and 10 aspects</span></span></span>
-<span class="r-in"><span><span class="st">                      of automobile design and performance for 32 automobiles</span></span></span>
-<span class="r-in"><span><span class="st">                      (1973–74 models)."</span>,</span></span>
-<span class="r-in"><span>                      owner_org <span class="op">=</span> <span class="st">"Lebanon"</span>,</span></span>
-<span class="r-in"><span>                      visibility <span class="op">=</span> <span class="st">"public"</span>,</span></span>
-<span class="r-in"><span>                      geographies <span class="op">=</span> <span class="st">"UNSPECIFIED"</span>,</span></span>
-<span class="r-in"><span>                      external_access_level <span class="op">=</span> <span class="st">"open_access"</span>,</span></span>
-<span class="r-in"><span>                      data_collector <span class="op">=</span> <span class="st">"Motor Trend"</span>,</span></span>
-<span class="r-in"><span>                      keywords <span class="op">=</span> <span class="va">keywords</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Environment"</span>, <span class="st">"Other"</span><span class="op">)</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>                      unit_of_measurement <span class="op">=</span> <span class="st">"car"</span>,</span></span>
-<span class="r-in"><span>                      data_collection_technique <span class="op">=</span> <span class="st">"oth"</span>,</span></span>
-<span class="r-in"><span>                      archived <span class="op">=</span> <span class="st">"False"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># ## For the above to work - you need to make sure you have at least editor access</span></span></span>
-<span class="r-in"><span><span class="co"># to the corresponding container - i.e. owner_org = "exercise-container"</span></span></span>
-<span class="r-in"><span><span class="co">#p &lt;- riddle::dataset_create(metadata = m, uat = TRUE)</span></span></span>
-<span class="r-in"><span><span class="co"># The return value is a representation of the dataset we just created in</span></span></span>
-<span class="r-in"><span><span class="co"># RIDL that you could inspect like any other R object.</span></span></span>
-<span class="r-in"><span><span class="co">#p</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="dataset_metadata.html">dataset_metadata</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Test"</span>,</span></span>
-<span class="r-in"><span>                      name <span class="op">=</span> <span class="st">"Test"</span>,</span></span>
-<span class="r-in"><span>                      notes <span class="op">=</span> <span class="st">"The data was extracted from kobo."</span>,</span></span>
-<span class="r-in"><span>                      owner_org <span class="op">=</span> <span class="st">"Americas : Regional Datasets"</span>,</span></span>
-<span class="r-in"><span>                      visibility <span class="op">=</span> <span class="st">"public"</span>,</span></span>
-<span class="r-in"><span>                      geographies <span class="op">=</span> <span class="st">"UNSPECIFIED"</span>,</span></span>
-<span class="r-in"><span>                      external_access_level <span class="op">=</span> <span class="st">"open_access"</span>,</span></span>
-<span class="r-in"><span>                      data_collector <span class="op">=</span> <span class="st">"UNHCR"</span>,</span></span>
-<span class="r-in"><span>                      keywords <span class="op">=</span> <span class="va">keywords</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Environment"</span>, <span class="st">"Other"</span><span class="op">)</span><span class="op">]</span>,</span></span>
-<span class="r-in"><span>                      unit_of_measurement <span class="op">=</span> <span class="st">"car"</span>,</span></span>
-<span class="r-in"><span>                      data_collection_technique <span class="op">=</span> <span class="st">"oth"</span>,</span></span>
-<span class="r-in"><span>                      archived <span class="op">=</span> <span class="st">"False"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#-----</span></span></span>
+<span class="r-in"><span><span class="co"># test search in prod</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"USE_UAT"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">riddle</span><span class="fu">::</span><span class="fu">dataset_show</span><span class="op">(</span><span class="st">"unhcr-cbi-americas-quarterly-report"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 54</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   admin…¹ archi…² author autho…³ clean…⁴ creat…⁵ data_…⁶ data_…⁷ data_…⁸ data_…⁹</span>
@@ -158,6 +117,53 @@ not explicitly provided in the <code>metadata</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   maintainer &lt;lgl&gt;, maintainer_email &lt;lgl&gt;, metadata_created &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   metadata_modified &lt;chr&gt;, name &lt;chr&gt;, notes &lt;chr&gt;, num_resources &lt;int&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   num_tags &lt;int&gt;, operational_purpose_of_data &lt;chr&gt;, organization &lt;list&gt;, …</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#-----</span></span></span>
+<span class="r-in"><span><span class="co"># Test create in UAT</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>USE_UAT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">### TO FIX -- geographies: Missing value</span></span></span>
+<span class="r-in"><span><span class="co">## __type: Validation Error ---</span></span></span>
+<span class="r-in"><span><span class="co">## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># m &lt;- riddle::dataset_metadata(title = "Motor Trend Car Road Test two",</span></span></span>
+<span class="r-in"><span><span class="co">#                       name = "mtcars_ed",</span></span></span>
+<span class="r-in"><span><span class="co">#                       notes = "The data was extracted from the 1974 Motor Trend</span></span></span>
+<span class="r-in"><span><span class="co">#                       US magazine, and comprises fuel consumption and 10 aspects</span></span></span>
+<span class="r-in"><span><span class="co">#                       of automobile design and performance for 32 automobiles</span></span></span>
+<span class="r-in"><span><span class="co">#                       (1973–74 models).",</span></span></span>
+<span class="r-in"><span><span class="co">#                       owner_org = "Lebanon",</span></span></span>
+<span class="r-in"><span><span class="co">#                       visibility = "public",</span></span></span>
+<span class="r-in"><span><span class="co">#                       geographies = "UNSPECIFIED",</span></span></span>
+<span class="r-in"><span><span class="co">#                       external_access_level = "open_access",</span></span></span>
+<span class="r-in"><span><span class="co">#                       data_collector = "Motor Trend",</span></span></span>
+<span class="r-in"><span><span class="co">#                       keywords = keywords[c("Environment", "Other")],</span></span></span>
+<span class="r-in"><span><span class="co">#                       unit_of_measurement = "car",</span></span></span>
+<span class="r-in"><span><span class="co">#                       data_collection_technique = "oth",</span></span></span>
+<span class="r-in"><span><span class="co">#                       archived = "False")</span></span></span>
+<span class="r-in"><span><span class="co"># ## For the above to work - you need to make sure you have at least editor access</span></span></span>
+<span class="r-in"><span><span class="co"># to the corresponding container - i.e. owner_org = "exercise-container"</span></span></span>
+<span class="r-in"><span><span class="co">#p &lt;- riddle::dataset_create(metadata = m)</span></span></span>
+<span class="r-in"><span><span class="co"># The return value is a representation of the dataset we just created in</span></span></span>
+<span class="r-in"><span><span class="co"># RIDL that you could inspect like any other R object.</span></span></span>
+<span class="r-in"><span><span class="co">#p</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#-----</span></span></span>
+<span class="r-in"><span><span class="co"># Test create in prod</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"USE_UAT"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># m1 &lt;- riddle::dataset_metadata(title = "Test",</span></span></span>
+<span class="r-in"><span><span class="co">#                       name = "Test",</span></span></span>
+<span class="r-in"><span><span class="co">#                       notes = "The data was extracted from kobo.",</span></span></span>
+<span class="r-in"><span><span class="co">#                       owner_org = "Americas : Regional Datasets",</span></span></span>
+<span class="r-in"><span><span class="co">#                       visibility = "public",</span></span></span>
+<span class="r-in"><span><span class="co">#                       geographies = "UNSPECIFIED",</span></span></span>
+<span class="r-in"><span><span class="co">#                       external_access_level = "open_access",</span></span></span>
+<span class="r-in"><span><span class="co">#                       data_collector = "UNHCR",</span></span></span>
+<span class="r-in"><span><span class="co">#                       keywords = keywords[c("Environment", "Other")],</span></span></span>
+<span class="r-in"><span><span class="co">#                       unit_of_measurement = "car",</span></span></span>
+<span class="r-in"><span><span class="co">#                       data_collection_technique = "oth",</span></span></span>
+<span class="r-in"><span><span class="co">#                       archived = "False")</span></span></span>
+<span class="r-in"><span><span class="co"># p &lt;- riddle::dataset_create(metadata = m1)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

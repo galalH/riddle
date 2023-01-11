@@ -4,16 +4,12 @@
 \alias{resource_fetch}
 \title{Fetch resource from RIDL}
 \usage{
-resource_fetch(url, path = tempfile(), uat = FALSE)
+resource_fetch(url, path = tempfile())
 }
 \arguments{
 \item{url}{The URL of the resource to fetch}
 
 \item{path}{Location to store the resource}
-
-\item{uat}{Boolean TRUE /FALSE tells whether to use
-https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
-FALSE per default}
 }
 \value{
 Path to the downloaded file

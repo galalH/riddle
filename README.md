@@ -34,9 +34,11 @@ The easiest way to do that is by calling `usethis::edit_r_environ()` and adding 
 
 The package works with both the production and [UAT instances of RIDL](https://ridl-uat.unhcr.org)
  (aka "User Acceptance Testing"). To use the UAT version, add the corresponding KEY 
- within your `.Renviron` file: `RIDL_API_KEY_UAT=xxxxx`.  Then add `uat = TRUE` 
- as a parameter in any function from the package.  This way you do not need to 
- change your `RIDL_API_KEY` when you wan to switch between  prod and uat server
+ within your `.Renviron` file: `RIDL_API_KEY_UAT=xxxxx`.  To use the UAT version,
+ run `Sys.setenv(USE_UAT=1)` before calling any functions from the package. 
+ To go back to the production instance, call `Sys.unsetenv("USE_UAT")`.
+ 
+ 
 
 
 ## An intro to RIDL  concepts

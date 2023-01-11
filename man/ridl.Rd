@@ -4,21 +4,24 @@
 \alias{ridl}
 \title{apihelper}
 \usage{
-ridl(action, ..., .encoding = "json", uat = FALSE)
+ridl(action, ..., .encoding = "json")
 }
 \arguments{
 \item{action}{Operation to execute. See \href{https://docs.ckan.org/en/2.9/api/}{CKAN's API documentation} for details.}
 
 \item{.encoding}{HTTP POST encoding to use - one of \code{json}, \code{form}, or \code{multipart}.}
-
-\item{uat}{Boolean TRUE /FALSE tells whether to use https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
-FALSE per default}
 }
 \value{
 \code{httr::response} object with the result of the call.
 }
 \description{
 Helper function to make API calls
+}
+\details{
+The package works with both the production and UAT instances of RIDL.
+To use the UAT version, run \code{Sys.setenv(USE_UAT=1)} before calling any functions
+from the package.
+To go back to the production instance, call \code{Sys.unsetenv("USE_UAT")}.
 }
 \examples{
 # ridl()

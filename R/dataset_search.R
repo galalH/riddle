@@ -9,8 +9,6 @@
 #'              (optional, default: 10, upper limit: 1000)
 #' @param start The offset in the complete result for where the set of returned 
 #'               datasets should begin.
-#' @param uat Boolean TRUE /FALSE tells whether to use https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
-#'             FALSE per default
 #'
 #' @importFrom purrr is_empty pmap
 #' @importFrom tibble tibble
@@ -20,15 +18,15 @@
 #' @return A tibble with the search results.
 #' @export
 #' @examples
-#' 
-#' # p <- riddle::dataset_search(q = "tests", 
-#' #                             uat = TRUE)
-#' # p
-#' # p$id
-dataset_search <- function(q = NULL, rows = NULL, start = NULL, uat = FALSE) {
+#' #-----
+#' # Test search in prod
+#' Sys.unsetenv("USE_UAT")
+#' p <- riddle::dataset_search(q = "cbi")
+#' p
+#' p$id
+dataset_search <- function(q = NULL, rows = NULL, start = NULL) {
   r <- ridl(action ="package_search", 
-            !!!(as.list(match.call()[-1]))  , 
-            uat = uat)$results
+            !!!(as.list(match.call()[-1])) )$results
 
   if (purrr::is_empty(r)) {
     r <- tibble::tibble()

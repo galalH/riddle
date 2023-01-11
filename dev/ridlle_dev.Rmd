@@ -7,6 +7,7 @@ editor_options:
 
 ```{r development, include=FALSE}
 library(testthat)
+#library(riddle)
 ```
 
 ```{r development-load}
@@ -39,34 +40,38 @@ knitr::kable(riddle::keywords)
 #' 
 #' Helper function to make API calls
 #'
+#' The package works with both the production and UAT instances of RIDL. 
+#' To use the UAT version, run `Sys.setenv(USE_UAT=1)` before calling any functions
+#'  from the package.
+#'  To go back to the production instance, call `Sys.unsetenv("USE_UAT")`.
+#'
+#'
 #' @param action Operation to execute. See [CKAN's API documentation](https://docs.ckan.org/en/2.9/api/) for details.
-#' @param uat Boolean TRUE /FALSE tells whether to use https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
-#'             FALSE per default
 #' @param .encoding HTTP POST encoding to use - one of `json`, `form`, or `multipart`.
 #' @importFrom httr POST
 #'
 #'
 #' @return `httr::response` object with the result of the call.
 #' @export
-ridl <- function(action, ...,
-                 .encoding = "json",
-                 uat = FALSE) {
-  if(uat == TRUE)  {
-    baseurl <- "https://ridl-uat.unhcr.org/"
-    r <- httr::POST(baseurl,
-               path = glue::glue("/api/action/{action}"),
-               httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY_UAT")),
-               body = rlang::list2(...),
-               encode = .encoding) %>%
-          httr::content(simplifyVector = TRUE) 
+ridl <- function(action,
+                 ...,
+                 .encoding = "json") {
+  if(Sys.setenv(USE_UAT=1))  {
+      baseurl <- "https://ridl.unhcr.org/"
+      r <- httr::POST(baseurl,
+                 path = glue::glue("/api/action/{action}"),
+                 httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY")),
+                 body = rlang::list2(...),
+                 encode = .encoding) %>%
+            httr::content(simplifyVector = TRUE) 
     } else {
-    baseurl <- "https://ridl.unhcr.org/"
-    r <- httr::POST(baseurl,
-               path = glue::glue("/api/action/{action}"),
-               httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY")),
-               body = rlang::list2(...),
-               encode = .encoding) %>%
-          httr::content(simplifyVector = TRUE) }
+      baseurl <- "https://ridl-uat.unhcr.org/"
+      r <- httr::POST(baseurl,
+                 path = glue::glue("/api/action/{action}"),
+                 httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY_UAT")),
+                 body = rlang::list2(...),
+                 encode = .encoding) %>%
+            httr::content(simplifyVector = TRUE) }
 
   if (!r$success)
     stop(r$error %>%
@@ -412,100 +417,99 @@ test_that("dataset_tibblify works", {
 #'
 #' @param metadata Metadata created by \code{\link{dataset_metadata()}}.
 #' @param id The id or name of the dataset.
-#' @param uat Boolean TRUE /FALSE tells whether to use https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
-#'             FALSE per default
 #'
 #' @return The dataset.
 #' @export
-dataset_create <- function(metadata,
-                           uat= FALSE) { 
+dataset_create <- function(metadata) { 
   ridl(action ="package_create",
-       !!!metadata, 
-       uat = uat) %>% 
+       !!!metadata) %>% 
     dataset_tibblify() }
 
 #' @rdname dataset
 #' @export
-dataset_show <- function(id, 
-                         uat= FALSE) { 
+dataset_show <- function(id) { 
   ridl(action ="package_show",
-       id = id,
-       uat = uat) %>% 
+       id = id) %>% 
     dataset_tibblify() }
 
 #' @rdname dataset
 #' @export
-dataset_update <- function(id, metadata, 
-                           uat= FALSE) { 
+dataset_update <- function(id, metadata) { 
   ridl(action ="package_update", 
        id = id, 
-       !!!metadata, 
-       uat = uat) %>% 
+       !!!metadata) %>% 
     dataset_tibblify() }
 
 #' @rdname dataset
 #' @export
 dataset_patch <- function(id, 
-                          metadata, 
-                          uat= FALSE) { 
+                          metadata) { 
   ridl(action ="package_patch",
        id = id, 
-       !!!metadata, 
-       uat = uat) %>% 
+       !!!metadata) %>% 
     dataset_tibblify() }
 
 #' @rdname dataset
 #' @export
-dataset_delete <- function(id, 
-                           uat = FALSE) { 
+dataset_delete <- function(id) { 
   ridl(action ="package_delete",
-       id = id,
-       uat = uat) }
+       id = id) }
 ```
   
 ```{r example-dataset}
 
 
+#-----
+# test search in prod
+Sys.unsetenv("USE_UAT")
+riddle::dataset_show("unhcr-cbi-americas-quarterly-report")
+
+#-----
+# Test create in UAT
+Sys.setenv(USE_UAT=1)
 ### TO FIX -- geographies: Missing value
 ## __type: Validation Error ---
 ## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682
 
-m <- riddle::dataset_metadata(title = "Motor Trend Car Road Test two",
-                      name = "mtcars_ed",
-                      notes = "The data was extracted from the 1974 Motor Trend
-                      US magazine, and comprises fuel consumption and 10 aspects
-                      of automobile design and performance for 32 automobiles
-                      (1973–74 models).",
-                      owner_org = "Lebanon",
-                      visibility = "public",
-                      geographies = "UNSPECIFIED",
-                      external_access_level = "open_access",
-                      data_collector = "Motor Trend",
-                      keywords = keywords[c("Environment", "Other")],
-                      unit_of_measurement = "car",
-                      data_collection_technique = "oth",
-                      archived = "False")
+# m <- riddle::dataset_metadata(title = "Motor Trend Car Road Test two",
+#                       name = "mtcars_ed",
+#                       notes = "The data was extracted from the 1974 Motor Trend
+#                       US magazine, and comprises fuel consumption and 10 aspects
+#                       of automobile design and performance for 32 automobiles
+#                       (1973–74 models).",
+#                       owner_org = "Lebanon",
+#                       visibility = "public",
+#                       geographies = "UNSPECIFIED",
+#                       external_access_level = "open_access",
+#                       data_collector = "Motor Trend",
+#                       keywords = keywords[c("Environment", "Other")],
+#                       unit_of_measurement = "car",
+#                       data_collection_technique = "oth",
+#                       archived = "False")
 # ## For the above to work - you need to make sure you have at least editor access
 # to the corresponding container - i.e. owner_org = "exercise-container"
-#p <- riddle::dataset_create(metadata = m, uat = TRUE)
+#p <- riddle::dataset_create(metadata = m)
 # The return value is a representation of the dataset we just created in
 # RIDL that you could inspect like any other R object.
 #p
 
-m <- riddle::dataset_metadata(title = "Test",
-                      name = "Test",
-                      notes = "The data was extracted from kobo.",
-                      owner_org = "Americas : Regional Datasets",
-                      visibility = "public",
-                      geographies = "UNSPECIFIED",
-                      external_access_level = "open_access",
-                      data_collector = "UNHCR",
-                      keywords = keywords[c("Environment", "Other")],
-                      unit_of_measurement = "car",
-                      data_collection_technique = "oth",
-                      archived = "False")
+#-----
+# Test create in prod
+Sys.unsetenv("USE_UAT")
+# m1 <- riddle::dataset_metadata(title = "Test",
+#                       name = "Test",
+#                       notes = "The data was extracted from kobo.",
+#                       owner_org = "Americas : Regional Datasets",
+#                       visibility = "public",
+#                       geographies = "UNSPECIFIED",
+#                       external_access_level = "open_access",
+#                       data_collector = "UNHCR",
+#                       keywords = keywords[c("Environment", "Other")],
+#                       unit_of_measurement = "car",
+#                       data_collection_technique = "oth",
+#                       archived = "False")
+# p <- riddle::dataset_create(metadata = m1)
 
-riddle::dataset_show("unhcr-cbi-americas-quarterly-report")
 
 ```
   
@@ -526,8 +530,6 @@ riddle::dataset_show("unhcr-cbi-americas-quarterly-report")
 #'              (optional, default: 10, upper limit: 1000)
 #' @param start The offset in the complete result for where the set of returned 
 #'               datasets should begin.
-#' @param uat Boolean TRUE /FALSE tells whether to use https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
-#'             FALSE per default
 #'
 #' @importFrom purrr is_empty pmap
 #' @importFrom tibble tibble
@@ -536,10 +538,9 @@ riddle::dataset_show("unhcr-cbi-americas-quarterly-report")
 #' 
 #' @return A tibble with the search results.
 #' @export
-dataset_search <- function(q = NULL, rows = NULL, start = NULL, uat = FALSE) {
+dataset_search <- function(q = NULL, rows = NULL, start = NULL) {
   r <- ridl(action ="package_search", 
-            !!!(as.list(match.call()[-1]))  , 
-            uat = uat)$results
+            !!!(as.list(match.call()[-1])) )$results
 
   if (purrr::is_empty(r)) {
     r <- tibble::tibble()
@@ -556,11 +557,12 @@ dataset_search <- function(q = NULL, rows = NULL, start = NULL, uat = FALSE) {
 ```
   
 ```{r example-dataset_search}
-
-# p <- riddle::dataset_search(q = "tests", 
-#                             uat = TRUE)
-# p
-# p$id
+#-----
+# Test search in prod
+Sys.unsetenv("USE_UAT")
+p <- riddle::dataset_search(q = "cbi")
+p
+p$id
 ```
   
 ```{r tests-dataset_search}
@@ -698,9 +700,11 @@ test_that("resource_tibblify works", {
 # resource
 
 ```{r function-resource}
+#' 
 #' Work with RIDL resources (files)
-#'
+#' 
 #' @name resource
+#'
 #' @details You must have the necessary permissions to create, edit, or delete 
 #'          datasets and their resources.
 #'
@@ -720,74 +724,79 @@ test_that("resource_tibblify works", {
 #' @param res_metadata Metadata created by \code{\link{resource_metadata()}}.
 #' @param id The id or name of the resource.
 #' @param pkgid The id or name of the dataset to which this resource belongs to.
-#' @param uat Boolean TRUE /FALSE tells whether to use
-#'             https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
-#'             FALSE per default
 #' 
 #' @importFrom httr upload_file
 #'
 #' @return The resource.
-  
 #' @rdname resource
 #' @export
-resource_create <- function(pkgid, res_metadata, uat) {
+resource_create <- function(pkgid, res_metadata) {
   enc <- if(is.null(res_metadata$upload)) "json" else "multipart"
   ridl(action ="resource_create", 
        dataset_id = pkgid, !!!res_metadata,
-       .encoding = enc,
-       uat = uat) %>% 
+       .encoding = enc) %>% 
     resource_tibblify()
 }
 
-#' @rdname resource
-#' @export
-resource_update <- function(id, res_metadata, uat) {
-  enc <- if(is.null(res_metadata$upload)) "json" else "multipart"
-  ridl(action ="resource_update",
-       id = id,
-       !!!res_metadata,
-       .encoding = enc,
-       uat = uat) %>% 
-    resource_tibblify()
-}
-
-#' @rdname resource
-#' @export
-resource_patch <- function(id, res_metadata, uat) {
-  enc <- if(is.null(res_metadata$upload)) "json" else "multipart"
-  ridl(action ="resource_patch",
-       id = id,
-       !!!res_metadata, 
-       .encoding = enc,
-       uat = uat) %>% 
-    resource_tibblify()
-}
-
-#' @rdname resource
-#' @export
-resource_delete <- function(id, uat) { 
-  ridl(action ="resource_delete",
-       id = id,
-       uat = uat) }
 
 #' @rdname search
 #' @export
 resource_search <- function(query = NULL,
                             rows = NULL, 
-                            start = NULL,
-                            uat) {
+                            start = NULL) {
   ridl(action ="resource_search",
-       !!!(as.list(match.call()[-1])),
-       uat = uat)$results %>% 
+       !!!(as.list(match.call()[-1])))$results %>% 
     tibble::as_tibble()
 }
+  
+
+
+#' @rdname resource
+#' @export
+resource_update <- function(id, res_metadata) {
+  enc <- if(is.null(res_metadata$upload)) "json" else "multipart"
+  ridl(action ="resource_update",
+       id = id,
+       !!!res_metadata,
+       .encoding = enc) %>% 
+    resource_tibblify()
+}
+
+#' @rdname resource
+#' @export
+resource_patch <- function(id, res_metadata) {
+  enc <- if(is.null(res_metadata$upload)) "json" else "multipart"
+  ridl(action ="resource_patch",
+       id = id,
+       !!!res_metadata, 
+       .encoding = enc) %>% 
+    resource_tibblify()
+}
+
+#' @rdname resource
+#' @export
+resource_delete <- function(id) { 
+  ridl(action ="resource_delete",
+       id = id) }
+
 
 ```
   
 ```{r example-resource}
 ## let's get again the details of the dataset we want to add the resource in..
-# p <- riddle::dataset_search("tests", uat = TRUE)
-# ridlid <- as.character(p[1, c("id")])
+#-----
+# Test search in prod
+Sys.unsetenv("USE_UAT")
+p <- riddle::dataset_search("rms_v4")
+p
+
+#-----
+# Test search in uat
+Sys.setenv(USE_UAT=1)
+p <- riddle::dataset_search("tests")
+p
+
+ridlid <- as.character(p[1, c("id")])
 
 m <- riddle::resource_metadata(type = "data",
                        url = "mtcars.csv",
@@ -803,16 +812,16 @@ m <- riddle::resource_metadata(type = "data",
 upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")))
 
 ## let's get again the details of the dataset we want to add the resource in..
-#r <- riddle::resource_create(ridlid, res_metadata = m, uat = TRUE)
+#r <- riddle::resource_create(pkgid = ridlid, res_metadata = m)
 # Like before, the return value is a tibble representation of the resource.
 #r
  
 ## and now can search for it - checking it is correctly there... 
-##riddle::resource_search("name:mtcarsriddle", uat = TRUE)
+##riddle::resource_search("name:mtcarsriddle")
 
 # And once we’re done experimenting with the API, we should take down our
 # toy dataset since we don’t really need it on RIDL.
-#riddle::dataset_delete(p$id, uat = TRUE)
+#riddle::dataset_delete(p$id)
 
 ```
   
@@ -834,29 +843,26 @@ test_that("resource works", {
 #' Fetch resource from RIDL
 #' @param url The URL of the resource to fetch
 #' @param path Location to store the resource
-#' @param uat Boolean TRUE /FALSE tells whether to use
-#'             https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
-#'             FALSE per default
 #'             
 #' @importFrom httr GET add_headers write_disk
 #'
 #' @return Path to the downloaded file
 #' @export
 resource_fetch <- function(url, 
-                           path = tempfile(),
-                           uat = FALSE) {
+                           path = tempfile()) {
   
-   if(uat == FALSE)   {
-    baseurl <- "https://ridl.unhcr.org/"
-    httr::GET(baseurl,
-            httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_KEY")),
-            httr::write_disk(path))   }
-  else  {
+   if(Sys.setenv(USE_UAT=1) )   {
     baseurl <- "https://ridl-uat.unhcr.org/"
     httr::GET(baseurl,
             httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_KEY_UAT")),
-            httr::write_disk(path))   }
-  path
+            httr::write_disk(path)) 
+ }
+  else  {
+    baseurl <- "https://ridl.unhcr.org/"
+    httr::GET(baseurl,
+            httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_KEY")),
+            httr::write_disk(path))    }
+  return(path)
 }
 ```
   

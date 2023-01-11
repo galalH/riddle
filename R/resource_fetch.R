@@ -3,9 +3,6 @@
 #' Fetch resource from RIDL
 #' @param url The URL of the resource to fetch
 #' @param path Location to store the resource
-#' @param uat Boolean TRUE /FALSE tells whether to use
-#'             https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
-#'             FALSE per default
 #'             
 #' @importFrom httr GET add_headers write_disk
 #'
@@ -14,18 +11,18 @@
 #' @examples
 #' # resource_fetch()
 resource_fetch <- function(url, 
-                           path = tempfile(),
-                           uat = FALSE) {
+                           path = tempfile()) {
   
-   if(uat == FALSE)   {
-    baseurl <- "https://ridl.unhcr.org/"
-    httr::GET(baseurl,
-            httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_KEY")),
-            httr::write_disk(path))   }
-  else  {
+   if(Sys.setenv(USE_UAT=1) )   {
     baseurl <- "https://ridl-uat.unhcr.org/"
     httr::GET(baseurl,
             httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_KEY_UAT")),
-            httr::write_disk(path))   }
-  path
+            httr::write_disk(path)) 
+ }
+  else  {
+    baseurl <- "https://ridl.unhcr.org/"
+    httr::GET(baseurl,
+            httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_KEY")),
+            httr::write_disk(path))    }
+  return(path)
 }

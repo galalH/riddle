@@ -1,5 +1,5 @@
 Package: riddle
-Title: Minimal Client for the UNHCR RIDL Platform
+Title: An API wrapper to interact with the UNHCR RIDL Platform
 Version: 0.0.1
 Authors@R: c(
     person("Hisham", "Galal", , "galalh@unhcr.org", role = c("aut", "cre")),

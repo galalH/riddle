@@ -4,9 +4,13 @@
 #' 
 #' Helper function to make API calls
 #'
+#' The package works with both the production and UAT instances of RIDL. 
+#' To use the UAT version, run `Sys.setenv(USE_UAT=1)` before calling any functions
+#'  from the package.
+#'  To go back to the production instance, call `Sys.unsetenv("USE_UAT")`.
+#'
+#'
 #' @param action Operation to execute. See [CKAN's API documentation](https://docs.ckan.org/en/2.9/api/) for details.
-#' @param uat Boolean TRUE /FALSE tells whether to use https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
-#'             FALSE per default
 #' @param .encoding HTTP POST encoding to use - one of `json`, `form`, or `multipart`.
 #' @importFrom httr POST
 #'
@@ -15,25 +19,25 @@
 #' @export
 #' @examples
 #' # ridl()
-ridl <- function(action, ...,
-                 .encoding = "json",
-                 uat = FALSE) {
-  if(uat == TRUE)  {
-    baseurl <- "https://ridl-uat.unhcr.org/"
-    r <- httr::POST(baseurl,
-               path = glue::glue("/api/action/{action}"),
-               httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY_UAT")),
-               body = rlang::list2(...),
-               encode = .encoding) %>%
-          httr::content(simplifyVector = TRUE) 
+ridl <- function(action,
+                 ...,
+                 .encoding = "json") {
+  if(Sys.setenv(USE_UAT=1))  {
+      baseurl <- "https://ridl.unhcr.org/"
+      r <- httr::POST(baseurl,
+                 path = glue::glue("/api/action/{action}"),
+                 httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY")),
+                 body = rlang::list2(...),
+                 encode = .encoding) %>%
+            httr::content(simplifyVector = TRUE) 
     } else {
-    baseurl <- "https://ridl.unhcr.org/"
-    r <- httr::POST(baseurl,
-               path = glue::glue("/api/action/{action}"),
-               httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY")),
-               body = rlang::list2(...),
-               encode = .encoding) %>%
-          httr::content(simplifyVector = TRUE) }
+      baseurl <- "https://ridl-uat.unhcr.org/"
+      r <- httr::POST(baseurl,
+                 path = glue::glue("/api/action/{action}"),
+                 httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY_UAT")),
+                 body = rlang::list2(...),
+                 encode = .encoding) %>%
+            httr::content(simplifyVector = TRUE) }
 
   if (!r$success)
     stop(r$error %>%

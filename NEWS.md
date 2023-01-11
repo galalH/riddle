@@ -4,9 +4,11 @@ Contribution from Edouard:
 
  * Added missing parameter documentation for `visibility` in `resource_metadata()`
  
- * Fixed non working package examples... 
+ * Fixed (some) non working package examples... 
  
  * Gave specific use case examples
+ 
+ * created a specific environement variable usage when using uat so that we can swithc without re-editing renvir
  
  * Fixed the non-existing `resource_upload` function that was in the doc... 
  
