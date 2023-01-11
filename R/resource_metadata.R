@@ -28,7 +28,7 @@
 #' @export
 #' @examples
 #' #resource_metadata()
-#' m <- resource_metadata(type = "data",
+#' m <- riddle::resource_metadata(type = "data",
 #'                        url = "mtcars.csv",
 #'                        name = "mtcars.csv",
 #'                        format = "csv",
@@ -72,7 +72,4 @@ resource_metadata <- function(type = NULL,
     purrr::discard(purrr::is_empty)
 }
 
-# Helper function to package API results as a  tibble
-resource_tibblify <- function(x) {
-  x %>% purrr::modify_if(rlang::is_empty, ~NA) %>% tibble::as_tibble()
-}
+

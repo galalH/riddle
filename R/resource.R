@@ -3,32 +3,43 @@
 #' Work with RIDL resources (files)
 #'
 #' @name resource
-#' @details You must have the necessary permissions to create, edit, or delete datasets and their resources.
+#' @details You must have the necessary permissions to create, edit, or delete 
+#'          datasets and their resources.
 #'
-#' Note that several fields are required for `resource_create()` and `resource_update()` operations to succeed. Consult \code{\link{resource_metadata()}} for the details.
+#' Note that several fields are required for `resource_create()` and 
+#' `resource_update()` operations to succeed. 
+#'   Consult \code{\link{resource_metadata()}} for the details.
 #'
-#' For `resource_update()`/`resource_patch()` operations, it is recommended to call `resource_show()`, make the desired changes to the result, and then call `resource_update()`/`resource_patch()` with it.
+#' For `resource_update()`/`resource_patch()` operations, it is recommended to 
+#' call `resource_show()`, make the desired changes to the result, and then 
+#' call `resource_update()`/`resource_patch()` with it.
 #'
-#' The difference between the update and patch methods is that the patch will perform an update of the provided parameters, while leaving all other parameters unchanged, whereas the update methods deletes all parameters not explicitly provided in the `metadata`.
+#' The difference between the update and patch methods is that the patch will 
+#' perform an update of the provided parameters, while leaving all other 
+#' parameters unchanged, whereas the update methods deletes all parameters
+#'  not explicitly provided in the `metadata`.
 #'
-#' @param metadata Metadata created by \code{\link{resource_metadata()}}.
+#' @param res_metadata Metadata created by \code{\link{resource_metadata()}}.
 #' @param id The id or name of the resource.
 #' @param pkgid The id or name of the dataset to which this resource belongs to.
+#' @param uat Boolean TRUE /FALSE tells whether to use
+#'             https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
+#'             FALSE per default
 #' 
 #' @importFrom httr upload_file
 #'
 #' @return The resource.
+  
+#' @rdname resource
 #' @export
 #' @examples
-#' # library(riddle)
-#' # Sys.setenv(USE_UAT=1)
-#' # ## let's get again the details of the dataset we want to add the resource in..
-#' # p <- dataset_search("tests")
+#' ## let's get again the details of the dataset we want to add the resource in..
+#' # p <- riddle::dataset_search("tests", uat = TRUE)
 #' # ridlid <- as.character(p[1, c("id")])
 #' 
-#' m <- resource_metadata(type = "data",
+#' m <- riddle::resource_metadata(type = "data",
 #'                        url = "mtcars.csv",
-#'                        name = "mtcars.csv v2",
+#'                        name = "mtcarsriddle",
 #'                        format = "csv",
 #'                        file_type = "microdata",
 #'                        date_range_start = "1973-01-01",
@@ -37,61 +48,69 @@
 #'                        visibility = "public",
 #'                        process_status = "raw",
 #'                        identifiability = "anonymized_public",
-#'                        upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")))
-#' ## let's get again the details of the dataset we want to add the resource in..
-#' #r <- resource_create(ridlid, m)
-#' # Like before, the return value is a tibble representation of the
-#' # resource.
+#' upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")))
 #' 
+#' ## let's get again the details of the dataset we want to add the resource in..
+#' #r <- riddle::resource_create(ridlid, res_metadata = m, uat = TRUE)
+#' # Like before, the return value is a tibble representation of the resource.
 #' #r
 #'  
 #' ## and now can search for it - checking it is correctly there... 
-#' #resource_search("name:mtcars")
+#' ##riddle::resource_search("name:mtcarsriddle", uat = TRUE)
 #' 
 #' # And once we’re done experimenting with the API, we should take down our
 #' # toy dataset since we don’t really need it on RIDL.
-#' #dataset_delete(p$id)
+#' #riddle::dataset_delete(p$id, uat = TRUE)
 #' 
-resource_create <- function(pkgid, metadata) {
-  enc <- if(is.null(metadata$upload)) "json" else "multipart"
-  ridl("resource_create", dataset_id = pkgid, !!!metadata, .encoding = enc) %>% resource_tibblify()
+resource_create <- function(pkgid, res_metadata, uat) {
+  enc <- if(is.null(res_metadata$upload)) "json" else "multipart"
+  ridl(action ="resource_create", 
+       dataset_id = pkgid, !!!res_metadata,
+       .encoding = enc,
+       uat = uat) %>% 
+    resource_tibblify()
 }
 
 #' @rdname resource
 #' @export
-resource_update <- function(id, metadata) {
-  enc <- if(is.null(metadata$upload)) "json" else "multipart"
-  ridl("resource_update", id = id, !!!metadata, .encoding = enc) %>% resource_tibblify()
+resource_update <- function(id, res_metadata, uat) {
+  enc <- if(is.null(res_metadata$upload)) "json" else "multipart"
+  ridl(action ="resource_update",
+       id = id,
+       !!!res_metadata,
+       .encoding = enc,
+       uat = uat) %>% 
+    resource_tibblify()
 }
 
 #' @rdname resource
 #' @export
-resource_patch <- function(id, metadata) {
-  enc <- if(is.null(metadata$upload)) "json" else "multipart"
-  ridl("resource_patch", id = id, !!!metadata, .encoding = enc) %>% resource_tibblify()
+resource_patch <- function(id, res_metadata, uat) {
+  enc <- if(is.null(res_metadata$upload)) "json" else "multipart"
+  ridl(action ="resource_patch",
+       id = id,
+       !!!res_metadata, 
+       .encoding = enc,
+       uat = uat) %>% 
+    resource_tibblify()
 }
 
 #' @rdname resource
 #' @export
-resource_delete <- function(id) { ridl("resource_delete", id = id) }
+resource_delete <- function(id, uat) { 
+  ridl(action ="resource_delete",
+       id = id,
+       uat = uat) }
 
 #' @rdname search
 #' @export
-resource_search <- function(query = NULL, rows = NULL, start = NULL) {
-  ridl("resource_search", !!!(as.list(match.call()[-1])))$results %>% tibble::as_tibble()
-}
-
-#' Fetch resource from RIDL
-#' @param url The URL of the resource to fetch
-#' @param path Location to store the resource
-#'
-#' @return Path to the downloaded file
-#' @export
-resource_fetch <- function(url, path = tempfile()) {
-  httr::GET(url,
-            httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_KEY")),
-            httr::write_disk(path))
-
-  path
+resource_search <- function(query = NULL,
+                            rows = NULL, 
+                            start = NULL,
+                            uat) {
+  ridl(action ="resource_search",
+       !!!(as.list(match.call()[-1])),
+       uat = uat)$results %>% 
+    tibble::as_tibble()
 }
 

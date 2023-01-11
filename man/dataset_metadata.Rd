@@ -143,6 +143,6 @@ m <- dataset_metadata(title = "Motor Trend Car Road Tests",
                       unit_of_measurement = "car",
                       data_collection_technique = "oth",
                       archived = "False")
-m
 
+m
 }

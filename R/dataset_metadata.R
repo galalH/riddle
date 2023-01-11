@@ -67,8 +67,8 @@
 #'                       unit_of_measurement = "car",
 #'                       data_collection_technique = "oth",
 #'                       archived = "False")
-#' m
 #' 
+#' m
 dataset_metadata <- function(title = NULL,
                              name = NULL,
                              short_title = NULL,
@@ -143,12 +143,4 @@ dataset_metadata <- function(title = NULL,
     purrr::discard(purrr::is_empty)
 }
 
-# Helper function to package API results as a  tibble
-dataset_tibblify <- function(x) {
-  x %>%
-    purrr::modify_if(rlang::is_empty, ~NA) %>%
-    purrr::modify_if(rlang::is_list, tibble::as_tibble) %>%
-    purrr::modify_if(purrr::negate(rlang::is_atomic), list) %>%
-    purrr::modify_if(~rlang::is_atomic(.) & length(.) > 1, list) %>%
-    tibble::as_tibble()
-}
+

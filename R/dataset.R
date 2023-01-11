@@ -5,67 +5,110 @@
 #' @name dataset
 #' @details You must have the necessary permissions to create, edit, or delete datasets.
 #'
-#' Note that several fields are required for `dataset_create()` and `dataset_update()` operations to succeed. Consult \code{\link{dataset_metadata()}} for the details.
+#' Note that several fields are required for `dataset_create()` and `dataset_update()` operations to succeed. 
+#' Consult \code{\link{dataset_metadata()}} for the details.
 #'
-#' For `dataset_update()`/`dataset_patch()` operations, it is recommended to call `dataset_show()`, make the desired changes to the result, and then call `dataset_update()`/`dataset_patch()` with it.
+#' For `dataset_update()`/`dataset_patch()` operations, it is recommended to 
+#' call `dataset_show()`, make the desired changes to the result, 
+#' and then call `dataset_update()`/`dataset_patch()` with it.
 #'
-#' The difference between the update and patch methods is that the patch will perform an update of the provided parameters, while leaving all other parameters unchanged, whereas the update methods deletes all parameters not explicitly provided in the `metadata`.
+#' The difference between the update and patch methods is that the patch will 
+#' perform an update of the provided parameters, while leaving all other 
+#' parameters unchanged, whereas the update methods deletes all parameters 
+#' not explicitly provided in the `metadata`.
 #'
 #' @param metadata Metadata created by \code{\link{dataset_metadata()}}.
 #' @param id The id or name of the dataset.
+#' @param uat Boolean TRUE /FALSE tells whether to use https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
+#'             FALSE per default
 #'
 #' @return The dataset.
 #' @export
 #' @examples
 #' 
-#' library(riddle)
-#' Sys.setenv(USE_UAT=1)
-#' #Sys.unsetenv("USE_UAT")
 #' 
 #' ### TO FIX -- geographies: Missing value
 #' ## __type: Validation Error ---
 #' ## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682
 #' 
-#' # m <- dataset_metadata(title = "Motor Trend Car Road Test two",
-#' #                       name = "mtcars",
-#' #                       notes = "The data was extracted from the 1974 Motor Trend
-#' #                       US magazine, and comprises fuel consumption and 10 aspects
-#' #                       of automobile design and performance for 32 automobiles
-#' #                       (1973–74 models).",
-#' #                       owner_org = "exercise-container",
-#' #                       visibility = "public",
-#' #                       geographies = "UNSPECIFIED",
-#' #                       external_access_level = "open_access",
-#' #                       data_collector = "Motor Trend",
-#' #                       keywords = keywords[c("Environment", "Other")],
-#' #                       unit_of_measurement = "car",
-#' #                       data_collection_technique = "oth",
-#' #                       archived = "False")
+#' m <- riddle::dataset_metadata(title = "Motor Trend Car Road Test two",
+#'                       name = "mtcars_ed",
+#'                       notes = "The data was extracted from the 1974 Motor Trend
+#'                       US magazine, and comprises fuel consumption and 10 aspects
+#'                       of automobile design and performance for 32 automobiles
+#'                       (1973–74 models).",
+#'                       owner_org = "Lebanon",
+#'                       visibility = "public",
+#'                       geographies = "UNSPECIFIED",
+#'                       external_access_level = "open_access",
+#'                       data_collector = "Motor Trend",
+#'                       keywords = keywords[c("Environment", "Other")],
+#'                       unit_of_measurement = "car",
+#'                       data_collection_technique = "oth",
+#'                       archived = "False")
 #' # ## For the above to work - you need to make sure you have at least editor access
-#' # # to the corresponding container - i.e. owner_org = "exercise-container"
-#' # p <- dataset_create(m)
+#' # to the corresponding container - i.e. owner_org = "exercise-container"
+#' #p <- riddle::dataset_create(metadata = m, uat = TRUE)
 #' # The return value is a representation of the dataset we just created in
 #' # RIDL that you could inspect like any other R object.
 #' #p
 #' 
+#' m <- riddle::dataset_metadata(title = "Test",
+#'                       name = "Test",
+#'                       notes = "The data was extracted from kobo.",
+#'                       owner_org = "Americas : Regional Datasets",
+#'                       visibility = "public",
+#'                       geographies = "UNSPECIFIED",
+#'                       external_access_level = "open_access",
+#'                       data_collector = "UNHCR",
+#'                       keywords = keywords[c("Environment", "Other")],
+#'                       unit_of_measurement = "car",
+#'                       data_collection_technique = "oth",
+#'                       archived = "False")
 #' 
+#' riddle::dataset_show("unhcr-cbi-americas-quarterly-report")
 #' 
-#' #dataset_show("unhcr-cbi-americas-quarterly-report")
-#' 
-dataset_create <- function(metadata) { ridl("package_create", !!!metadata) %>% dataset_tibblify() }
+dataset_create <- function(metadata,
+                           uat= FALSE) { 
+  ridl(action ="package_create",
+       !!!metadata, 
+       uat = uat) %>% 
+    dataset_tibblify() }
 
 #' @rdname dataset
 #' @export
-dataset_show <- function(id) { ridl("package_show", id = id) %>% dataset_tibblify() }
+dataset_show <- function(id, 
+                         uat= FALSE) { 
+  ridl(action ="package_show",
+       id = id,
+       uat = uat) %>% 
+    dataset_tibblify() }
 
 #' @rdname dataset
 #' @export
-dataset_update <- function(id, metadata) { ridl("package_update", id = id, !!!metadata) %>% dataset_tibblify() }
+dataset_update <- function(id, metadata, 
+                           uat= FALSE) { 
+  ridl(action ="package_update", 
+       id = id, 
+       !!!metadata, 
+       uat = uat) %>% 
+    dataset_tibblify() }
 
 #' @rdname dataset
 #' @export
-dataset_patch <- function(id, metadata) { ridl("package_patch", id = id, !!!metadata) %>% dataset_tibblify() }
+dataset_patch <- function(id, 
+                          metadata, 
+                          uat= FALSE) { 
+  ridl(action ="package_patch",
+       id = id, 
+       !!!metadata, 
+       uat = uat) %>% 
+    dataset_tibblify() }
 
 #' @rdname dataset
 #' @export
-dataset_delete <- function(id) { ridl("package_delete", id = id) }
+dataset_delete <- function(id, 
+                           uat = FALSE) { 
+  ridl(action ="package_delete",
+       id = id,
+       uat = uat) }

@@ -5,27 +5,40 @@
 #' @name search
 #'
 #' @param q,query The search query.
-#' @param rows The maximum number of matching rows (datasets) to return. (optional, default: 10, upper limit: 1000)
-#' @param start The offset in the complete result for where the set of returned datasets should begin.
+#' @param rows The maximum number of matching rows (datasets) to return. 
+#'              (optional, default: 10, upper limit: 1000)
+#' @param start The offset in the complete result for where the set of returned 
+#'               datasets should begin.
+#' @param uat Boolean TRUE /FALSE tells whether to use https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
+#'             FALSE per default
 #'
+#' @importFrom purrr is_empty pmap
+#' @importFrom tibble tibble
+#' @importFrom tidyselect vars_select_helpers
+#' @importFrom dplyr mutate across
+#' 
 #' @return A tibble with the search results.
 #' @export
 #' @examples
 #' 
-#' # library(riddle)
-#' # Sys.setenv(USE_UAT=1)
-#' # p <- dataset_search("tests")
+#' # p <- riddle::dataset_search(q = "tests", 
+#' #                             uat = TRUE)
 #' # p
 #' # p$id
-dataset_search <- function(q = NULL, rows = NULL, start = NULL) {
-  r <- ridl("package_search", !!!(as.list(match.call()[-1])))$results
+dataset_search <- function(q = NULL, rows = NULL, start = NULL, uat = FALSE) {
+  r <- ridl(action ="package_search", 
+            !!!(as.list(match.call()[-1]))  , 
+            uat = uat)$results
 
-  if (purrr::is_empty(r))
-    return(tibble::tibble())
-
-  r %>%
+  if (purrr::is_empty(r)) {
+    r <- tibble::tibble()
+    
+  } else {  
+    r %>%
     dplyr::mutate(dplyr::across(tidyselect::vars_select_helpers$where(is.data.frame),
                                 ~purrr::pmap(., ~tibble::tibble(...)))) %>%
-    tibble::as_tibble()
+    tibble::as_tibble() -> r
+    }
+  return(r)
 }
 

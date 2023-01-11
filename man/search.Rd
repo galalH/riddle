@@ -6,16 +6,21 @@
 \alias{resource_search}
 \title{Searches for datasets and resources satisfying a given criteria.}
 \usage{
-dataset_search(q = NULL, rows = NULL, start = NULL)
+dataset_search(q = NULL, rows = NULL, start = NULL, uat = FALSE)
 
-resource_search(query = NULL, rows = NULL, start = NULL)
+resource_search(query = NULL, rows = NULL, start = NULL, uat)
 }
 \arguments{
 \item{q, query}{The search query.}
 
-\item{rows}{The maximum number of matching rows (datasets) to return. (optional, default: 10, upper limit: 1000)}
+\item{rows}{The maximum number of matching rows (datasets) to return.
+(optional, default: 10, upper limit: 1000)}
 
-\item{start}{The offset in the complete result for where the set of returned datasets should begin.}
+\item{start}{The offset in the complete result for where the set of returned
+datasets should begin.}
+
+\item{uat}{Boolean TRUE /FALSE tells whether to use https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
+FALSE per default}
 }
 \value{
 A tibble with the search results.
@@ -25,9 +30,8 @@ Searches for datasets and resources satisfying a given criteria.
 }
 \examples{
 
-# library(riddle)
-# Sys.setenv(USE_UAT=1)
-# p <- dataset_search("tests")
+# p <- riddle::dataset_search(q = "tests", 
+#                             uat = TRUE)
 # p
 # p$id
 }

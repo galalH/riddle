@@ -34,6 +34,9 @@
     <loc>/reference/dataset_metadata.html</loc>
   </url>
   <url>
+    <loc>/reference/dataset_tibblify.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
@@ -58,7 +61,13 @@
     <loc>/reference/resource_metadata.html</loc>
   </url>
   <url>
+    <loc>/reference/resource_tibblify.html</loc>
+  </url>
+  <url>
     <loc>/reference/riddle-package.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ridl.html</loc>
   </url>
   <url>
     <loc>/reference/search.html</loc>

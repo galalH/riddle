@@ -33,7 +33,7 @@ The easiest way to do that is by calling `usethis::edit_r_environ()` and adding 
 `RIDL_API_KEY=xxxxx` to the file before saving and restarting your R session.
 
 The package works with both the production and [UAT instances of RIDL](https://ridl-uat.unhcr.org)
- (aka "User Aceptance Testing"). To use the UAT version, add the corresponding KEY 
+ (aka "User Acceptance Testing"). To use the UAT version, add the corresponding KEY 
  within your `.Renviron` file: `RIDL_API_KEY_UAT=xxxxx`.  Then add `uat = TRUE` 
  as a parameter in any function from the package.  This way you do not need to 
  change your `RIDL_API_KEY` when you wan to switch between  prod and uat server
@@ -50,23 +50,23 @@ the documentation is available [here](https://im.unhcr.org/ridl) for more detail
 A `container` is a placeholder where we can share data on `RIDL`. A `container` 
 can hold zero or multiple `datasets`. As a convention all operations datasets are
 grouped together within a container but an operation container can also include
-multiple specific containers.
+multiple specific containers. Container are documented within the dataset metadata 
+through the variable `owner_org`
 
 Container URL are typically formatted as: 
-https://ridl.unhcr.org/data-container/`__name_of_country__`
+> https://ridl.unhcr.org/data-container/`__name_of_country__`
 
 ### `Dataset`
 
-A `dataset` is a placeholder where we can share a serie of data files
-(`resources`) linked to a data collection project. 
-In a dataset page there’s some metadata 
+A `dataset` is a placeholder where we can share a series of data and documentation files
+(called `resources` - see below), eac of them linked to a data project. 
+Each dataset is described with some metadata 
 (using the [data documentation initiative (DDI) format](https://ddialliance.org/)) 
-that give you enough context on the project and information to properly store the
+that gives enough context on the project and information to properly store the
 data files and use them. 
 
-
-Datasets URL are typically  formatted as:
-https://ridl.unhcr.org/dataset/`__name_of_dataset__`
+Dataset URL are typically  formatted as:
+> https://ridl.unhcr.org/dataset/`__name_of_dataset__`
 
 Data files, e.g an Excel file, as well as any supporting documentation are called
 `resource` and are shared as either `data` or `attachment`  within a specific
@@ -80,37 +80,21 @@ the metata from the project itself.
 
 
 Resources URL are typically  formatted as:
-https://ridl.unhcr.org/dataset/`__name_of_dataset__`/resource/`__id_of_the_ressource__`
-
-## Use case
-
-The package is supporting 2 specific use cases where automation can save time, i.e. __attaching either `data` or `ressource`__. 
-
-For instance:
-
-  1. Ideally, data resources from kobotoolbox should be added using the API connection as described in 
-[Part 4 of the documentation](https://im.unhcr.org/ridl/#Link_kobo_ridl). Though, there might be specific cases where you
-are building an operational dataset, scrapping an official data source from the web or 
-  within a PDF and want to add this on a regular basis as a new `data` resource 
-  within an existing dataset.   You can check a practical example of such use case here:[darien_gap_human_mobility](https://github.com/unhcr-americas/darien_gap_human_mobility/tree/main/R)
-  
-  2. You want to add your own initial data exploration, data interpretation 
-  presentation and/or data story telling report as a new `attachement` resource within a dataset. 
-  You can check a practical example of such use case here:[kobocruncher](https://edouard-legoupil.github.io/kobocruncher/)
+> https://ridl.unhcr.org/dataset/`__name_of_dataset__`/resource/`__id_of_the_resource__`
 
 ## How to 
 
 As a UNHCR staff, you should have access to a series of containers based on where you are working.
 Within each container, if you have editor or admin right, you can create a dataset. 
+
+### Use case 1: create a new dataset
+
 To create a dataset, you need first to document the dataset metadata, including the 
 reference to the container where you would like the new dataset to be created.
 Once the dataset is created, you can add as many resources as required (either `data` or `attachment`). 
 
-Below is simple example using the `mtcars` dataset as an example..
-
 ```{r}
 library(riddle)
-Sys.setenv(USE_UAT=1)
 ## First we create the dataset metadata
 m <- dataset_metadata(title = "Motor Trend Car Road Tests",
                       name = "mtcars",
@@ -129,12 +113,29 @@ m <- dataset_metadata(title = "Motor Trend Car Road Tests",
                       
 ## For the above to work - you need to make sure you have at least editor access
 # to the corresponding container - i.e. owner_org = "exercise-container"
-p <- dataset_create(m)
+p <- dataset_create(m, uat = TRUE)
 
 # The return value is a representation of the dataset we just created in
 # RIDL that you could inspect like any other R object.
 p 
+```
 
+
+
+### Use case 2:  add a new data file
+
+Ideally, data resources from kobotoolbox should be added using the API connection as described in 
+[Part 4 of the documentation](https://im.unhcr.org/ridl/#Link_kobo_ridl). 
+
+Though, there might be specific cases where you
+are building an operational dataset, scrapping an official data source from the web or 
+  within a PDF and want to add this on a regular basis as a new `data` resource 
+  within an existing dataset.   You can check a practical example of such use case here:[darien_gap_human_mobility](https://github.com/unhcr-americas/darien_gap_human_mobility/tree/main/R)
+
+
+Below is simple example using the `mtcars` dataset as an example.
+```{r}
+library(riddle)
 ## let's get again the details of the dataset we want to add the resource in 
 # based on a search...
 p <- dataset_search("tests")
@@ -150,7 +151,7 @@ m <- resource_metadata(type = "data",
                        process_status = "raw",
                        identifiability = "anonymized_public")
 ## let's get again the details of the dataset we want to add the resource in..
-r <- resource_create(p$id, m)
+r <- resource_create(p$id, m, uat = TRUE)
 
 # Like before, the return value is a tibble representation of the
 # resource.
@@ -158,7 +159,8 @@ r
 
 # But so far we’ve only created the metadata for the resource. The next
 # step is to upload the data.
-resource_upload(r$id, path = system.file("extdata/mtcars.csv", package = "readr"))
+## not sure why this function is not there...
+## resource_upload(r$id, path = system.file("extdata/mtcars.csv", package = "readr"))
 
 ## and now can search for it - checking it is correctly there... 
 resource_search("name:mtcars")
@@ -166,7 +168,18 @@ resource_search("name:mtcars")
 # And once we’re done experimenting with the API, we should take down our
 # toy dataset since we don’t really need it on RIDL.
 dataset_delete(p$id)
-# Get back to Prod Environment
-Sys.unsetenv("USE_UAT")
+```  
+  
+### Use case 2:  Add attachment
+You want to add your own initial data exploration, data interpretation presentation 
+and/or data story telling report as a new `attachement` resource within a dataset. 
 
-```
+You can check a practical example of such use case here:[kobocruncher](https://edouard-legoupil.github.io/kobocruncher/)
+
+
+```{r}
+library(riddle)
+
+```  
+
+

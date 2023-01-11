@@ -8,18 +8,22 @@
 \alias{resource_delete}
 \title{Work with RIDL resources (files)}
 \usage{
-resource_create(pkgid, metadata)
+resource_create(pkgid, res_metadata, uat)
 
-resource_update(id, metadata)
+resource_update(id, res_metadata, uat)
 
-resource_patch(id, metadata)
+resource_patch(id, res_metadata, uat)
 
-resource_delete(id)
+resource_delete(id, uat)
 }
 \arguments{
 \item{pkgid}{The id or name of the dataset to which this resource belongs to.}
 
-\item{metadata}{Metadata created by \code{\link{resource_metadata()}}.}
+\item{res_metadata}{Metadata created by \code{\link{resource_metadata()}}.}
+
+\item{uat}{Boolean TRUE /FALSE tells whether to use
+https://ridl-uat.unhcr.org/ or https://ridl.unhcr.org/.
+FALSE per default}
 
 \item{id}{The id or name of the resource.}
 }
@@ -30,24 +34,30 @@ The resource.
 Work with RIDL resources (files)
 }
 \details{
-You must have the necessary permissions to create, edit, or delete datasets and their resources.
+You must have the necessary permissions to create, edit, or delete
+datasets and their resources.
 
-Note that several fields are required for \code{resource_create()} and \code{resource_update()} operations to succeed. Consult \code{\link{resource_metadata()}} for the details.
+Note that several fields are required for \code{resource_create()} and
+\code{resource_update()} operations to succeed.
+Consult \code{\link{resource_metadata()}} for the details.
 
-For \code{resource_update()}/\code{resource_patch()} operations, it is recommended to call \code{resource_show()}, make the desired changes to the result, and then call \code{resource_update()}/\code{resource_patch()} with it.
+For \code{resource_update()}/\code{resource_patch()} operations, it is recommended to
+call \code{resource_show()}, make the desired changes to the result, and then
+call \code{resource_update()}/\code{resource_patch()} with it.
 
-The difference between the update and patch methods is that the patch will perform an update of the provided parameters, while leaving all other parameters unchanged, whereas the update methods deletes all parameters not explicitly provided in the \code{metadata}.
+The difference between the update and patch methods is that the patch will
+perform an update of the provided parameters, while leaving all other
+parameters unchanged, whereas the update methods deletes all parameters
+not explicitly provided in the \code{metadata}.
 }
 \examples{
-# library(riddle)
-# Sys.setenv(USE_UAT=1)
-# ## let's get again the details of the dataset we want to add the resource in..
-# p <- dataset_search("tests")
+## let's get again the details of the dataset we want to add the resource in..
+# p <- riddle::dataset_search("tests", uat = TRUE)
 # ridlid <- as.character(p[1, c("id")])
 
-m <- resource_metadata(type = "data",
+m <- riddle::resource_metadata(type = "data",
                        url = "mtcars.csv",
-                       name = "mtcars.csv v2",
+                       name = "mtcarsriddle",
                        format = "csv",
                        file_type = "microdata",
                        date_range_start = "1973-01-01",
@@ -56,19 +66,18 @@ m <- resource_metadata(type = "data",
                        visibility = "public",
                        process_status = "raw",
                        identifiability = "anonymized_public",
-                       upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")))
-## let's get again the details of the dataset we want to add the resource in..
-#r <- resource_create(ridlid, m)
-# Like before, the return value is a tibble representation of the
-# resource.
+upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")))
 
+## let's get again the details of the dataset we want to add the resource in..
+#r <- riddle::resource_create(ridlid, res_metadata = m, uat = TRUE)
+# Like before, the return value is a tibble representation of the resource.
 #r
  
 ## and now can search for it - checking it is correctly there... 
-#resource_search("name:mtcars")
+##riddle::resource_search("name:mtcarsriddle", uat = TRUE)
 
 # And once we’re done experimenting with the API, we should take down our
 # toy dataset since we don’t really need it on RIDL.
-#dataset_delete(p$id)
+#riddle::dataset_delete(p$id, uat = TRUE)
 
 }

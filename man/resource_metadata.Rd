@@ -66,7 +66,7 @@ Fields marked with a (*) are required for \code{\link{resource_create()}} and \c
 }
 \examples{
 #resource_metadata()
-m <- resource_metadata(type = "data",
+m <- riddle::resource_metadata(type = "data",
                        url = "mtcars.csv",
                        name = "mtcars.csv",
                        format = "csv",

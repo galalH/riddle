@@ -27,7 +27,7 @@ library(riddle)
   
 
 ```{r example-ridl}
-#ridl()
+# ridl()
 ```
 
   
@@ -52,13 +52,39 @@ m <- dataset_metadata(title = "Motor Trend Car Road Tests",
                       unit_of_measurement = "car",
                       data_collection_technique = "oth",
                       archived = "False")
-m
 
+m
 ```
 
   
 
+# dataset_tibblify
+
+    
+
   
+
+```{r example-dataset_tibblify}
+m <- dataset_metadata(title = "Motor Trend Car Road Tests",
+                      name = "mtcars",
+                      notes = "The data was extracted from the 1974 Motor Trend 
+                      US magazine, and comprises fuel consumption and 10 aspects
+                      of automobile design and performance for 32 automobiles 
+                      (1973–74 models).",
+                      owner_org = "exercise-container",
+                      visibility = "public",
+                      geographies = "UNSPECIFIED",
+                      external_access_level = "open_access",
+                      data_collector = "Motor Trend",
+                      keywords = keywords[c("Environment", "Other")],
+                      unit_of_measurement = "car",
+                      data_collection_technique = "oth",
+                      archived = "False")
+
+m1 <- dataset_tibblify(m)
+m1
+```
+
   
 
 # dataset
@@ -67,39 +93,47 @@ m
 
 ```{r example-dataset}
 
-library(riddle)
-Sys.setenv(USE_UAT=1)
-#Sys.unsetenv("USE_UAT")
 
 ### TO FIX -- geographies: Missing value
 ## __type: Validation Error ---
 ## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682
 
-# m <- dataset_metadata(title = "Motor Trend Car Road Test two",
-#                       name = "mtcars",
-#                       notes = "The data was extracted from the 1974 Motor Trend
-#                       US magazine, and comprises fuel consumption and 10 aspects
-#                       of automobile design and performance for 32 automobiles
-#                       (1973–74 models).",
-#                       owner_org = "exercise-container",
-#                       visibility = "public",
-#                       geographies = "UNSPECIFIED",
-#                       external_access_level = "open_access",
-#                       data_collector = "Motor Trend",
-#                       keywords = keywords[c("Environment", "Other")],
-#                       unit_of_measurement = "car",
-#                       data_collection_technique = "oth",
-#                       archived = "False")
+m <- riddle::dataset_metadata(title = "Motor Trend Car Road Test two",
+                      name = "mtcars_ed",
+                      notes = "The data was extracted from the 1974 Motor Trend
+                      US magazine, and comprises fuel consumption and 10 aspects
+                      of automobile design and performance for 32 automobiles
+                      (1973–74 models).",
+                      owner_org = "Lebanon",
+                      visibility = "public",
+                      geographies = "UNSPECIFIED",
+                      external_access_level = "open_access",
+                      data_collector = "Motor Trend",
+                      keywords = keywords[c("Environment", "Other")],
+                      unit_of_measurement = "car",
+                      data_collection_technique = "oth",
+                      archived = "False")
 # ## For the above to work - you need to make sure you have at least editor access
-# # to the corresponding container - i.e. owner_org = "exercise-container"
-# p <- dataset_create(m)
+# to the corresponding container - i.e. owner_org = "exercise-container"
+#p <- riddle::dataset_create(metadata = m, uat = TRUE)
 # The return value is a representation of the dataset we just created in
 # RIDL that you could inspect like any other R object.
 #p
 
+m <- riddle::dataset_metadata(title = "Test",
+                      name = "Test",
+                      notes = "The data was extracted from kobo.",
+                      owner_org = "Americas : Regional Datasets",
+                      visibility = "public",
+                      geographies = "UNSPECIFIED",
+                      external_access_level = "open_access",
+                      data_collector = "UNHCR",
+                      keywords = keywords[c("Environment", "Other")],
+                      unit_of_measurement = "car",
+                      data_collection_technique = "oth",
+                      archived = "False")
 
-
-#dataset_show("unhcr-cbi-americas-quarterly-report")
+riddle::dataset_show("unhcr-cbi-americas-quarterly-report")
 
 ```
 
@@ -115,9 +149,8 @@ Sys.setenv(USE_UAT=1)
 
 ```{r example-dataset_search}
 
-# library(riddle)
-# Sys.setenv(USE_UAT=1)
-# p <- dataset_search("tests")
+# p <- riddle::dataset_search(q = "tests", 
+#                             uat = TRUE)
 # p
 # p$id
 ```
@@ -132,7 +165,7 @@ Sys.setenv(USE_UAT=1)
 
 ```{r example-resource_metadata}
 #resource_metadata()
-m <- resource_metadata(type = "data",
+m <- riddle::resource_metadata(type = "data",
                        url = "mtcars.csv",
                        name = "mtcars.csv",
                        format = "csv",
@@ -148,20 +181,46 @@ m
 
   
 
-# ressource
+# resource_tibblify
+
+    
 
   
 
-```{r example-ressource}
-# library(riddle)
-# Sys.setenv(USE_UAT=1)
-# ## let's get again the details of the dataset we want to add the resource in..
-# p <- dataset_search("tests")
+```{r example-resource_tibblify}
+m <- riddle::resource_metadata(type = "data",
+                       url = "mtcars.csv",
+                       name = "mtcars.csv",
+                       format = "csv",
+                       file_type = "microdata",
+                       date_range_start = "1973-01-01",
+                       date_range_end = "1973-12-31",
+                       version = "1",
+                       visibility = "public",
+                       process_status = "raw",
+                       identifiability = "anonymized_public")
+m1 <- riddle::resource_tibblify(m)
+m1
+```
+
+  
+
+  
+
+
+
+# resource
+
+  
+
+```{r example-resource}
+## let's get again the details of the dataset we want to add the resource in..
+# p <- riddle::dataset_search("tests", uat = TRUE)
 # ridlid <- as.character(p[1, c("id")])
 
-m <- resource_metadata(type = "data",
+m <- riddle::resource_metadata(type = "data",
                        url = "mtcars.csv",
-                       name = "mtcars.csv v2",
+                       name = "mtcarsriddle",
                        format = "csv",
                        file_type = "microdata",
                        date_range_start = "1973-01-01",
@@ -170,24 +229,38 @@ m <- resource_metadata(type = "data",
                        visibility = "public",
                        process_status = "raw",
                        identifiability = "anonymized_public",
-                       upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")))
-## let's get again the details of the dataset we want to add the resource in..
-#r <- resource_create(ridlid, m)
-# Like before, the return value is a tibble representation of the
-# resource.
+upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")))
 
+## let's get again the details of the dataset we want to add the resource in..
+#r <- riddle::resource_create(ridlid, res_metadata = m, uat = TRUE)
+# Like before, the return value is a tibble representation of the resource.
 #r
  
 ## and now can search for it - checking it is correctly there... 
-#resource_search("name:mtcars")
+##riddle::resource_search("name:mtcarsriddle", uat = TRUE)
 
 # And once we’re done experimenting with the API, we should take down our
 # toy dataset since we don’t really need it on RIDL.
-#dataset_delete(p$id)
+#riddle::dataset_delete(p$id, uat = TRUE)
 
 ```
 
   
+
+# resource_fetch
+
+    
+
+  
+
+```{r example-resource_fetch}
+# resource_fetch()
+```
+
+  
+
+  
+
 
 # summary_report
 
