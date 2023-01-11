@@ -716,7 +716,7 @@ test_that("resource_tibblify works", {
 #' parameters unchanged, whereas the update methods deletes all parameters
 #'  not explicitly provided in the `metadata`.
 #'
-#' @param metadata Metadata created by \code{\link{resource_metadata()}}.
+#' @param metadatares Metadata created by \code{\link{resource_metadata()}}.
 #' @param id The id or name of the resource.
 #' @param pkgid The id or name of the dataset to which this resource belongs to.
 #' @param uat Boolean TRUE /FALSE tells whether to use
@@ -727,10 +727,10 @@ test_that("resource_tibblify works", {
 #'
 #' @return The resource.
 #' @export
-resource_create <- function(pkgid, metadata, uat) {
-  enc <- if(is.null(metadata$upload)) "json" else "multipart"
+resource_create <- function(pkgid, metadatares, uat) {
+  enc <- if(is.null(metadatares$upload)) "json" else "multipart"
   ridl("resource_create", 
-       dataset_id = pkgid, !!!metadata,
+       dataset_id = pkgid, !!!metadatares,
        .encoding = enc,
        uat) %>% 
     resource_tibblify()
@@ -738,11 +738,11 @@ resource_create <- function(pkgid, metadata, uat) {
 
 #' @rdname resource
 #' @export
-resource_update <- function(id, metadata, uat) {
-  enc <- if(is.null(metadata$upload)) "json" else "multipart"
+resource_update <- function(id, metadatares, uat) {
+  enc <- if(is.null(metadatares$upload)) "json" else "multipart"
   ridl("resource_update",
        id = id,
-       !!!metadata,
+       !!!metadatares,
        .encoding = enc,
        uat) %>% 
     resource_tibblify()
@@ -750,11 +750,11 @@ resource_update <- function(id, metadata, uat) {
 
 #' @rdname resource
 #' @export
-resource_patch <- function(id, metadata, uat) {
-  enc <- if(is.null(metadata$upload)) "json" else "multipart"
+resource_patch <- function(id, metadatares, uat) {
+  enc <- if(is.null(metadatares$upload)) "json" else "multipart"
   ridl("resource_patch",
        id = id,
-       !!!metadata, 
+       !!!metadatares, 
        .encoding = enc,
        uat) %>% 
     resource_tibblify()
@@ -799,7 +799,7 @@ m <- riddle::resource_metadata(type = "data",
                        identifiability = "anonymized_public",
                        upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")))
 ## let's get again the details of the dataset we want to add the resource in..
-r <- riddle::resource_create(ridlid, m, uat = TRUE)
+r <- riddle::resource_create(ridlid, metadatares = m, uat = TRUE)
 # Like before, the return value is a tibble representation of the resource.
 r
  
