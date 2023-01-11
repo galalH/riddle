@@ -938,6 +938,7 @@ summary_report <- function(year = 2022,
 # Run but keep eval=FALSE to avoid infinite loop
 # Execute in the console directly
 fusen::inflate(flat_file = "dev/ridlle_dev.Rmd", vignette_name = "Package Functions")
-
+library(pkgdown)
+build_site()
 ```
 

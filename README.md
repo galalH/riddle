@@ -54,6 +54,7 @@ multiple specific containers. Container are documented within the dataset metada
 through the variable `owner_org`
 
 Container URL are typically formatted as: 
+
 > https://ridl.unhcr.org/data-container/`__name_of_country__`
 
 ### `Dataset`
@@ -66,6 +67,7 @@ that gives enough context on the project and information to properly store the
 data files and use them. 
 
 Dataset URL are typically  formatted as:
+
 > https://ridl.unhcr.org/dataset/`__name_of_dataset__`
 
 Data files, e.g an Excel file, as well as any supporting documentation are called
@@ -80,6 +82,7 @@ the metata from the project itself.
 
 
 Resources URL are typically  formatted as:
+
 > https://ridl.unhcr.org/dataset/`__name_of_dataset__`/resource/`__id_of_the_resource__`
 
 ## How to 
@@ -170,7 +173,7 @@ resource_search("name:mtcars")
 dataset_delete(p$id)
 ```  
   
-### Use case 2:  Add attachment
+### Use case 3:  Add attachment
 You want to add your own initial data exploration, data interpretation presentation 
 and/or data story telling report as a new `attachement` resource within a dataset. 
 

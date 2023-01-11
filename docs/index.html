@@ -99,14 +99,20 @@
 <code>Container</code><a class="anchor" aria-label="anchor" href="#container"></a>
 </h3>
 <p>A <code>container</code> is a placeholder where we can share data on <code>RIDL</code>. A <code>container</code> can hold zero or multiple <code>datasets</code>. As a convention all operations datasets are grouped together within a container but an operation container can also include multiple specific containers. Container are documented within the dataset metadata through the variable <code>owner_org</code></p>
-<p>Container URL are typically formatted as: &gt; <a href="https://ridl.unhcr.org/data-container/%60__name_of_country__" class="external-link uri">https://ridl.unhcr.org/data-container/`__name_of_country__</a>`</p>
+<p>Container URL are typically formatted as:</p>
+<blockquote>
+<p><a href="https://ridl.unhcr.org/data-container/%60__name_of_country__" class="external-link uri">https://ridl.unhcr.org/data-container/`__name_of_country__</a>`</p>
+</blockquote>
 </div>
 <div class="section level3">
 <h3 id="dataset">
 <code>Dataset</code><a class="anchor" aria-label="anchor" href="#dataset"></a>
 </h3>
 <p>A <code>dataset</code> is a placeholder where we can share a series of data and documentation files (called <code>resources</code> - see below), eac of them linked to a data project. Each dataset is described with some metadata (using the <a href="https://ddialliance.org/" class="external-link">data documentation initiative (DDI) format</a>) that gives enough context on the project and information to properly store the data files and use them.</p>
-<p>Dataset URL are typically formatted as: &gt; <a href="https://ridl.unhcr.org/dataset/%60__name_of_dataset__" class="external-link uri">https://ridl.unhcr.org/dataset/`__name_of_dataset__</a>`</p>
+<p>Dataset URL are typically formatted as:</p>
+<blockquote>
+<p><a href="https://ridl.unhcr.org/dataset/%60__name_of_dataset__" class="external-link uri">https://ridl.unhcr.org/dataset/`__name_of_dataset__</a>`</p>
+</blockquote>
 <p>Data files, e.g an Excel file, as well as any supporting documentation are called <code>resource</code> and are shared as either <code>data</code> or <code>attachment</code> within a specific <code>dataset</code> page.</p>
 </div>
 <div class="section level3">
@@ -114,7 +120,10 @@
 <code>Resource</code><a class="anchor" aria-label="anchor" href="#resource"></a>
 </h3>
 <p>A <code>resource</code> is a file shared in <code>dataset</code> page. Depending on the type ( <code>data</code> or <code>attachment</code> ) , it comes with specific minimum <code>metadata</code> that complement the metata from the project itself.</p>
-<p>Resources URL are typically formatted as: &gt; <a href="https://ridl.unhcr.org/dataset/%60__name_of_dataset__%60/resource/%60__id_of_the_resource__" class="external-link uri">https://ridl.unhcr.org/dataset/`__name_of_dataset__`/resource/`__id_of_the_resource__</a>`</p>
+<p>Resources URL are typically formatted as:</p>
+<blockquote>
+<p><a href="https://ridl.unhcr.org/dataset/%60__name_of_dataset__%60/resource/%60__id_of_the_resource__" class="external-link uri">https://ridl.unhcr.org/dataset/`__name_of_dataset__`/resource/`__id_of_the_resource__</a>`</p>
+</blockquote>
 </div>
 </div>
 <div class="section level2">
@@ -191,7 +200,7 @@
 <span><span class="fu"><a href="reference/dataset.html">dataset_delete</a></span><span class="op">(</span><span class="va">p</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="use-case-2-add-attachment">Use case 2: Add attachment<a class="anchor" aria-label="anchor" href="#use-case-2-add-attachment"></a>
+<h3 id="use-case-3-add-attachment">Use case 3: Add attachment<a class="anchor" aria-label="anchor" href="#use-case-3-add-attachment"></a>
 </h3>
 <p>You want to add your own initial data exploration, data interpretation presentation and/or data story telling report as a new <code>attachement</code> resource within a dataset.</p>
 <p>You can check a practical example of such use case here:<a href="https://edouard-legoupil.github.io/kobocruncher/" class="external-link">kobocruncher</a></p>
