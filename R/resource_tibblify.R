@@ -15,6 +15,10 @@
 #' @examples
 #' m <- riddle::resource_metadata(type = "data",
 #'                        url = "mtcars.csv",
+#'           #  upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),
+#'           ## # Error:
+#' # ! All columns in a tibble must be vectors.
+#' # ✖ Column `upload` is a `form_file` object.
 #'                        name = "mtcars.csv",
 #'                        format = "csv",
 #'                        file_type = "microdata",
@@ -24,7 +28,11 @@
 #'                        visibility = "public",
 #'                        process_status = "raw",
 #'                        identifiability = "anonymized_public")
+#' 
 #' m1 <- riddle::resource_tibblify(m)
+#' 
+#' 
+#' 
 #' m1
 resource_tibblify <- function(x) {
   x %>% purrr::modify_if(rlang::is_empty, ~NA) %>% tibble::as_tibble()

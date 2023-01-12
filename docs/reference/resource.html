@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">riddle</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,16 +76,16 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>pkgid</dt>
-<dd><p>The id or name of the dataset to which this resource belongs to.</p></dd>
-
-
-<dt>res_metadata</dt>
+    <dl><dt>res_metadata</dt>
 <dd><p>Metadata created by <code><a href="resource_metadata.html">resource_metadata()</a></code>.</p></dd>
 
 
 <dt>id</dt>
 <dd><p>The id or name of the resource.</p></dd>
+
+
+<dt>dataset_id</dt>
+<dd><p>The id or name of the dataset to which this resource belongs to.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -129,8 +129,8 @@ not explicitly provided in the <code>metadata</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> <span style="color: #949494;">""</span>             True    <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>      <span style="color: #949494;">""</span>      1b633b… <span style="color: #949494;">""</span>      <span style="color: #949494;">""</span>      tri    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span>  <span style="color: #BB0000;">NA</span>            False   <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>     b5d85f…  <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     tri    </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span>  <span style="color: #BB0000;">NA</span>            False   <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>       <span style="color: #BB0000;">NA</span>     b5d85f…  <span style="color: #BB0000;">NA</span>      <span style="color: #BB0000;">NA</span>     tri    </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> <span style="color: #949494;">""</span>             False   <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>      <span style="color: #949494;">""</span>      9a1c9d… <span style="color: #949494;">""</span>      <span style="color: #949494;">""</span>      capi   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> <span style="color: #949494;">""</span>             False   <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>      <span style="color: #949494;">""</span>      e44763… <span style="color: #949494;">""</span>      <span style="color: #949494;">""</span>      f2f    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> <span style="color: #949494;">""</span>             False   <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>      <span style="color: #949494;">""</span>      e44763… <span style="color: #949494;">""</span>      <span style="color: #949494;">""</span>      f2f    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> <span style="color: #949494;">""</span>             False   <span style="color: #BB0000;">NA</span>     <span style="color: #BB0000;">NA</span>      <span style="color: #949494;">""</span>      9a1c9d… <span style="color: #949494;">""</span>      <span style="color: #949494;">""</span>      capi   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># … with 45 more variables: data_collector &lt;chr&gt;, data_sensitivity &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   date_range_end &lt;chr&gt;, date_range_start &lt;chr&gt;, external_access_level &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   geog_coverage &lt;chr&gt;, geographies &lt;list&gt;, id &lt;chr&gt;, identifiability &lt;chr&gt;,</span></span>
@@ -164,24 +164,11 @@ not explicitly provided in the <code>metadata</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   license_title &lt;lgl&gt;, maintainer &lt;lgl&gt;, maintainer_email &lt;lgl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   metadata_created &lt;chr&gt;, metadata_modified &lt;chr&gt;, name &lt;chr&gt;, notes &lt;chr&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   num_resources &lt;int&gt;, num_tags &lt;int&gt;, operational_purpose_of_data &lt;list&gt;, …</span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">ridlid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">p</span><span class="op">[</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="resource_metadata.html">resource_metadata</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"data"</span>,</span></span>
-<span class="r-in"><span>                       url <span class="op">=</span> <span class="st">"mtcars.csv"</span>,</span></span>
-<span class="r-in"><span>                       name <span class="op">=</span> <span class="st">"mtcarsriddle"</span>,</span></span>
-<span class="r-in"><span>                       format <span class="op">=</span> <span class="st">"csv"</span>,</span></span>
-<span class="r-in"><span>                       file_type <span class="op">=</span> <span class="st">"microdata"</span>,</span></span>
-<span class="r-in"><span>                       date_range_start <span class="op">=</span> <span class="st">"1973-01-01"</span>,</span></span>
-<span class="r-in"><span>                       date_range_end <span class="op">=</span> <span class="st">"1973-12-31"</span>,</span></span>
-<span class="r-in"><span>                       version <span class="op">=</span> <span class="st">"1"</span>,</span></span>
-<span class="r-in"><span>                       visibility <span class="op">=</span> <span class="st">"public"</span>,</span></span>
-<span class="r-in"><span>                       process_status <span class="op">=</span> <span class="st">"raw"</span>,</span></span>
-<span class="r-in"><span>                       identifiability <span class="op">=</span> <span class="st">"anonymized_public"</span>,</span></span>
-<span class="r-in"><span>upload <span class="op">=</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/upload_file.html" class="external-link">upload_file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mtcars.csv"</span>, package <span class="op">=</span> <span class="st">"readr"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">##take the first one</span></span></span>
+<span class="r-in"><span><span class="va">ridlid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">p</span><span class="op">[</span><span class="fl">9</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## let's get again the details of the dataset we want to add the resource in..</span></span></span>
-<span class="r-in"><span><span class="co">#r &lt;- riddle::resource_create(pkgid = ridlid, res_metadata = m)</span></span></span>
+<span class="r-in"><span><span class="co">#r &lt;- riddle::resource_create(dataset_id = ridlid, res_metadata = m)</span></span></span>
 <span class="r-in"><span><span class="co"># Like before, the return value is a tibble representation of the resource.</span></span></span>
 <span class="r-in"><span><span class="co">#r</span></span></span>
 <span class="r-in"><span> </span></span>
@@ -191,6 +178,69 @@ not explicitly provided in the <code>metadata</code>.</p>
 <span class="r-in"><span><span class="co"># And once we’re done experimenting with the API, we should take down our</span></span></span>
 <span class="r-in"><span><span class="co"># toy dataset since we don’t really need it on RIDL.</span></span></span>
 <span class="r-in"><span><span class="co">#riddle::dataset_delete(p$id)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#-----</span></span></span>
+<span class="r-in"><span><span class="co"># Test search in prod</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"USE_UAT"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="dataset.html">dataset_show</a></span><span class="op">(</span><span class="st">'rms_v4'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">dataset_id_rms</span> <span class="op">&lt;-</span> <span class="va">p</span><span class="op">$</span><span class="va">id</span></span></span>
+<span class="r-in"><span><span class="va">list_of_ressources</span> <span class="op">&lt;-</span> <span class="va">p</span><span class="op">[[</span><span class="st">"resources"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">list_of_ressources</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>provided 13 variables to replace 1 variables</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |cache_last_updated |cache_url |created                    |datastore_active |description                                                            |file_type     |format |hash |id                                   |kobo_details           |kobo_type     |last_modified              |metadata_modified          |mimetype                                                          |mimetype_inner |name                       |package_id                           | position|resource_type |     size|state  |type       |url                                                                                                                                                                         |url_type |visibility |date_range_end |date_range_start |identifiability         |process_status |version |original_url |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |:------------------|:---------|:--------------------------|:----------------|:----------------------------------------------------------------------|:-------------|:------|:----|:------------------------------------|:----------------------|:-------------|:--------------------------|:--------------------------|:-----------------------------------------------------------------|:--------------|:--------------------------|:------------------------------------|--------:|:-------------|--------:|:------|:----------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------|:----------|:--------------|:----------------|:-----------------------|:--------------|:-------|:------------|</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NA                 |NA        |2022-08-31T22:49:51.777678 |FALSE            |Questionnaire imported from the KoBo survey                            |questionnaire |XLS    |     |2c6a805f-77d4-4b3d-9873-5480d9943472 |aQTbMZSPH4vwMJTtk4xjHT |questionnaire |2022-08-31T22:50:07.684601 |2022-08-31T22:50:08.260981 |application/x-empty                                               |NA             |Questionnaire XLS          |8c7eb4c1-b40e-4fc5-abae-896655f64cb2 |        0|NA            |        0|active |attachment |https://ridl.unhcr.org/dataset/8c7eb4c1-b40e-4fc5-abae-896655f64cb2/resource/2c6a805f-77d4-4b3d-9873-5480d9943472/download/aqtbmzsph4vwmjttk4xjht.xls                       |upload   |public     |NA             |NA               |NA                      |NA             |NA      |NA           |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NA                 |NA        |2022-08-31T22:49:55.450262 |FALSE            |CSV data imported from the KoBoToolbox survey.                         |microdata     |CSV    |     |491c3718-a4e6-40c8-8289-90199e5457cb |aQTbMZSPH4vwMJTtk4xjHT |data          |2022-08-31T22:50:20.090377 |2022-08-31T22:50:20.447250 |application/x-empty                                               |NA             |Survey csv data            |8c7eb4c1-b40e-4fc5-abae-896655f64cb2 |        1|NA            |        0|active |data       |https://ridl.unhcr.org/dataset/8c7eb4c1-b40e-4fc5-abae-896655f64cb2/resource/491c3718-a4e6-40c8-8289-90199e5457cb/download/survey-csv-data__aqtbmzsph4vwmjttk4xjht_data.csv |upload   |restricted |2022-07-30     |2022-07-11       |personally_identifiable |raw            |1       |NA           |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NA                 |NA        |2022-08-31T22:49:57.089230 |FALSE            |XLS data imported from the KoBoToolbox survey.                         |microdata     |XLS    |     |92ae1611-149c-4e4a-b83a-eaeb25942309 |aQTbMZSPH4vwMJTtk4xjHT |data          |2022-08-31T22:50:33.070115 |2022-12-08T15:55:38.370890 |application/x-empty                                               |NA             |Survey xls data            |8c7eb4c1-b40e-4fc5-abae-896655f64cb2 |        2|NA            |        0|active |data       |https://ridl.unhcr.org/dataset/8c7eb4c1-b40e-4fc5-abae-896655f64cb2/resource/92ae1611-149c-4e4a-b83a-eaeb25942309/download/survey-xls-data__aqtbmzsph4vwmjttk4xjht_data.xls |upload   |restricted |2022-07-30     |2022-07-11       |personally_identifiable |raw            |1       |NA           |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NA                 |NA        |2022-10-03T14:32:11.734505 |FALSE            |Data from Kobo in XML format with values and headers.  3 October 2022. |microdata     |XLSX   |     |21b3ce9f-5653-4819-a6ac-df19283691d1 |NA                     |              |2022-10-03T14:32:11.536587 |2022-10-03T14:32:18.063693 |application/vnd.openxmlformats-officedocument.spreadsheetml.sheet |NA             |RMS XML values and headers |8c7eb4c1-b40e-4fc5-abae-896655f64cb2 |        3|NA            |  1967301|active |data       |https://ridl.unhcr.org/dataset/8c7eb4c1-b40e-4fc5-abae-896655f64cb2/resource/21b3ce9f-5653-4819-a6ac-df19283691d1/download/rms_v4_xml_values_and_headers.xlsx               |upload   |restricted |2022-07-30     |2022-07-11       |personally_identifiable |raw            |1       |             |</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> |NA                 |NA        |2022-10-04T13:59:30.533323 |FALSE            |                                                                       |report        |HTML   |     |29d4bdba-b599-4e9e-8f17-eadbe6fadcc1 |NA                     |              |2022-10-04T13:59:30.321887 |2022-10-04T13:59:36.012003 |text/html                                                         |NA             |Crunching report           |8c7eb4c1-b40e-4fc5-abae-896655f64cb2 |        4|NA            | 56601325|active |attachment |https://ridl.unhcr.org/dataset/8c7eb4c1-b40e-4fc5-abae-896655f64cb2/resource/29d4bdba-b599-4e9e-8f17-eadbe6fadcc1/download/exploration.html                                 |upload   |public     |NA             |NA               |NA                      |NA             |NA      |             |</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">new_attachment</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="resource_metadata.html">resource_metadata</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"attachment"</span>,</span></span>
+<span class="r-in"><span>                       url <span class="op">=</span> <span class="st">"resource.R"</span>, </span></span>
+<span class="r-in"><span><span class="co"># upload = httr::upload_file(here::here("R","resource.R") ),</span></span></span>
+<span class="r-in"><span><span class="co">## # Error:</span></span></span>
+<span class="r-in"><span><span class="co"># ! All columns in a tibble must be vectors.</span></span></span>
+<span class="r-in"><span><span class="co"># ✖ Column `upload` is a `form_file` object.</span></span></span>
+<span class="r-in"><span>                       name <span class="op">=</span> <span class="st">"Rscript"</span>,</span></span>
+<span class="r-in"><span>                       format <span class="op">=</span> <span class="st">"R"</span>,</span></span>
+<span class="r-in"><span>                       file_type <span class="op">=</span> <span class="st">"report"</span>,</span></span>
+<span class="r-in"><span>                       version <span class="op">=</span> <span class="st">"1"</span>,</span></span>
+<span class="r-in"><span>                       visibility <span class="op">=</span> <span class="st">"public"</span> <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Now testing adding the file "resource.R" as an attachment in the </span></span></span>
+<span class="r-in"><span><span class="co">## dataset 'rms_v4'</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># but not working.... </span></span></span>
+<span class="r-in"><span><span class="co"># resource_create(dataset_id = dataset_id_rms, </span></span></span>
+<span class="r-in"><span><span class="co">#                         res_metadata = new_attachment )</span></span></span>
+<span class="r-in"><span><span class="co"># Error in ridl(action = "resource_create", dataset_id = dataset_id, !!!res_metadata, : </span></span></span>
+<span class="r-in"><span><span class="co"># __type: Not Found Error</span></span></span>
+<span class="r-in"><span><span class="co"># message: Not found: No dataset id provided, cannot check auth.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="resource_metadata.html">resource_metadata</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"data"</span>,</span></span>
+<span class="r-in"><span>                       url <span class="op">=</span> <span class="st">"mtcars.csv"</span>,</span></span>
+<span class="r-in"><span><span class="co">#  upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),         </span></span></span>
+<span class="r-in"><span><span class="co">## # Error:</span></span></span>
+<span class="r-in"><span><span class="co"># ! All columns in a tibble must be vectors.</span></span></span>
+<span class="r-in"><span><span class="co"># ✖ Column `upload` is a `form_file` object.</span></span></span>
+<span class="r-in"><span>                       name <span class="op">=</span> <span class="st">"mtcars.csv"</span>,</span></span>
+<span class="r-in"><span>                       format <span class="op">=</span> <span class="st">"csv"</span>,</span></span>
+<span class="r-in"><span>                       file_type <span class="op">=</span> <span class="st">"microdata"</span>,</span></span>
+<span class="r-in"><span>                       date_range_start <span class="op">=</span> <span class="st">"1973-01-01"</span>,</span></span>
+<span class="r-in"><span>                       date_range_end <span class="op">=</span> <span class="st">"1973-12-31"</span>,</span></span>
+<span class="r-in"><span>                       version <span class="op">=</span> <span class="st">"1"</span>,</span></span>
+<span class="r-in"><span>                       visibility <span class="op">=</span> <span class="st">"public"</span>,</span></span>
+<span class="r-in"><span>                       process_status <span class="op">=</span> <span class="st">"raw"</span>,</span></span>
+<span class="r-in"><span>                       identifiability <span class="op">=</span> <span class="st">"anonymized_public"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># same pb... </span></span></span>
+<span class="r-in"><span><span class="co"># resource_create(dataset_id = dataset_id_rms, </span></span></span>
+<span class="r-in"><span><span class="co">#                          res_metadata = m )</span></span></span>
+<span class="r-in"><span><span class="co"># Error in ridl(action = "resource_create", dataset_id = dataset_id, !!!res_metadata, : </span></span></span>
+<span class="r-in"><span><span class="co"># __type: Not Found Error</span></span></span>
+<span class="r-in"><span><span class="co"># message: Not found: No dataset id provided, cannot check auth.</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -24,6 +24,10 @@
 #' p <- riddle::dataset_search(q = "cbi")
 #' p
 #' p$id
+#' 
+#' 
+#' 
+#' 
 dataset_search <- function(q = NULL, rows = NULL, start = NULL) {
   r <- ridl(action ="package_search", 
             !!!(as.list(match.call()[-1])) )$results

@@ -27,7 +27,7 @@ library(riddle)
   
 
 ```{r example-ridl}
-# ridl()
+# ridl(action ="package_search", as.list("cbi"))
 ```
 
   
@@ -99,6 +99,12 @@ m1
 Sys.unsetenv("USE_UAT")
 riddle::dataset_show("unhcr-cbi-americas-quarterly-report")
 
+p <- riddle::dataset_show('rms_v4')
+list_of_ressources <- p[["resources"]][[1]]
+list_of_ressources
+
+
+
 #-----
 # Test create in UAT
 Sys.setenv(USE_UAT=1)
@@ -106,21 +112,21 @@ Sys.setenv(USE_UAT=1)
 ## __type: Validation Error ---
 ## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682
 
-# m <- riddle::dataset_metadata(title = "Motor Trend Car Road Test two",
-#                       name = "mtcars_ed",
-#                       notes = "The data was extracted from the 1974 Motor Trend
-#                       US magazine, and comprises fuel consumption and 10 aspects
-#                       of automobile design and performance for 32 automobiles
-#                       (1973–74 models).",
-#                       owner_org = "Lebanon",
-#                       visibility = "public",
-#                       geographies = "UNSPECIFIED",
-#                       external_access_level = "open_access",
-#                       data_collector = "Motor Trend",
-#                       keywords = keywords[c("Environment", "Other")],
-#                       unit_of_measurement = "car",
-#                       data_collection_technique = "oth",
-#                       archived = "False")
+m <- riddle::dataset_metadata(title = "Motor Trend Car Road Test two",
+                      name = "mtcars_ed",
+                      notes = "The data was extracted from the 1974 Motor Trend
+                      US magazine, and comprises fuel consumption and 10 aspects
+                      of automobile design and performance for 32 automobiles
+                      (1973–74 models).",
+                      owner_org = "Americas",
+                      visibility = "public",
+                      geographies = "UNSPECIFIED",
+                      external_access_level = "open_access",
+                      data_collector = "Motor Trend",
+                      keywords = keywords[c("Environment", "Other")],
+                      unit_of_measurement = "car",
+                      data_collection_technique = "oth",
+                      archived = "False")
 # ## For the above to work - you need to make sure you have at least editor access
 # to the corresponding container - i.e. owner_org = "exercise-container"
 #p <- riddle::dataset_create(metadata = m)
@@ -165,6 +171,10 @@ Sys.unsetenv("USE_UAT")
 p <- riddle::dataset_search(q = "cbi")
 p
 p$id
+
+
+
+
 ```
 
   
@@ -202,6 +212,10 @@ m
 ```{r example-resource_tibblify}
 m <- riddle::resource_metadata(type = "data",
                        url = "mtcars.csv",
+          #  upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),
+          ## # Error:
+# ! All columns in a tibble must be vectors.
+# ✖ Column `upload` is a `form_file` object.
                        name = "mtcars.csv",
                        format = "csv",
                        file_type = "microdata",
@@ -211,7 +225,11 @@ m <- riddle::resource_metadata(type = "data",
                        visibility = "public",
                        process_status = "raw",
                        identifiability = "anonymized_public")
+
 m1 <- riddle::resource_tibblify(m)
+
+
+
 m1
 ```
 
@@ -238,24 +256,11 @@ p
 Sys.setenv(USE_UAT=1)
 p <- riddle::dataset_search("tests")
 p
-
-ridlid <- as.character(p[1, c("id")])
-
-m <- riddle::resource_metadata(type = "data",
-                       url = "mtcars.csv",
-                       name = "mtcarsriddle",
-                       format = "csv",
-                       file_type = "microdata",
-                       date_range_start = "1973-01-01",
-                       date_range_end = "1973-12-31",
-                       version = "1",
-                       visibility = "public",
-                       process_status = "raw",
-                       identifiability = "anonymized_public",
-upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")))
+##take the first one
+ridlid <- as.character(p[9, c("id")])
 
 ## let's get again the details of the dataset we want to add the resource in..
-#r <- riddle::resource_create(pkgid = ridlid, res_metadata = m)
+#r <- riddle::resource_create(dataset_id = ridlid, res_metadata = m)
 # Like before, the return value is a tibble representation of the resource.
 #r
  
@@ -265,6 +270,59 @@ upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr"))
 # And once we’re done experimenting with the API, we should take down our
 # toy dataset since we don’t really need it on RIDL.
 #riddle::dataset_delete(p$id)
+
+
+#-----
+# Test search in prod
+Sys.unsetenv("USE_UAT")
+p <- riddle::dataset_show('rms_v4')
+dataset_id_rms <- p$id
+list_of_ressources <- p[["resources"]][[1]]
+knitr::kable(list_of_ressources)
+
+new_attachment <- riddle::resource_metadata(type = "attachment",
+                       url = "resource.R", 
+# upload = httr::upload_file(here::here("R","resource.R") ),
+## # Error:
+# ! All columns in a tibble must be vectors.
+# ✖ Column `upload` is a `form_file` object.
+                       name = "Rscript",
+                       format = "R",
+                       file_type = "report",
+                       version = "1",
+                       visibility = "public" )
+
+## Now testing adding the file "resource.R" as an attachment in the 
+## dataset 'rms_v4'
+
+# but not working.... 
+# resource_create(dataset_id = dataset_id_rms, 
+#                         res_metadata = new_attachment )
+# Error in ridl(action = "resource_create", dataset_id = dataset_id, !!!res_metadata, : 
+# __type: Not Found Error
+# message: Not found: No dataset id provided, cannot check auth.
+
+m <- riddle::resource_metadata(type = "data",
+                       url = "mtcars.csv",
+#  upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),         
+## # Error:
+# ! All columns in a tibble must be vectors.
+# ✖ Column `upload` is a `form_file` object.
+                       name = "mtcars.csv",
+                       format = "csv",
+                       file_type = "microdata",
+                       date_range_start = "1973-01-01",
+                       date_range_end = "1973-12-31",
+                       version = "1",
+                       visibility = "public",
+                       process_status = "raw",
+                       identifiability = "anonymized_public")
+# same pb... 
+# resource_create(dataset_id = dataset_id_rms, 
+#                          res_metadata = m )
+# Error in ridl(action = "resource_create", dataset_id = dataset_id, !!!res_metadata, : 
+# __type: Not Found Error
+# message: Not found: No dataset id provided, cannot check auth.
 
 ```
 
@@ -277,7 +335,48 @@ upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr"))
   
 
 ```{r example-resource_fetch}
-# resource_fetch()
+#-----
+# Test search in prod
+Sys.unsetenv("USE_UAT")
+
+
+## Example 1: with a direct URL
+resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',
+                       path = tempfile())
+
+## Example 1: Let's try to identify a resource - then fetch it locally and update it back... as from here
+# https://github.com/unhcr-americas/darien_gap_human_mobility/blob/main/report.Rmd#L38
+
+p <- riddle::dataset_show('panama-irregular-entries-through-darien-by-gender')
+## let's get the first resource
+test_ressources <- p[["resources"]][[1]] |> dplyr::slice(1)
+
+## Get the resource locally..
+resource_fetch(url = test_ressources$url,   path =  here::here("data.csv"))  
+
+# Rebuild the metadata
+m <- resource_metadata(type = test_ressources$type, #"data",
+                         url = "df_gender_2020.csv",
+#   upload = httr::upload_file(here::here("data.csv")),
+## # Error:
+# ! All columns in a tibble must be vectors.
+# ✖ Column `upload` is a `form_file` object.
+                         name = test_ressources$name, # "Irregular entries by gender in 2022",
+                         format = test_ressources$format, #"csv",
+                         file_type =  test_ressources$file_type, #"microdata",
+                         visibility = test_ressources$visibility, # "public",
+                         date_range_start =  test_ressources$date_range_start, # "2022-01-01",
+                         date_range_end = test_ressources$date_range_end, #as.character(floor_date(today('America/Panama'), "month") - days(1)), #end day of last month
+                         version = test_ressources$version, # "0",
+                         process_status = test_ressources$process_status, #"anonymized",
+                         identifiability = test_ressources$visibility, #"anonymized_public"
+  )
+## Update back -- Does not work...   
+# r <- resource_update('6e53f9fe-a3a5-4277-9e37-3085e506a261', m)
+
+# No encoding supplied: defaulting to UTF-8.
+# Error in !r$success : invalid argument type
+
 ```
 
   

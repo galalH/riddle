@@ -1,6 +1,6 @@
 Package: riddle
 Title: An API wrapper to interact with the UNHCR RIDL Platform
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
     person("Hisham", "Galal", , "galalh@unhcr.org", role = c("aut", "cre")),
     person("Edouard", "Legoupil", , "legoupil@unhcr.org", role = "aut")
@@ -23,6 +23,7 @@ Imports:
     tidyselect,
     unhcrdown
 Suggests: 
+    here,
     knitr,
     rmarkdown,
     testthat

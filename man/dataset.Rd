@@ -53,6 +53,12 @@ not explicitly provided in the \code{metadata}.
 Sys.unsetenv("USE_UAT")
 riddle::dataset_show("unhcr-cbi-americas-quarterly-report")
 
+p <- riddle::dataset_show('rms_v4')
+list_of_ressources <- p[["resources"]][[1]]
+list_of_ressources
+
+
+
 #-----
 # Test create in UAT
 Sys.setenv(USE_UAT=1)
@@ -60,21 +66,21 @@ Sys.setenv(USE_UAT=1)
 ## __type: Validation Error ---
 ## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682
 
-# m <- riddle::dataset_metadata(title = "Motor Trend Car Road Test two",
-#                       name = "mtcars_ed",
-#                       notes = "The data was extracted from the 1974 Motor Trend
-#                       US magazine, and comprises fuel consumption and 10 aspects
-#                       of automobile design and performance for 32 automobiles
-#                       (1973–74 models).",
-#                       owner_org = "Lebanon",
-#                       visibility = "public",
-#                       geographies = "UNSPECIFIED",
-#                       external_access_level = "open_access",
-#                       data_collector = "Motor Trend",
-#                       keywords = keywords[c("Environment", "Other")],
-#                       unit_of_measurement = "car",
-#                       data_collection_technique = "oth",
-#                       archived = "False")
+m <- riddle::dataset_metadata(title = "Motor Trend Car Road Test two",
+                      name = "mtcars_ed",
+                      notes = "The data was extracted from the 1974 Motor Trend
+                      US magazine, and comprises fuel consumption and 10 aspects
+                      of automobile design and performance for 32 automobiles
+                      (1973–74 models).",
+                      owner_org = "Americas",
+                      visibility = "public",
+                      geographies = "UNSPECIFIED",
+                      external_access_level = "open_access",
+                      data_collector = "Motor Trend",
+                      keywords = keywords[c("Environment", "Other")],
+                      unit_of_measurement = "car",
+                      data_collection_technique = "oth",
+                      archived = "False")
 # ## For the above to work - you need to make sure you have at least editor access
 # to the corresponding container - i.e. owner_org = "exercise-container"
 #p <- riddle::dataset_create(metadata = m)

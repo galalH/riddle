@@ -15,14 +15,27 @@ ridl(action, ..., .encoding = "json")
 \code{httr::response} object with the result of the call.
 }
 \description{
-Helper function to make API calls
+Helper function to make API calls. Calls includes the 10 following actions:
 }
 \details{
+\itemize{
+\item "package_create"
+\item "package_update"
+\item "package_patch"
+\item "package_delete"
+\item "package_search"
+\item "resource_create"
+\item "resource_update"
+\item "resource_patch"
+\item "resource_delete"
+\item "resource_search"
+}
+
 The package works with both the production and UAT instances of RIDL.
 To use the UAT version, run \code{Sys.setenv(USE_UAT=1)} before calling any functions
 from the package.
 To go back to the production instance, call \code{Sys.unsetenv("USE_UAT")}.
 }
 \examples{
-# ridl()
+# ridl(action ="package_search", as.list("cbi"))
 }

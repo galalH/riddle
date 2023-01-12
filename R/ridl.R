@@ -2,7 +2,18 @@
 
 #' apihelper
 #' 
-#' Helper function to make API calls
+#' Helper function to make API calls. Calls includes the 10 following actions:
+#' 
+#'  * "package_create"
+#'  * "package_update"
+#'  * "package_patch"
+#'  * "package_delete"
+#'  * "package_search"
+#'  * "resource_create"
+#'  * "resource_update"
+#'  * "resource_patch"
+#'  * "resource_delete"
+#'  * "resource_search"
 #'
 #' The package works with both the production and UAT instances of RIDL. 
 #' To use the UAT version, run `Sys.setenv(USE_UAT=1)` before calling any functions
@@ -18,7 +29,7 @@
 #' @return `httr::response` object with the result of the call.
 #' @export
 #' @examples
-#' # ridl()
+#' # ridl(action ="package_search", as.list("cbi"))
 ridl <- function(action,
                  ...,
                  .encoding = "json") {

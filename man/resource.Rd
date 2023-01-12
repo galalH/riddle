@@ -25,11 +25,11 @@ resource_patch(id, res_metadata)
 resource_delete(id)
 }
 \arguments{
-\item{pkgid}{The id or name of the dataset to which this resource belongs to.}
-
 \item{res_metadata}{Metadata created by \code{\link{resource_metadata()}}.}
 
 \item{id}{The id or name of the resource.}
+
+\item{dataset_id}{The id or name of the dataset to which this resource belongs to.}
 }
 \value{
 The resource.
@@ -67,24 +67,11 @@ p
 Sys.setenv(USE_UAT=1)
 p <- riddle::dataset_search("tests")
 p
-
-ridlid <- as.character(p[1, c("id")])
-
-m <- riddle::resource_metadata(type = "data",
-                       url = "mtcars.csv",
-                       name = "mtcarsriddle",
-                       format = "csv",
-                       file_type = "microdata",
-                       date_range_start = "1973-01-01",
-                       date_range_end = "1973-12-31",
-                       version = "1",
-                       visibility = "public",
-                       process_status = "raw",
-                       identifiability = "anonymized_public",
-upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")))
+##take the first one
+ridlid <- as.character(p[9, c("id")])
 
 ## let's get again the details of the dataset we want to add the resource in..
-#r <- riddle::resource_create(pkgid = ridlid, res_metadata = m)
+#r <- riddle::resource_create(dataset_id = ridlid, res_metadata = m)
 # Like before, the return value is a tibble representation of the resource.
 #r
  
@@ -94,5 +81,58 @@ upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr"))
 # And once we’re done experimenting with the API, we should take down our
 # toy dataset since we don’t really need it on RIDL.
 #riddle::dataset_delete(p$id)
+
+
+#-----
+# Test search in prod
+Sys.unsetenv("USE_UAT")
+p <- riddle::dataset_show('rms_v4')
+dataset_id_rms <- p$id
+list_of_ressources <- p[["resources"]][[1]]
+knitr::kable(list_of_ressources)
+
+new_attachment <- riddle::resource_metadata(type = "attachment",
+                       url = "resource.R", 
+# upload = httr::upload_file(here::here("R","resource.R") ),
+## # Error:
+# ! All columns in a tibble must be vectors.
+# ✖ Column `upload` is a `form_file` object.
+                       name = "Rscript",
+                       format = "R",
+                       file_type = "report",
+                       version = "1",
+                       visibility = "public" )
+
+## Now testing adding the file "resource.R" as an attachment in the 
+## dataset 'rms_v4'
+
+# but not working.... 
+# resource_create(dataset_id = dataset_id_rms, 
+#                         res_metadata = new_attachment )
+# Error in ridl(action = "resource_create", dataset_id = dataset_id, !!!res_metadata, : 
+# __type: Not Found Error
+# message: Not found: No dataset id provided, cannot check auth.
+
+m <- riddle::resource_metadata(type = "data",
+                       url = "mtcars.csv",
+#  upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),         
+## # Error:
+# ! All columns in a tibble must be vectors.
+# ✖ Column `upload` is a `form_file` object.
+                       name = "mtcars.csv",
+                       format = "csv",
+                       file_type = "microdata",
+                       date_range_start = "1973-01-01",
+                       date_range_end = "1973-12-31",
+                       version = "1",
+                       visibility = "public",
+                       process_status = "raw",
+                       identifiability = "anonymized_public")
+# same pb... 
+# resource_create(dataset_id = dataset_id_rms, 
+#                          res_metadata = m )
+# Error in ridl(action = "resource_create", dataset_id = dataset_id, !!!res_metadata, : 
+# __type: Not Found Error
+# message: Not found: No dataset id provided, cannot check auth.
 
 }

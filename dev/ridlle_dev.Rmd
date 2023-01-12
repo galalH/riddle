@@ -38,7 +38,18 @@ knitr::kable(riddle::keywords)
 ```{r function-ridl}
 #' apihelper
 #' 
-#' Helper function to make API calls
+#' Helper function to make API calls. Calls includes the 10 following actions:
+#' 
+#'  * "package_create"
+#'  * "package_update"
+#'  * "package_patch"
+#'  * "package_delete"
+#'  * "package_search"
+#'  * "resource_create"
+#'  * "resource_update"
+#'  * "resource_patch"
+#'  * "resource_delete"
+#'  * "resource_search"
 #'
 #' The package works with both the production and UAT instances of RIDL. 
 #' To use the UAT version, run `Sys.setenv(USE_UAT=1)` before calling any functions
@@ -86,7 +97,7 @@ ridl <- function(action,
 ```
   
 ```{r example-ridl}
-# ridl()
+# ridl(action ="package_search", as.list("cbi"))
 ```
   
 ```{r tests-ridl}
@@ -477,21 +488,21 @@ Sys.setenv(USE_UAT=1)
 ## __type: Validation Error ---
 ## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682
 
-# m <- riddle::dataset_metadata(title = "Motor Trend Car Road Test two",
-#                       name = "mtcars_ed",
-#                       notes = "The data was extracted from the 1974 Motor Trend
-#                       US magazine, and comprises fuel consumption and 10 aspects
-#                       of automobile design and performance for 32 automobiles
-#                       (1973–74 models).",
-#                       owner_org = "Lebanon",
-#                       visibility = "public",
-#                       geographies = "UNSPECIFIED",
-#                       external_access_level = "open_access",
-#                       data_collector = "Motor Trend",
-#                       keywords = keywords[c("Environment", "Other")],
-#                       unit_of_measurement = "car",
-#                       data_collection_technique = "oth",
-#                       archived = "False")
+m <- riddle::dataset_metadata(title = "Motor Trend Car Road Test two",
+                      name = "mtcars_ed",
+                      notes = "The data was extracted from the 1974 Motor Trend
+                      US magazine, and comprises fuel consumption and 10 aspects
+                      of automobile design and performance for 32 automobiles
+                      (1973–74 models).",
+                      owner_org = "Americas",
+                      visibility = "public",
+                      geographies = "UNSPECIFIED",
+                      external_access_level = "open_access",
+                      data_collector = "Motor Trend",
+                      keywords = keywords[c("Environment", "Other")],
+                      unit_of_measurement = "car",
+                      data_collection_technique = "oth",
+                      archived = "False")
 # ## For the above to work - you need to make sure you have at least editor access
 # to the corresponding container - i.e. owner_org = "exercise-container"
 #p <- riddle::dataset_create(metadata = m)
@@ -689,7 +700,10 @@ resource_tibblify <- function(x) {
 ```{r example-resource_tibblify}
 m <- riddle::resource_metadata(type = "data",
                        url = "mtcars.csv",
-            upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),
+          #  upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),
+          ## # Error:
+# ! All columns in a tibble must be vectors.
+# ✖ Column `upload` is a `form_file` object.
                        name = "mtcars.csv",
                        format = "csv",
                        file_type = "microdata",
@@ -699,7 +713,11 @@ m <- riddle::resource_metadata(type = "data",
                        visibility = "public",
                        process_status = "raw",
                        identifiability = "anonymized_public")
+
 m1 <- riddle::resource_tibblify(m)
+
+
+
 m1
 ```
   
@@ -836,7 +854,10 @@ knitr::kable(list_of_ressources)
 
 new_attachment <- riddle::resource_metadata(type = "attachment",
                        url = "resource.R", 
-upload = httr::upload_file(here::here("R","resource.R") ),
+# upload = httr::upload_file(here::here("R","resource.R") ),
+## # Error:
+# ! All columns in a tibble must be vectors.
+# ✖ Column `upload` is a `form_file` object.
                        name = "Rscript",
                        format = "R",
                        file_type = "report",
@@ -855,7 +876,10 @@ upload = httr::upload_file(here::here("R","resource.R") ),
 
 m <- riddle::resource_metadata(type = "data",
                        url = "mtcars.csv",
-            upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),
+#  upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),         
+## # Error:
+# ! All columns in a tibble must be vectors.
+# ✖ Column `upload` is a `form_file` object.
                        name = "mtcars.csv",
                        format = "csv",
                        file_type = "microdata",
@@ -900,6 +924,9 @@ test_that("resource works", {
 resource_fetch <- function(url, 
                            path = tempfile()) {
   
+  ## Remove file if it exist..
+  if (file.exists(path)) file.remove(path)
+  
  if(Sys.setenv(USE_UAT=1) )   {
     httr::GET(url,
             httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_KEY_UAT")),
@@ -917,12 +944,46 @@ resource_fetch <- function(url,
 ```{r example-resource_fetch}
 #-----
 # Test search in prod
-# https://github.com/unhcr-americas/darien_gap_human_mobility/blob/main/report.Rmd#L38
 Sys.unsetenv("USE_UAT")
-resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',
-                       path = tempfile())  
 
- 
+
+## Example 1: with a direct URL
+resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',
+                       path = tempfile())
+
+## Example 1: Let's try to identify a resource - then fetch it locally and update it back... as from here
+# https://github.com/unhcr-americas/darien_gap_human_mobility/blob/main/report.Rmd#L38
+
+p <- riddle::dataset_show('panama-irregular-entries-through-darien-by-gender')
+## let's get the first resource
+test_ressources <- p[["resources"]][[1]] |> dplyr::slice(1)
+
+## Get the resource locally..
+resource_fetch(url = test_ressources$url,   path =  here::here("data.csv"))  
+
+# Rebuild the metadata
+m <- resource_metadata(type = test_ressources$type, #"data",
+                         url = "df_gender_2020.csv",
+#   upload = httr::upload_file(here::here("data.csv")),
+## # Error:
+# ! All columns in a tibble must be vectors.
+# ✖ Column `upload` is a `form_file` object.
+                         name = test_ressources$name, # "Irregular entries by gender in 2022",
+                         format = test_ressources$format, #"csv",
+                         file_type =  test_ressources$file_type, #"microdata",
+                         visibility = test_ressources$visibility, # "public",
+                         date_range_start =  test_ressources$date_range_start, # "2022-01-01",
+                         date_range_end = test_ressources$date_range_end, #as.character(floor_date(today('America/Panama'), "month") - days(1)), #end day of last month
+                         version = test_ressources$version, # "0",
+                         process_status = test_ressources$process_status, #"anonymized",
+                         identifiability = test_ressources$visibility, #"anonymized_public"
+  )
+## Update back -- Does not work...   
+# r <- resource_update('6e53f9fe-a3a5-4277-9e37-3085e506a261', m)
+
+# No encoding supplied: defaulting to UTF-8.
+# Error in !r$success : invalid argument type
+
 ```
   
 ```{r tests-resource_fetch}
