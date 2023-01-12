@@ -15,8 +15,8 @@
 #' @examples
 #' m <- riddle::resource_metadata(type = "data",
 #'                        url = "mtcars.csv",
-#'           #  upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),
-#'           ## # Error:
+#' #  upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),
+#' ## # Error:
 #' # ! All columns in a tibble must be vectors.
 #' # ✖ Column `upload` is a `form_file` object.
 #'                        name = "mtcars.csv",

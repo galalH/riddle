@@ -18,12 +18,17 @@ ridl(action, ..., .encoding = "json")
 Helper function to make API calls. Calls includes the 10 following actions:
 }
 \details{
+On dataset
 \itemize{
 \item "package_create"
 \item "package_update"
 \item "package_patch"
 \item "package_delete"
 \item "package_search"
+}
+
+On ressource
+\itemize{
 \item "resource_create"
 \item "resource_update"
 \item "resource_patch"

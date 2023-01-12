@@ -62,6 +62,9 @@ list_of_ressources
 #-----
 # Test create in UAT
 Sys.setenv(USE_UAT=1)
+
+# p <- riddle::dataset_show('testedouard2')
+
 ### TO FIX -- geographies: Missing value
 ## __type: Validation Error ---
 ## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682

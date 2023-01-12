@@ -78,20 +78,20 @@
 </h1>
 <p>This is a minimal package for programatically interacting with the <a href="https://ridl.unhcr.org" class="external-link">UNHCR Raw Internal Data Library (RIDL)</a>. The main purpose served by this package is to make the RIDL API documentation more readily accessible within an R ecosystem for better automation.</p>
 <div class="section level2">
-<h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
+<h2 id="install-and-configure-authentication-token">Install and configure authentication token<a class="anchor" aria-label="anchor" href="#install-and-configure-authentication-token"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"edouard-legoupil/riddle"</span><span class="op">)</span> </span></code></pre></div>
-<p>The <code>riddle</code> package requires you to add your API key and store it for further use. The easiest way to do that is to store your API key in your <code>.Renviron</code> file which is automatically read by R on startup.</p>
-<p>You can retrieve your <code>API key</code> in your <a href="https://ridl.unhcr.org/user/" class="external-link">user page</a>.</p>
+<p>The <code>riddle</code> package requires you to add your <strong>API token</strong> and store it for further use. The easiest way to do that is to store your API token in your <code>.Renviron</code> file which is automatically read by R on startup.</p>
+<p>You can retrieve your <code>API TOKEN</code> in your <a href="https://ridl.unhcr.org/user/" class="external-link">user page</a>.</p>
 <div class="figure">
-<img src="https://raw.githubusercontent.com/Edouard-Legoupil/riddle/main/man/figures/ridl_api_key.png" alt=""><p class="caption">api_key_img</p>
+<img src="https://raw.githubusercontent.com/Edouard-Legoupil/riddle/main/inst/token.png" alt=""><p class="caption">api_token_img</p>
 </div>
-<p>To use the package, you’ll need to store your RIDL API key in the <code>RIDL_API_KEY</code> environment variable. The easiest way to do that is by calling <code><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">usethis::edit_r_environ()</a></code> and adding the line <code>RIDL_API_KEY=xxxxx</code> to the file before saving and restarting your R session.</p>
-<p>The package works with both the production and <a href="https://ridl-uat.unhcr.org" class="external-link">UAT instances of RIDL</a> (aka “User Acceptance Testing”). To use the UAT version, add the corresponding KEY within your <code>.Renviron</code> file: <code>RIDL_API_KEY_UAT=xxxxx</code>. To use the UAT version, run <code>Sys.setenv(USE_UAT=1)</code> before calling any functions from the package. To go back to the production instance, call <code>Sys.unsetenv("USE_UAT")</code>.</p>
+<p>To use the package, you’ll need to store your RIDL API token in the <code>RIDL_API_TOKEN</code> environment variable. The easiest way to do that is by calling <code><a href="https://usethis.r-lib.org/reference/edit.html" class="external-link">usethis::edit_r_environ()</a></code> and adding the line <code>RIDL_API_TOKEN=xxxxx</code> to the file before saving and restarting your R session.</p>
+<p>The package works with both the production and <a href="https://ridl-uat.unhcr.org" class="external-link">UAT instances of RIDL</a> (aka “User Acceptance Testing”). To use the UAT version, add the corresponding TOKEN within your <code>.Renviron</code> file: <code>RIDL_UAT_API_TOKEN=xxxxx</code>. To use the UAT version, run <code>Sys.setenv(USE_UAT=1)</code> before calling any functions from the package. To go back to the production instance, call <code>Sys.unsetenv("USE_UAT")</code>.</p>
 </div>
 <div class="section level2">
-<h2 id="an-intro-to-ridl-concepts">An intro to RIDL concepts<a class="anchor" aria-label="anchor" href="#an-intro-to-ridl-concepts"></a>
+<h2 id="a-quick-intro-to-ridl-concepts">A quick intro to RIDL concepts<a class="anchor" aria-label="anchor" href="#a-quick-intro-to-ridl-concepts"></a>
 </h2>
 <p>In order to easily use the <code>ridlle</code> package, it’s important to understand some 3 main concepts of this platform. RIDL is based on <a href="https://ckan.org/" class="external-link">CKAN</a> and the documentation is available <a href="https://im.unhcr.org/ridl" class="external-link">here</a> for more details.</p>
 <div class="section level3">
@@ -127,7 +127,7 @@
 </div>
 </div>
 <div class="section level2">
-<h2 id="how-to">How to<a class="anchor" aria-label="anchor" href="#how-to"></a>
+<h2 id="how-to">How To<a class="anchor" aria-label="anchor" href="#how-to"></a>
 </h2>
 <p>As a UNHCR staff, you should have access to a series of containers based on where you are working. Within each container, if you have editor or admin right, you can create a dataset.</p>
 <div class="section level3">
@@ -160,7 +160,7 @@
 <span><span class="va">p</span> </span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="use-case-2-add-a-new-data-file">Use case 2: add a new data file<a class="anchor" aria-label="anchor" href="#use-case-2-add-a-new-data-file"></a>
+<h3 id="use-case-2-replace-data-file">Use case 2: replace data file<a class="anchor" aria-label="anchor" href="#use-case-2-replace-data-file"></a>
 </h3>
 <p>Ideally, data resources from kobotoolbox should be added using the API connection as described in <a href="https://im.unhcr.org/ridl/#Link_kobo_ridl" class="external-link">Part 4 of the documentation</a>.</p>
 <p>Though, there might be specific cases where you are building an operational dataset, scrapping an official data source from the web or within a PDF and want to add this on a regular basis as a new <code>data</code> resource within an existing dataset. You can check a practical example of such use case here:<a href="https://github.com/unhcr-americas/darien_gap_human_mobility/tree/main/R" class="external-link">darien_gap_human_mobility</a></p>
@@ -200,7 +200,7 @@
 <span><span class="fu"><a href="reference/dataset.html">dataset_delete</a></span><span class="op">(</span><span class="va">p</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="use-case-3-add-attachment">Use case 3: Add attachment<a class="anchor" aria-label="anchor" href="#use-case-3-add-attachment"></a>
+<h3 id="use-case-3-add-a-new-attachment-with-your-reproducible-analysis-code">Use case 3: Add a new attachment with your reproducible analysis code<a class="anchor" aria-label="anchor" href="#use-case-3-add-a-new-attachment-with-your-reproducible-analysis-code"></a>
 </h3>
 <p>You want to add your own initial data exploration, data interpretation presentation and/or data story telling report as a new <code>attachement</code> resource within a dataset.</p>
 <p>You can check a practical example of such use case here:<a href="https://edouard-legoupil.github.io/kobocruncher/" class="external-link">kobocruncher</a></p>

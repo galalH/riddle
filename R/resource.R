@@ -26,9 +26,9 @@
 #' @param dataset_id The id or name of the dataset to which this resource belongs to.
 #' 
 #' @importFrom httr upload_file
-#'
-#' @return The resource.
+
 #' @rdname resource
+#' @return metadata resource.
 #' @export
 #' @examples
 #' ## let's get again the details of the dataset we want to add the resource in..
@@ -46,17 +46,7 @@
 #' ##take the first one
 #' ridlid <- as.character(p[9, c("id")])
 #' 
-#' ## let's get again the details of the dataset we want to add the resource in..
-#' #r <- riddle::resource_create(dataset_id = ridlid, res_metadata = m)
-#' # Like before, the return value is a tibble representation of the resource.
-#' #r
-#'  
-#' ## and now can search for it - checking it is correctly there... 
-#' ##riddle::resource_search("name:mtcarsriddle")
 #' 
-#' # And once we’re done experimenting with the API, we should take down our
-#' # toy dataset since we don’t really need it on RIDL.
-#' #riddle::dataset_delete(p$id)
 #' 
 #' 
 #' #-----
@@ -91,10 +81,8 @@
 #' 
 #' m <- riddle::resource_metadata(type = "data",
 #'                        url = "mtcars.csv",
-#' #  upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),         
-#' ## # Error:
-#' # ! All columns in a tibble must be vectors.
-#' # ✖ Column `upload` is a `form_file` object.
+#'   upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),         
+#' 
 #'                        name = "mtcars.csv",
 #'                        format = "csv",
 #'                        file_type = "microdata",
@@ -111,37 +99,63 @@
 #' # __type: Not Found Error
 #' # message: Not found: No dataset id provided, cannot check auth.
 #' 
+#' ## let's get again the details of the dataset we want to add the resource in..
+#' #r <- riddle::resource_create(dataset_id = ridlid, res_metadata = m)
+#' # Like before, the return value is a tibble representation of the resource.
+#' #r
+#'  
+#' ## and now can search for it - checking it is correctly there... 
+#' ##riddle::resource_search("name:mtcarsriddle")
+#' 
+#' # And once we’re done experimenting with the API, we should take down our
+#' # toy dataset since we don’t really need it on RIDL.
+#' #riddle::dataset_delete(p$id)
+#' # riddle::resource_delete()
+#' 
 resource_create <- function(dataset_id, res_metadata) {
+  ## enc needs to be adjusted to multipart in case a file is uploaded...
   enc <- if(is.null(res_metadata$upload)) "json" else "multipart"
   ridl(action ="resource_create", 
        dataset_id = dataset_id,
        !!!res_metadata,
-       .encoding = enc) %>% 
-    resource_tibblify()
+       .encoding = enc) -> r
+    r$result %>% 
+    resource_tibblify() -> res
+  
+  return(res)
+  
 }
 
 
 #' @rdname search
+#' @return tibble with list of related resource.
 #' @export
 resource_search <- function(query = NULL,
                             rows = NULL, 
                             start = NULL) {
   ridl(action ="resource_search",
-       !!!(as.list(match.call()[-1])))$results %>% 
-    tibble::as_tibble()
+       !!!(as.list(match.call()[-1])))-> r
+    r$results %>% 
+    tibble::as_tibble() -> res
+  
+  return(res)
 }
   
 
 
 #' @rdname resource
+#' @return updated metadata resource.
 #' @export
 resource_update <- function(id, res_metadata) {
   enc <- if(is.null(res_metadata$upload)) "json" else "multipart"
   ridl(action ="resource_update",
        id = id,
        !!!res_metadata,
-       .encoding = enc) %>% 
-    resource_tibblify()
+       .encoding = enc) -> r
+    r$result %>% 
+    resource_tibblify()-> res
+  
+  return(res)
 }
 
 #' @rdname resource
@@ -151,14 +165,20 @@ resource_patch <- function(id, res_metadata) {
   ridl(action ="resource_patch",
        id = id,
        !!!res_metadata, 
-       .encoding = enc) %>% 
-    resource_tibblify()
+       .encoding = enc) -> r
+  
+    r$result %>% 
+    resource_tibblify()-> res
+  
+  return(res)
 }
 
 #' @rdname resource
 #' @export
 resource_delete <- function(id) { 
   ridl(action ="resource_delete",
-       id = id) }
+       id = id) -> r
+  
+  return( cat("Resource deleted"))}
 
 

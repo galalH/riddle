@@ -31,6 +31,8 @@ datasets should begin.}
 \value{
 A tibble with the search results.
 
+tibble with list of related resource.
+
 The resource.
 }
 \description{
@@ -57,12 +59,15 @@ not explicitly provided in the \code{metadata}.
 #-----
 # Test search in prod
 Sys.unsetenv("USE_UAT")
-p <- riddle::dataset_search(q = "cbi")
+p <- dataset_search(q = "cbi")
 p
-p$id
 
 
 
+#-----
+# Test create in UAT
+Sys.setenv(USE_UAT=1)
+p2 <- dataset_search(q = "testedouard2")
 
 ## let's get again the details of the dataset we want to add the resource in..
 

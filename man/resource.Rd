@@ -32,7 +32,9 @@ resource_delete(id)
 \item{dataset_id}{The id or name of the dataset to which this resource belongs to.}
 }
 \value{
-The resource.
+metadata resource.
+
+updated metadata resource.
 }
 \description{
 Work with RIDL resources (files)
@@ -70,17 +72,7 @@ p
 ##take the first one
 ridlid <- as.character(p[9, c("id")])
 
-## let's get again the details of the dataset we want to add the resource in..
-#r <- riddle::resource_create(dataset_id = ridlid, res_metadata = m)
-# Like before, the return value is a tibble representation of the resource.
-#r
- 
-## and now can search for it - checking it is correctly there... 
-##riddle::resource_search("name:mtcarsriddle")
 
-# And once we’re done experimenting with the API, we should take down our
-# toy dataset since we don’t really need it on RIDL.
-#riddle::dataset_delete(p$id)
 
 
 #-----
@@ -115,10 +107,8 @@ new_attachment <- riddle::resource_metadata(type = "attachment",
 
 m <- riddle::resource_metadata(type = "data",
                        url = "mtcars.csv",
-#  upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),         
-## # Error:
-# ! All columns in a tibble must be vectors.
-# ✖ Column `upload` is a `form_file` object.
+  upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),         
+
                        name = "mtcars.csv",
                        format = "csv",
                        file_type = "microdata",
@@ -134,5 +124,18 @@ m <- riddle::resource_metadata(type = "data",
 # Error in ridl(action = "resource_create", dataset_id = dataset_id, !!!res_metadata, : 
 # __type: Not Found Error
 # message: Not found: No dataset id provided, cannot check auth.
+
+## let's get again the details of the dataset we want to add the resource in..
+#r <- riddle::resource_create(dataset_id = ridlid, res_metadata = m)
+# Like before, the return value is a tibble representation of the resource.
+#r
+ 
+## and now can search for it - checking it is correctly there... 
+##riddle::resource_search("name:mtcarsriddle")
+
+# And once we’re done experimenting with the API, we should take down our
+# toy dataset since we don’t really need it on RIDL.
+#riddle::dataset_delete(p$id)
+# riddle::resource_delete()
 
 }

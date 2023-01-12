@@ -4,11 +4,14 @@
 #' 
 #' Helper function to make API calls. Calls includes the 10 following actions:
 #' 
+#' On dataset
 #'  * "package_create"
 #'  * "package_update"
 #'  * "package_patch"
 #'  * "package_delete"
 #'  * "package_search"
+#'  
+#' On ressource  
 #'  * "resource_create"
 #'  * "resource_update"
 #'  * "resource_patch"
@@ -28,35 +31,43 @@
 #'
 #' @return `httr::response` object with the result of the call.
 #' @export
+
 #' @examples
 #' # ridl(action ="package_search", as.list("cbi"))
 ridl <- function(action,
                  ...,
                  .encoding = "json") {
   if(Sys.setenv(USE_UAT=1))  {
-      baseurl <- "https://ridl.unhcr.org/"
-      r <- httr::POST(baseurl,
+    
+      r <- httr::POST("https://ridl.unhcr.org/",
                  path = glue::glue("/api/action/{action}"),
-                 httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY")),
+                # httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY")),
+                 httr::add_headers("Authorization" = Sys.getenv("RIDL_API_TOKEN")),
                  body = rlang::list2(...),
                  encode = .encoding) %>%
             httr::content(simplifyVector = TRUE) 
+      
     } else {
-      baseurl <- "https://ridl-uat.unhcr.org/"
-      r <- httr::POST(baseurl,
+      
+      r <- httr::POST("https://ridl-uat.unhcr.org/",
                  path = glue::glue("/api/action/{action}"),
-                 httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY_UAT")),
+                # httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY_UAT")),
+                 httr::add_headers("Authorization" = Sys.getenv("RIDL_UAT_API_TOKEN")),
                  body = rlang::list2(...),
                  encode = .encoding) %>%
             httr::content(simplifyVector = TRUE) }
-
+  
+  ## Display results in console
+  message(r$result)
+  ## Error catching
   if (!r$success)
     stop(r$error %>%
            purrr::imap(~glue::glue("{.y}: {.x}")) %>%
            unlist() %>%
            stringr::str_c(collapse = "\n"))
-
-  r$result
+  
+  ## Return all the details of the API interaction... 
+  return(r)
 }
 
 

@@ -14,34 +14,31 @@ documentation more readily accessible within an R ecosystem for better automatio
 
 
 
-## Install
+## Install and configure authentication token
 
 ``` r
 remotes::install_github("edouard-legoupil/riddle") 
 ```
 
-The `riddle` package requires you to add your API key and store it for further use. 
-The easiest way to do that is to store your API key in your `.Renviron` file which 
+The `riddle` package requires you to add your __API token__ and store it for further use. 
+The easiest way to do that is to store your API token in your `.Renviron` file which 
 is automatically read by R on startup.
 
-You can retrieve your `API key` in your [user page](https://ridl.unhcr.org/user/).
+You can retrieve your `API TOKEN` in your [user page](https://ridl.unhcr.org/user/).
 
-![api_key_img](https://raw.githubusercontent.com/Edouard-Legoupil/riddle/main/man/figures/ridl_api_key.png)
+![api_token_img](https://raw.githubusercontent.com/Edouard-Legoupil/riddle/main/inst/token.png)
 
-To use the package, you’ll need to store your RIDL API key in the `RIDL_API_KEY` environment variable. 
+To use the package, you’ll need to store your RIDL API token in the `RIDL_API_TOKEN` environment variable. 
 The easiest way to do that is by calling `usethis::edit_r_environ()` and adding the line
-`RIDL_API_KEY=xxxxx` to the file before saving and restarting your R session.
+`RIDL_API_TOKEN=xxxxx` to the file before saving and restarting your R session.
 
 The package works with both the production and [UAT instances of RIDL](https://ridl-uat.unhcr.org)
- (aka "User Acceptance Testing"). To use the UAT version, add the corresponding KEY 
- within your `.Renviron` file: `RIDL_API_KEY_UAT=xxxxx`.  To use the UAT version,
+ (aka "User Acceptance Testing"). To use the UAT version, add the corresponding TOKEN 
+ within your `.Renviron` file: `RIDL_UAT_API_TOKEN=xxxxx`.  To use the UAT version,
  run `Sys.setenv(USE_UAT=1)` before calling any functions from the package. 
  To go back to the production instance, call `Sys.unsetenv("USE_UAT")`.
  
- 
-
-
-## An intro to RIDL  concepts
+## A quick intro to RIDL  concepts
 
 In order to easily use the `ridlle` package, it’s important to understand
 some 3 main concepts of this platform. RIDL is based on [CKAN](https://ckan.org/) and 
@@ -87,7 +84,7 @@ Resources URL are typically  formatted as:
 
 > https://ridl.unhcr.org/dataset/`__name_of_dataset__`/resource/`__id_of_the_resource__`
 
-## How to 
+## How To 
 
 As a UNHCR staff, you should have access to a series of containers based on where you are working.
 Within each container, if you have editor or admin right, you can create a dataset. 
@@ -127,7 +124,7 @@ p
 
 
 
-### Use case 2:  add a new data file
+### Use case 2:  replace data file
 
 Ideally, data resources from kobotoolbox should be added using the API connection as described in 
 [Part 4 of the documentation](https://im.unhcr.org/ridl/#Link_kobo_ridl). 
@@ -175,7 +172,7 @@ resource_search("name:mtcars")
 dataset_delete(p$id)
 ```  
   
-### Use case 3:  Add attachment
+### Use case 3:  Add a new attachment with your reproducible analysis code 
 You want to add your own initial data exploration, data interpretation presentation 
 and/or data story telling report as a new `attachement` resource within a dataset. 
 

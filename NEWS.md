@@ -2,6 +2,8 @@
 
 Contribution from Edouard:
 
+ * replaced authentication with key by authentication with token - in the doc
+
  * Added missing parameter documentation for `visibility` in `resource_metadata()`
  
  * Fixed (some) non working package examples... 

@@ -40,7 +40,7 @@ resource_fetch(url = test_ressources$url,   path =  here::here("data.csv"))
 # Rebuild the metadata
 m <- resource_metadata(type = test_ressources$type, #"data",
                          url = "df_gender_2020.csv",
-#   upload = httr::upload_file(here::here("data.csv")),
+upload = httr::upload_file(here::here("data.csv")),
 ## # Error:
 # ! All columns in a tibble must be vectors.
 # ✖ Column `upload` is a `form_file` object.
@@ -52,11 +52,12 @@ m <- resource_metadata(type = test_ressources$type, #"data",
                          date_range_end = test_ressources$date_range_end, #as.character(floor_date(today('America/Panama'), "month") - days(1)), #end day of last month
                          version = test_ressources$version, # "0",
                          process_status = test_ressources$process_status, #"anonymized",
-                         identifiability = test_ressources$visibility, #"anonymized_public"
+                         identifiability = test_ressources$identifiability, #"anonymized_public"
   )
-## Update back -- Does not work...   
-# r <- resource_update('6e53f9fe-a3a5-4277-9e37-3085e506a261', m)
 
+## Update back -- Does not work...   
+#r <- resource_update(id = test_ressources$id,  res_metadata = m)  
+### Error when using the upload... 
 # No encoding supplied: defaulting to UTF-8.
 # Error in !r$success : invalid argument type
 

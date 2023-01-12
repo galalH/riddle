@@ -39,6 +39,9 @@
 #' #-----
 #' # Test create in UAT
 #' Sys.setenv(USE_UAT=1)
+#' 
+#' # p <- riddle::dataset_show('testedouard2')
+#' 
 #' ### TO FIX -- geographies: Missing value
 #' ## __type: Validation Error ---
 #' ## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682
@@ -85,23 +88,32 @@
 #' 
 dataset_create <- function(metadata) { 
   ridl(action ="package_create",
-       !!!metadata) %>% 
-    dataset_tibblify() }
+       !!!metadata) -> r
+    r$result %>% 
+    dataset_tibblify() -> res
+  
+  return(res)  }
 
 #' @rdname dataset
 #' @export
 dataset_show <- function(id) { 
   ridl(action ="package_show",
-       id = id) %>% 
-    dataset_tibblify() }
+       id = id)-> r
+    r$result %>% 
+    dataset_tibblify() -> res
+  
+  return(res)  }
 
 #' @rdname dataset
 #' @export
 dataset_update <- function(id, metadata) { 
   ridl(action ="package_update", 
        id = id, 
-       !!!metadata) %>% 
-    dataset_tibblify() }
+       !!!metadata)-> r
+    r$result %>% 
+    dataset_tibblify() -> res
+  
+  return(res)  }
 
 #' @rdname dataset
 #' @export
@@ -109,11 +121,17 @@ dataset_patch <- function(id,
                           metadata) { 
   ridl(action ="package_patch",
        id = id, 
-       !!!metadata) %>% 
-    dataset_tibblify() }
+       !!!metadata) -> r
+    r$result %>% 
+    dataset_tibblify() -> res
+  
+  return(res)  }
 
 #' @rdname dataset
 #' @export
 dataset_delete <- function(id) { 
   ridl(action ="package_delete",
-       id = id) }
+       id = id) -> r
+     
+  
+  return( cat("dataset deleted")) }

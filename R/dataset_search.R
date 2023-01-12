@@ -21,26 +21,29 @@
 #' #-----
 #' # Test search in prod
 #' Sys.unsetenv("USE_UAT")
-#' p <- riddle::dataset_search(q = "cbi")
+#' p <- dataset_search(q = "cbi")
 #' p
-#' p$id
 #' 
 #' 
 #' 
+#' #-----
+#' # Test create in UAT
+#' Sys.setenv(USE_UAT=1)
+#' p2 <- dataset_search(q = "testedouard2")
 #' 
 dataset_search <- function(q = NULL, rows = NULL, start = NULL) {
-  r <- ridl(action ="package_search", 
-            !!!(as.list(match.call()[-1])) )$results
+  search_result <- ridl(action ="package_search", 
+            !!!(as.list(match.call()[-1])) )
 
-  if (purrr::is_empty(r)) {
-    r <- tibble::tibble()
-    
-  } else {  
-    r %>%
+  if (purrr::is_empty(search_result[["result"]])) {
+    search_results <- tibble::tibble()
+
+  } else {
+    search_result[["result"]][["results"]] %>%
     dplyr::mutate(dplyr::across(tidyselect::vars_select_helpers$where(is.data.frame),
                                 ~purrr::pmap(., ~tibble::tibble(...)))) %>%
-    tibble::as_tibble() -> r
+    tibble::as_tibble() -> search_results
     }
-  return(r)
+  return(search_results)
 }
 
