@@ -61,16 +61,16 @@ not explicitly provided in the \code{metadata}.
 #-----
 # Test search in prod
 Sys.unsetenv("USE_UAT")
-p <- riddle::dataset_search("rms_v4")
-p
+# p <- riddle::dataset_search("rms_v4")
+# p
 
 #-----
 # Test search in uat
 Sys.setenv(USE_UAT=1)
-p <- riddle::dataset_search("tests")
-p
-##take the first one
-ridlid <- as.character(p[9, c("id")])
+# p <- riddle::dataset_search("tests")
+# p
+# ##take the first one
+# ridlid <- as.character(p[9, c("id")])
 
 
 
@@ -78,10 +78,10 @@ ridlid <- as.character(p[9, c("id")])
 #-----
 # Test search in prod
 Sys.unsetenv("USE_UAT")
-p <- riddle::dataset_show('rms_v4')
-dataset_id_rms <- p$id
-list_of_ressources <- p[["resources"]][[1]]
-knitr::kable(list_of_ressources)
+# p <- riddle::dataset_show('rms_v4')
+# dataset_id_rms <- p$id
+# list_of_ressources <- p[["resources"]][[1]]
+# knitr::kable(list_of_ressources)
 
 new_attachment <- riddle::resource_metadata(type = "attachment",
                        url = "resource.R", 

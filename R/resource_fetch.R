@@ -15,36 +15,36 @@
 #' 
 #' 
 #' ## Example 1: with a direct URL
-#' resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',
-#'                        path = tempfile())
+#' # resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',
+#' #                        path = tempfile())
 #' 
 #' ## Example 1: Let's try to identify a resource - then fetch it locally and update it back... as from here
 #' # https://github.com/unhcr-americas/darien_gap_human_mobility/blob/main/report.Rmd#L38
 #' 
-#' p <- riddle::dataset_show('panama-irregular-entries-through-darien-by-gender')
-#' ## let's get the first resource
-#' test_ressources <- p[["resources"]][[1]] |> dplyr::slice(1)
-#' 
-#' ## Get the resource locally..
-#' resource_fetch(url = test_ressources$url,   path =  here::here("data.csv"))  
-#' 
-#' # Rebuild the metadata
-#' m <- resource_metadata(type = test_ressources$type, #"data",
-#'                          url = "df_gender_2020.csv",
-#' upload = httr::upload_file(here::here("data.csv")),
-#' ## # Error:
-#' # ! All columns in a tibble must be vectors.
-#' # ✖ Column `upload` is a `form_file` object.
-#'                          name = test_ressources$name, # "Irregular entries by gender in 2022",
-#'                          format = test_ressources$format, #"csv",
-#'                          file_type =  test_ressources$file_type, #"microdata",
-#'                          visibility = test_ressources$visibility, # "public",
-#'                          date_range_start =  test_ressources$date_range_start, # "2022-01-01",
-#'                          date_range_end = test_ressources$date_range_end, #as.character(floor_date(today('America/Panama'), "month") - days(1)), #end day of last month
-#'                          version = test_ressources$version, # "0",
-#'                          process_status = test_ressources$process_status, #"anonymized",
-#'                          identifiability = test_ressources$identifiability, #"anonymized_public"
-#'   )
+#' # p <- riddle::dataset_show('panama-irregular-entries-through-darien-by-gender')
+#' # ## let's get the first resource
+#' # test_ressources <- p[["resources"]][[1]] |> dplyr::slice(1)
+#' # 
+#' # ## Get the resource locally..
+#' # resource_fetch(url = test_ressources$url,   path =  here::here("data.csv"))  
+#' # 
+#' # # Rebuild the metadata
+#' # m <- resource_metadata(type = test_ressources$type, #"data",
+#' #                          url = "df_gender_2020.csv",
+#' # upload = httr::upload_file(here::here("data.csv")),
+#' # ## # Error:
+#' # # ! All columns in a tibble must be vectors.
+#' # # ✖ Column `upload` is a `form_file` object.
+#' #                          name = test_ressources$name, # "Irregular entries by gender in 2022",
+#' #                          format = test_ressources$format, #"csv",
+#' #                          file_type =  test_ressources$file_type, #"microdata",
+#' #                          visibility = test_ressources$visibility, # "public",
+#' #                          date_range_start =  test_ressources$date_range_start, # "2022-01-01",
+#' #                          date_range_end = test_ressources$date_range_end, #as.character(floor_date(today('America/Panama'), "month") - days(1)), #end day of last month
+#' #                          version = test_ressources$version, # "0",
+#' #                          process_status = test_ressources$process_status, #"anonymized",
+#' #                          identifiability = test_ressources$identifiability, #"anonymized_public"
+#' #   )
 #' 
 #' ## Update back -- Does not work...   
 #' #r <- resource_update(id = test_ressources$id,  res_metadata = m)  

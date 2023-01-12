@@ -28,11 +28,11 @@
 #' #-----
 #' # test search in prod
 #' Sys.unsetenv("USE_UAT")
-#' riddle::dataset_show("unhcr-cbi-americas-quarterly-report")
-#' 
-#' p <- riddle::dataset_show('rms_v4')
-#' list_of_ressources <- p[["resources"]][[1]]
-#' list_of_ressources
+#' # riddle::dataset_show("unhcr-cbi-americas-quarterly-report")
+#' # 
+#' # p <- riddle::dataset_show('rms_v4')
+#' # list_of_ressources <- p[["resources"]][[1]]
+#' # list_of_ressources
 #' 
 #' 
 #' 
