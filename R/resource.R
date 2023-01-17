@@ -35,13 +35,13 @@
 #' #-----
 #' # Test search in prod
 #' Sys.unsetenv("USE_UAT")
-#' # p <- riddle::dataset_search("rms_v4")
+#' # p <-  dataset_search("rms_v4")
 #' # p
 #' 
 #' #-----
 #' # Test search in uat
 #' Sys.setenv(USE_UAT=1)
-#' # p <- riddle::dataset_search("tests")
+#' # p <-  dataset_search("tests")
 #' # p
 #' # ##take the first one
 #' # ridlid <- as.character(p[9, c("id")])

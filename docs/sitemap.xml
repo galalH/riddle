@@ -25,9 +25,6 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/apihelper.html</loc>
-  </url>
-  <url>
     <loc>/reference/dataset.html</loc>
   </url>
   <url>
@@ -43,12 +40,6 @@
     <loc>/reference/keywords.html</loc>
   </url>
   <url>
-    <loc>/reference/package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/package_metadata.html</loc>
-  </url>
-  <url>
     <loc>/reference/pipe.html</loc>
   </url>
   <url>
@@ -62,9 +53,6 @@
   </url>
   <url>
     <loc>/reference/resource_tibblify.html</loc>
-  </url>
-  <url>
-    <loc>/reference/riddle-package.html</loc>
   </url>
   <url>
     <loc>/reference/ridl.html</loc>

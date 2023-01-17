@@ -17,7 +17,8 @@ documentation more readily accessible within an R ecosystem for better automatio
 ## Install and configure authentication token
 
 ``` r
-remotes::install_github("edouard-legoupil/riddle") 
+install.packages("pak")
+pak::pkg_install("edouard-legoupil/riddle") 
 ```
 
 The `riddle` package requires you to add your __API token__ and store it for further use. 

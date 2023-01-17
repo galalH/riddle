@@ -97,7 +97,6 @@ m1
 #-----
 # test search in prod
 Sys.unsetenv("USE_UAT")
-#Sys.setenv(USE_UAT=0)
 # riddle::dataset_show(id = "unhcr-cbi-americas-quarterly-report")
 # 
 # p <- riddle::dataset_show('rms_v4')
@@ -133,10 +132,11 @@ m <- riddle::dataset_metadata(title = "Motor Trend Car Road Test two",
                       archived = "False")
 # ## For the above to work - you need to make sure you have at least editor access
 # to the corresponding container - i.e. owner_org = "exercise-container"
-#p <- riddle::dataset_create(metadata = m)
+# p <- riddle::dataset_create(metadata = m)
+
 # The return value is a representation of the dataset we just created in
 # RIDL that you could inspect like any other R object.
-#p
+# p
 
 #-----
 # Test create in prod
@@ -255,13 +255,13 @@ m1
 #-----
 # Test search in prod
 Sys.unsetenv("USE_UAT")
-# p <- riddle::dataset_search("rms_v4")
+# p <-  dataset_search("rms_v4")
 # p
 
 #-----
 # Test search in uat
 Sys.setenv(USE_UAT=1)
-# p <- riddle::dataset_search("tests")
+# p <-  dataset_search("tests")
 # p
 # ##take the first one
 # ridlid <- as.character(p[9, c("id")])

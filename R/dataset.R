@@ -28,7 +28,6 @@
 #' #-----
 #' # test search in prod
 #' Sys.unsetenv("USE_UAT")
-#' #Sys.setenv(USE_UAT=0)
 #' # riddle::dataset_show(id = "unhcr-cbi-americas-quarterly-report")
 #' # 
 #' # p <- riddle::dataset_show('rms_v4')
@@ -64,10 +63,11 @@
 #'                       archived = "False")
 #' # ## For the above to work - you need to make sure you have at least editor access
 #' # to the corresponding container - i.e. owner_org = "exercise-container"
-#' #p <- riddle::dataset_create(metadata = m)
+#' # p <- riddle::dataset_create(metadata = m)
+#' 
 #' # The return value is a representation of the dataset we just created in
 #' # RIDL that you could inspect like any other R object.
-#' #p
+#' # p
 #' 
 #' #-----
 #' # Test create in prod

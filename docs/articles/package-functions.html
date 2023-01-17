@@ -188,7 +188,7 @@
 <span><span class="co">#-----</span></span>
 <span><span class="co"># test search in prod</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"USE_UAT"</span><span class="op">)</span></span>
-<span><span class="co"># riddle::dataset_show("unhcr-cbi-americas-quarterly-report")</span></span>
+<span><span class="co"># riddle::dataset_show(id = "unhcr-cbi-americas-quarterly-report")</span></span>
 <span><span class="co"># </span></span>
 <span><span class="co"># p &lt;- riddle::dataset_show('rms_v4')</span></span>
 <span><span class="co"># list_of_ressources &lt;- p[["resources"]][[1]]</span></span>
@@ -223,10 +223,11 @@
 <span>                      archived <span class="op">=</span> <span class="st">"False"</span><span class="op">)</span></span>
 <span><span class="co"># ## For the above to work - you need to make sure you have at least editor access</span></span>
 <span><span class="co"># to the corresponding container - i.e. owner_org = "exercise-container"</span></span>
-<span><span class="co">#p &lt;- riddle::dataset_create(metadata = m)</span></span>
+<span><span class="co"># p &lt;- riddle::dataset_create(metadata = m)</span></span>
+<span></span>
 <span><span class="co"># The return value is a representation of the dataset we just created in</span></span>
 <span><span class="co"># RIDL that you could inspect like any other R object.</span></span>
-<span><span class="co">#p</span></span>
+<span><span class="co"># p</span></span>
 <span></span>
 <span><span class="co">#-----</span></span>
 <span><span class="co"># Test create in prod</span></span>
@@ -353,13 +354,13 @@
 <span><span class="co">#-----</span></span>
 <span><span class="co"># Test search in prod</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"USE_UAT"</span><span class="op">)</span></span>
-<span><span class="co"># p &lt;- riddle::dataset_search("rms_v4")</span></span>
+<span><span class="co"># p &lt;-  dataset_search("rms_v4")</span></span>
 <span><span class="co"># p</span></span>
 <span></span>
 <span><span class="co">#-----</span></span>
 <span><span class="co"># Test search in uat</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>USE_UAT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co"># p &lt;- riddle::dataset_search("tests")</span></span>
+<span><span class="co"># p &lt;-  dataset_search("tests")</span></span>
 <span><span class="co"># p</span></span>
 <span><span class="co"># ##take the first one</span></span>
 <span><span class="co"># ridlid &lt;- as.character(p[9, c("id")])</span></span>
@@ -436,23 +437,23 @@
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#-----</span></span>
 <span><span class="co"># Test search in prod</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"USE_UAT"</span><span class="op">)</span></span>
+<span><span class="co">#Sys.unsetenv("USE_UAT")</span></span>
 <span></span>
 <span></span>
 <span><span class="co">## Example 1: with a direct URL</span></span>
 <span><span class="co"># resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',</span></span>
 <span><span class="co">#                        path = tempfile())</span></span>
 <span></span>
-<span><span class="co">## Example 1: Let's try to identify a resource - then fetch it locally and update it back... as from here</span></span>
+<span><span class="co">## Example 2: Let's try to identify a resource - then fetch it locally and update it back... as from here</span></span>
 <span><span class="co"># https://github.com/unhcr-americas/darien_gap_human_mobility/blob/main/report.Rmd#L38</span></span>
 <span></span>
-<span><span class="co"># p &lt;- riddle::dataset_show('panama-irregular-entries-through-darien-by-gender')</span></span>
-<span><span class="co"># ## let's get the first resource</span></span>
-<span><span class="co"># test_ressources &lt;- p[["resources"]][[1]] |&gt; dplyr::slice(1)</span></span>
-<span><span class="co"># </span></span>
+<span><span class="co"># p &lt;- riddle::dataset_show('rms_v4')</span></span>
+<span><span class="co"># ## let's get the fifth resource</span></span>
+<span><span class="co"># test_ressources &lt;- p[["resources"]][[1]] |&gt; dplyr::slice(5)</span></span>
+<span><span class="co">#</span></span>
 <span><span class="co"># ## Get the resource locally..</span></span>
-<span><span class="co"># resource_fetch(url = test_ressources$url,   path =  here::here("data.csv"))  </span></span>
-<span><span class="co"># </span></span>
+<span><span class="co">#resource_fetch(url = test_ressources$url,   path =  here::here("file"))</span></span>
+<span><span class="co">#</span></span>
 <span><span class="co"># # Rebuild the metadata</span></span>
 <span><span class="co"># m &lt;- resource_metadata(type = test_ressources$type, #"data",</span></span>
 <span><span class="co">#                          url = "df_gender_2020.csv",</span></span>
@@ -471,9 +472,9 @@
 <span><span class="co">#                          identifiability = test_ressources$identifiability, #"anonymized_public"</span></span>
 <span><span class="co">#   )</span></span>
 <span></span>
-<span><span class="co">## Update back -- Does not work...   </span></span>
-<span><span class="co">#r &lt;- resource_update(id = test_ressources$id,  res_metadata = m)  </span></span>
-<span><span class="co">### Error when using the upload... </span></span>
+<span><span class="co">## Update back -- Does not work...</span></span>
+<span><span class="co">#r &lt;- resource_update(id = test_ressources$id,  res_metadata = m)</span></span>
+<span><span class="co">### Error when using the upload...</span></span>
 <span><span class="co"># No encoding supplied: defaulting to UTF-8.</span></span>
 <span><span class="co"># Error in !r$success : invalid argument type</span></span></code></pre></div>
 </div>
