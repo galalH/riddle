@@ -71,25 +71,44 @@ knitr::kable(riddle::keywords)
 ridl <- function(action,
                  ...,
                  .encoding = "json") {
-  if(Sys.setenv(USE_UAT=1))  {
+     # if(Sys.setenv(USE_UAT=1))  {
+    
+      print( c("Running ridl action", action))
+
+      # It's ok to check the environment using Sys.setenv()?
+      # Should Sys.getenv() will be better?
+      if(Sys.getenv("USE_UAT") == 1)  {
+        token <- Sys.getenv("RIDL_UAT_API_TOKEN")
+        print(" - env: UAT")
+        #nchar(token) - show the end of the token as the begining is more likely to be the same... 
+        print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )
+      
+        r <- httr::POST("https://ridl-uat.unhcr.org/",
+                 path = glue::glue("/api/action/{action}"),
+               # httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY_UAT")),
+               #  httr::add_headers("Authorization" = Sys.getenv("RIDL_UAT_API_TOKEN")),
+                 httr::add_headers("X-CKAN-API-Key" = token),
+                 body = rlang::list2(...),
+                 encode = .encoding) %>%
+            httr::content(simplifyVector = TRUE)
+      
+    } else    {
+      
+      token <- Sys.getenv("RIDL_API_TOKEN")
+      print(" - env: PRODUCTION")
+      #nchar(token) - show the end of the token as the begining is more likely to be the same... 
+      print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )
     
       r <- httr::POST("https://ridl.unhcr.org/",
                  path = glue::glue("/api/action/{action}"),
                 # httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY")),
-                 httr::add_headers("Authorization" = Sys.getenv("RIDL_API_TOKEN")),
+                 # httr::add_headers("Authorization" = Sys.getenv("RIDL_API_TOKEN")),
+                 httr::add_headers("X-CKAN-API-Key" = token),
                  body = rlang::list2(...),
                  encode = .encoding) %>%
             httr::content(simplifyVector = TRUE) 
       
-    } else {
-      
-      r <- httr::POST("https://ridl-uat.unhcr.org/",
-                 path = glue::glue("/api/action/{action}"),
-                # httr::add_headers("Authorization" = Sys.getenv("RIDL_API_KEY_UAT")),
-                 httr::add_headers("Authorization" = Sys.getenv("RIDL_UAT_API_TOKEN")),
-                 body = rlang::list2(...),
-                 encode = .encoding) %>%
-            httr::content(simplifyVector = TRUE) }
+       }
   
   ## Display results in console
   message(r$result)
@@ -121,6 +140,7 @@ test_that("ridl works", {
 ```
 
 # dataset_metadata
+
 
 ```{r function-dataset_metadata}
 #' Convenience function to record dataset metadata
@@ -499,7 +519,8 @@ dataset_delete <- function(id) {
 #-----
 # test search in prod
 Sys.unsetenv("USE_UAT")
-# riddle::dataset_show("unhcr-cbi-americas-quarterly-report")
+#Sys.setenv(USE_UAT=0)
+# riddle::dataset_show(id = "unhcr-cbi-americas-quarterly-report")
 # 
 # p <- riddle::dataset_show('rms_v4')
 # list_of_ressources <- p[["resources"]][[1]]
@@ -996,23 +1017,23 @@ resource_fetch <- function(url,
 ```{r example-resource_fetch}
 #-----
 # Test search in prod
-Sys.unsetenv("USE_UAT")
+#Sys.unsetenv("USE_UAT")
 
 
 ## Example 1: with a direct URL
 # resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',
 #                        path = tempfile())
 
-## Example 1: Let's try to identify a resource - then fetch it locally and update it back... as from here
+## Example 2: Let's try to identify a resource - then fetch it locally and update it back... as from here
 # https://github.com/unhcr-americas/darien_gap_human_mobility/blob/main/report.Rmd#L38
 
-# p <- riddle::dataset_show('panama-irregular-entries-through-darien-by-gender')
-# ## let's get the first resource
-# test_ressources <- p[["resources"]][[1]] |> dplyr::slice(1)
-# 
+# p <- riddle::dataset_show('rms_v4')
+# ## let's get the fifth resource
+# test_ressources <- p[["resources"]][[1]] |> dplyr::slice(5)
+#
 # ## Get the resource locally..
-# resource_fetch(url = test_ressources$url,   path =  here::here("data.csv"))  
-# 
+#resource_fetch(url = test_ressources$url,   path =  here::here("file"))
+#
 # # Rebuild the metadata
 # m <- resource_metadata(type = test_ressources$type, #"data",
 #                          url = "df_gender_2020.csv",
@@ -1031,9 +1052,9 @@ Sys.unsetenv("USE_UAT")
 #                          identifiability = test_ressources$identifiability, #"anonymized_public"
 #   )
 
-## Update back -- Does not work...   
-#r <- resource_update(id = test_ressources$id,  res_metadata = m)  
-### Error when using the upload... 
+## Update back -- Does not work...
+#r <- resource_update(id = test_ressources$id,  res_metadata = m)
+### Error when using the upload...
 # No encoding supplied: defaulting to UTF-8.
 # Error in !r$success : invalid argument type
 
