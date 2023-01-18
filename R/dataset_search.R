@@ -29,7 +29,7 @@
 #' #-----
 #' # Test create in UAT
 #' Sys.setenv(USE_UAT=1)
-#' #p2 <- dataset_search(q = "testedouard2")
+#' # p2 <- dataset_search(q = "testedouard2")
 #' 
 dataset_search <- function(q = NULL, rows = NULL, start = NULL) {
   search_result <- ridl(action ="package_search", 

@@ -62,20 +62,10 @@ Sys.unsetenv("USE_UAT")
 #-----
 # Test create in UAT
 Sys.setenv(USE_UAT=1)
-
-# p <- riddle::dataset_show('testedouard2')
-
-### TO FIX -- geographies: Missing value
-## __type: Validation Error ---
-## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682
-
-m <- riddle::dataset_metadata(title = "Motor Trend Car Road Test two",
-                      name = "mtcars_ed",
-                      notes = "The data was extracted from the 1974 Motor Trend
-                      US magazine, and comprises fuel consumption and 10 aspects
-                      of automobile design and performance for 32 automobiles
-                      (1973–74 models).",
-                      owner_org = "Americas",
+m <- riddle::dataset_metadata(title = "Testing Riddle Interface",
+                      name = "riddleapitest",
+                      notes = "Making an API test",
+                      owner_org = "americas",  ## be careful- all lower case!!!
                       visibility = "public",
                       geographies = "UNSPECIFIED",
                       external_access_level = "open_access",
@@ -86,11 +76,13 @@ m <- riddle::dataset_metadata(title = "Motor Trend Car Road Test two",
                       archived = "False")
 # ## For the above to work - you need to make sure you have at least editor access
 # to the corresponding container - i.e. owner_org = "exercise-container"
-# p <- riddle::dataset_create(metadata = m)
+# p <- dataset_create(metadata = m)
 
 # The return value is a representation of the dataset we just created in
 # RIDL that you could inspect like any other R object.
 # p
+## Now deleting this!
+# dataset_delete(id = p$id)
 
 #-----
 # Test create in prod
@@ -98,7 +90,7 @@ Sys.unsetenv("USE_UAT")
 # m1 <- riddle::dataset_metadata(title = "Test",
 #                       name = "Test",
 #                       notes = "The data was extracted from kobo.",
-#                       owner_org = "Americas : Regional Datasets",
+#                       owner_org = "americas-regional-dataset",
 #                       visibility = "public",
 #                       geographies = "UNSPECIFIED",
 #                       external_access_level = "open_access",

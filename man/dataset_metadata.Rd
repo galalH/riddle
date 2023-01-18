@@ -56,7 +56,7 @@ dataset_metadata(
 
 \item{url}{Project URL - Website URL associated with this data project (if applicable).}
 
-\item{owner_org}{Data container(*) - Use the canonical name for the container.}
+\item{owner_org}{Data container(*) - Use the canonical name for the container (i.e. all lower case) for instance "americas" - not "Americas" - in case you are not using the right container you will receive.The id of the container can also be used}
 
 \item{geographies}{defaults is geographies - pulling from a webservice from geoserver}
 
@@ -134,7 +134,7 @@ m <- dataset_metadata(title = "Motor Trend Car Road Tests",
                       US magazine, and comprises fuel consumption and 10 aspects
                       of automobile design and performance for 32 automobiles 
                       (1973–74 models).",
-                      owner_org = "exercise-container",
+                      owner_org = "americas",
                       visibility = "public",
                       geographies = "UNSPECIFIED",
                       external_access_level = "open_access",

@@ -2,7 +2,8 @@
 
 #' apihelper
 #' 
-#' Helper function to make API calls. Calls includes the 10 following actions:
+#' Helper function to make [API calls](https://docs.ckan.org/en/2.9/api/index.html#action-api-reference).
+#'  Calls includes the 10 following actions:
 #' 
 #' On dataset
 #'  * "package_create"
@@ -11,7 +12,7 @@
 #'  * "package_delete"
 #'  * "package_search"
 #'  
-#' On ressource  
+#' On resource  
 #'  * "resource_create"
 #'  * "resource_update"
 #'  * "resource_patch"
@@ -46,7 +47,7 @@ ridl <- function(action,
       if(Sys.getenv("USE_UAT") == 1)  {
         token <- Sys.getenv("RIDL_UAT_API_TOKEN")
         print(" - env: UAT")
-        #nchar(token) - show the end of the token as the begining is more likely to be the same... 
+        #nchar(token) - show the end of the token as the beginning is more likely to be the same... 
         print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )
       
         r <- httr::POST("https://ridl-uat.unhcr.org/",
@@ -62,7 +63,7 @@ ridl <- function(action,
       
       token <- Sys.getenv("RIDL_API_TOKEN")
       print(" - env: PRODUCTION")
-      #nchar(token) - show the end of the token as the begining is more likely to be the same... 
+      #nchar(token) - show the end of the token as the beginning is more likely to be the same... 
       print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )
     
       r <- httr::POST("https://ridl.unhcr.org/",

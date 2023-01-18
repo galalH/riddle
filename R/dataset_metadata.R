@@ -14,7 +14,7 @@
 #' @param notes Description(*) - Some useful notes about the data. Please include the number of observations.
 #' @param tag_string Tags - eg. economy, mental health, government.
 #' @param url Project URL - Website URL associated with this data project (if applicable).
-#' @param owner_org Data container(*) - Use the canonical name for the container.
+#' @param owner_org Data container(*) - Use the canonical name for the container (i.e. all lower case) for instance "americas" - not "Americas" - in case you are not using the right container you will receive.The id of the container can also be used
 #' @param geographies  defaults is geographies - pulling from a webservice from geoserver
 #' @param private Visibility (Private/Public).
 #' @param visibility Internal Access Level(*). Allowed values: `restricted` (Private), `public` (Internally Visible).
@@ -58,7 +58,7 @@
 #'                       US magazine, and comprises fuel consumption and 10 aspects
 #'                       of automobile design and performance for 32 automobiles 
 #'                       (1973–74 models).",
-#'                       owner_org = "exercise-container",
+#'                       owner_org = "americas",
 #'                       visibility = "public",
 #'                       geographies = "UNSPECIFIED",
 #'                       external_access_level = "open_access",

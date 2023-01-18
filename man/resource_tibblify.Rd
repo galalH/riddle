@@ -18,10 +18,7 @@ Helper function to package API results as a  tibble
 \examples{
 m <- riddle::resource_metadata(type = "data",
                        url = "mtcars.csv",
-#  upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),
-## # Error:
-# ! All columns in a tibble must be vectors.
-# ✖ Column `upload` is a `form_file` object.
+ # upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),
                        name = "mtcars.csv",
                        format = "csv",
                        file_type = "microdata",

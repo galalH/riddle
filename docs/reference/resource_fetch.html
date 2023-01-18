@@ -79,33 +79,32 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#-----</span></span></span>
-<span class="r-in"><span><span class="co"># Test search in prod</span></span></span>
-<span class="r-in"><span><span class="co">#Sys.unsetenv("USE_UAT")</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 1: with a direct URL</span></span></span>
-<span class="r-in"><span><span class="co"># resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',</span></span></span>
-<span class="r-in"><span><span class="co">#                        path = tempfile())</span></span></span>
+<span class="r-in"><span><span class="co">#-----</span></span></span>
+<span class="r-in"><span><span class="co"># Test search in prod</span></span></span>
+<span class="r-in"><span><span class="co"># Sys.unsetenv("USE_UAT")</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',   path = tempfile())</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 2: Let's try to identify a resource - then fetch it locally and update it back... as from here</span></span></span>
 <span class="r-in"><span><span class="co"># https://github.com/unhcr-americas/darien_gap_human_mobility/blob/main/report.Rmd#L38</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Sys.unsetenv("USE_UAT")</span></span></span>
+<span class="r-in"><span><span class="co"># ## Get the dataset metadata based on its canonical name</span></span></span>
 <span class="r-in"><span><span class="co"># p &lt;- riddle::dataset_show('rms_v4')</span></span></span>
-<span class="r-in"><span><span class="co"># ## let's get the fifth resource</span></span></span>
+<span class="r-in"><span><span class="co"># ## Let's get the fifth resource within this dataset</span></span></span>
 <span class="r-in"><span><span class="co"># test_ressources &lt;- p[["resources"]][[1]] |&gt; dplyr::slice(5)</span></span></span>
 <span class="r-in"><span><span class="co">#</span></span></span>
-<span class="r-in"><span><span class="co"># ## Get the resource locally..</span></span></span>
-<span class="r-in"><span><span class="co">#resource_fetch(url = test_ressources$url,   path =  here::here("file"))</span></span></span>
-<span class="r-in"><span><span class="co">#</span></span></span>
+<span class="r-in"><span><span class="co"># ## Download the resource locally in a file name file..</span></span></span>
+<span class="r-in"><span><span class="co"># resource_fetch(url = test_ressources$url,   path =  here::here("file"))</span></span></span>
+<span class="r-in"><span><span class="co"># test_ressources$url</span></span></span>
 <span class="r-in"><span><span class="co"># # Rebuild the metadata</span></span></span>
 <span class="r-in"><span><span class="co"># m &lt;- resource_metadata(type = test_ressources$type, #"data",</span></span></span>
 <span class="r-in"><span><span class="co">#                          url = "df_gender_2020.csv",</span></span></span>
-<span class="r-in"><span><span class="co"># upload = httr::upload_file(here::here("data.csv")),</span></span></span>
-<span class="r-in"><span><span class="co"># ## # Error:</span></span></span>
-<span class="r-in"><span><span class="co"># # ! All columns in a tibble must be vectors.</span></span></span>
-<span class="r-in"><span><span class="co"># # ✖ Column `upload` is a `form_file` object.</span></span></span>
-<span class="r-in"><span><span class="co">#                          name = test_ressources$name, # "Irregular entries by gender in 2022",</span></span></span>
+<span class="r-in"><span><span class="co"># upload = httr::upload_file(here::here("file")),</span></span></span>
+<span class="r-in"><span> <span class="co">#                          name = test_ressources$name, # "Irregular entries by gender in 2022",</span></span></span>
 <span class="r-in"><span><span class="co">#                          format = test_ressources$format, #"csv",</span></span></span>
 <span class="r-in"><span><span class="co">#                          file_type =  test_ressources$file_type, #"microdata",</span></span></span>
 <span class="r-in"><span><span class="co">#                          visibility = test_ressources$visibility, # "public",</span></span></span>
@@ -116,11 +115,13 @@
 <span class="r-in"><span><span class="co">#                          identifiability = test_ressources$identifiability, #"anonymized_public"</span></span></span>
 <span class="r-in"><span><span class="co">#   )</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Update back -- Does not work...</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#r &lt;- resource_update(id = test_ressources$id,  res_metadata = m)</span></span></span>
-<span class="r-in"><span><span class="co">### Error when using the upload...</span></span></span>
-<span class="r-in"><span><span class="co"># No encoding supplied: defaulting to UTF-8.</span></span></span>
-<span class="r-in"><span><span class="co"># Error in !r$success : invalid argument type</span></span></span>
+<span class="r-in"><span> </span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"></span>
 </code></pre></div>

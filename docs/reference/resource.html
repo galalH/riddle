@@ -57,7 +57,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">resource_create</span><span class="op">(</span><span class="va">dataset_id</span>, <span class="va">res_metadata</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">resource_create</span><span class="op">(</span><span class="va">package_id</span>, <span class="va">res_metadata</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">resource_update</span><span class="op">(</span><span class="va">id</span>, <span class="va">res_metadata</span><span class="op">)</span></span>
 <span></span>
@@ -68,7 +68,7 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>dataset_id</dt>
+    <dl><dt>package_id</dt>
 <dd><p>The id or name of the dataset to which this resource belongs to.</p></dd>
 
 
@@ -107,87 +107,90 @@ not explicitly provided in the <code>metadata</code>.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## let's get again the details of the dataset we want to add the resource in..</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># ## Full example available with the fetch function..</span></span></span>
 <span class="r-in"><span><span class="co">#-----</span></span></span>
-<span class="r-in"><span><span class="co"># Test search in prod</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"USE_UAT"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># ## Test search in prod</span></span></span>
+<span class="r-in"><span><span class="co"># Sys.unsetenv("USE_UAT")</span></span></span>
 <span class="r-in"><span><span class="co"># p &lt;-  dataset_search("rms_v4")</span></span></span>
 <span class="r-in"><span><span class="co"># p</span></span></span>
+<span class="r-in"><span><span class="co"># list_of_resources &lt;- p[["resources"]][[1]]</span></span></span>
+<span class="r-in"><span><span class="co"># knitr::kable(list_of_resources)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#-----</span></span></span>
-<span class="r-in"><span><span class="co"># Test search in uat</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>USE_UAT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># ## Test search in uat</span></span></span>
+<span class="r-in"><span><span class="co"># Sys.setenv(USE_UAT=1)</span></span></span>
 <span class="r-in"><span><span class="co"># p &lt;-  dataset_search("tests")</span></span></span>
 <span class="r-in"><span><span class="co"># p</span></span></span>
 <span class="r-in"><span><span class="co"># ##take the first one</span></span></span>
 <span class="r-in"><span><span class="co"># ridlid &lt;- as.character(p[9, c("id")])</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#-----</span></span></span>
-<span class="r-in"><span><span class="co"># Test search in prod</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"USE_UAT"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># p &lt;- riddle::dataset_show('rms_v4')</span></span></span>
-<span class="r-in"><span><span class="co"># dataset_id_rms &lt;- p$id</span></span></span>
-<span class="r-in"><span><span class="co"># list_of_ressources &lt;- p[["resources"]][[1]]</span></span></span>
-<span class="r-in"><span><span class="co"># knitr::kable(list_of_ressources)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">new_attachment</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="resource_metadata.html">resource_metadata</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"attachment"</span>,</span></span>
-<span class="r-in"><span>                       url <span class="op">=</span> <span class="st">"resource.R"</span>, </span></span>
-<span class="r-in"><span><span class="co"># upload = httr::upload_file(here::here("R","resource.R") ),</span></span></span>
-<span class="r-in"><span><span class="co">## # Error:</span></span></span>
-<span class="r-in"><span><span class="co"># ! All columns in a tibble must be vectors.</span></span></span>
-<span class="r-in"><span><span class="co"># ✖ Column `upload` is a `form_file` object.</span></span></span>
-<span class="r-in"><span>                       name <span class="op">=</span> <span class="st">"Rscript"</span>,</span></span>
-<span class="r-in"><span>                       format <span class="op">=</span> <span class="st">"R"</span>,</span></span>
-<span class="r-in"><span>                       file_type <span class="op">=</span> <span class="st">"report"</span>,</span></span>
-<span class="r-in"><span>                       version <span class="op">=</span> <span class="st">"1"</span>,</span></span>
-<span class="r-in"><span>                       visibility <span class="op">=</span> <span class="st">"public"</span> <span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Now testing adding the file "resource.R" as an attachment in the </span></span></span>
-<span class="r-in"><span><span class="co">## dataset 'rms_v4'</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># but not working.... </span></span></span>
-<span class="r-in"><span><span class="co"># resource_create(dataset_id = dataset_id_rms, </span></span></span>
-<span class="r-in"><span><span class="co">#                         res_metadata = new_attachment )</span></span></span>
-<span class="r-in"><span><span class="co"># Error in ridl(action = "resource_create", dataset_id = dataset_id, !!!res_metadata, : </span></span></span>
-<span class="r-in"><span><span class="co"># __type: Not Found Error</span></span></span>
-<span class="r-in"><span><span class="co"># message: Not found: No dataset id provided, cannot check auth.</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="resource_metadata.html">resource_metadata</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"data"</span>,</span></span>
-<span class="r-in"><span>                       url <span class="op">=</span> <span class="st">"mtcars.csv"</span>,</span></span>
-<span class="r-in"><span>  upload <span class="op">=</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/upload_file.html" class="external-link">upload_file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mtcars.csv"</span>, package <span class="op">=</span> <span class="st">"readr"</span><span class="op">)</span><span class="op">)</span>,         </span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span>                       name <span class="op">=</span> <span class="st">"mtcars.csv"</span>,</span></span>
-<span class="r-in"><span>                       format <span class="op">=</span> <span class="st">"csv"</span>,</span></span>
-<span class="r-in"><span>                       file_type <span class="op">=</span> <span class="st">"microdata"</span>,</span></span>
-<span class="r-in"><span>                       date_range_start <span class="op">=</span> <span class="st">"1973-01-01"</span>,</span></span>
-<span class="r-in"><span>                       date_range_end <span class="op">=</span> <span class="st">"1973-12-31"</span>,</span></span>
-<span class="r-in"><span>                       version <span class="op">=</span> <span class="st">"1"</span>,</span></span>
-<span class="r-in"><span>                       visibility <span class="op">=</span> <span class="st">"public"</span>,</span></span>
-<span class="r-in"><span>                       process_status <span class="op">=</span> <span class="st">"raw"</span>,</span></span>
-<span class="r-in"><span>                       identifiability <span class="op">=</span> <span class="st">"anonymized_public"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># same pb... </span></span></span>
-<span class="r-in"><span><span class="co"># resource_create(dataset_id = dataset_id_rms, </span></span></span>
-<span class="r-in"><span><span class="co">#                          res_metadata = m )</span></span></span>
-<span class="r-in"><span><span class="co"># Error in ridl(action = "resource_create", dataset_id = dataset_id, !!!res_metadata, : </span></span></span>
-<span class="r-in"><span><span class="co"># __type: Not Found Error</span></span></span>
-<span class="r-in"><span><span class="co"># message: Not found: No dataset id provided, cannot check auth.</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## let's get again the details of the dataset we want to add the resource in..</span></span></span>
-<span class="r-in"><span><span class="co">#r &lt;- riddle::resource_create(dataset_id = ridlid, res_metadata = m)</span></span></span>
-<span class="r-in"><span><span class="co"># Like before, the return value is a tibble representation of the resource.</span></span></span>
-<span class="r-in"><span><span class="co">#r</span></span></span>
+<span class="r-in"><span><span class="co"># ## Test resource in UAT</span></span></span>
+<span class="r-in"><span><span class="co"># Sys.setenv(USE_UAT=1)</span></span></span>
+<span class="r-in"><span><span class="co"># m &lt;- riddle::dataset_metadata(title = "Testing Riddle Interface",</span></span></span>
+<span class="r-in"><span><span class="co">#                       name = "riddleapitest",</span></span></span>
+<span class="r-in"><span><span class="co">#                       notes = "Making an API test",</span></span></span>
+<span class="r-in"><span><span class="co">#                       owner_org = "americas",  ## be careful- all lower case!!!</span></span></span>
+<span class="r-in"><span><span class="co">#                       visibility = "public",</span></span></span>
+<span class="r-in"><span><span class="co">#                       geographies = "UNSPECIFIED",</span></span></span>
+<span class="r-in"><span><span class="co">#                       external_access_level = "open_access",</span></span></span>
+<span class="r-in"><span><span class="co">#                       data_collector = "myself",</span></span></span>
+<span class="r-in"><span><span class="co">#                       keywords = keywords[c("Environment", "Other")],</span></span></span>
+<span class="r-in"><span><span class="co">#                       unit_of_measurement = "byte",</span></span></span>
+<span class="r-in"><span><span class="co">#                       data_collection_technique = "oth",</span></span></span>
+<span class="r-in"><span><span class="co">#                       archived = "False")</span></span></span>
+<span class="r-in"><span><span class="co"># ## For the above to work - you need to make sure you have at least editor access</span></span></span>
+<span class="r-in"><span><span class="co"># ## to the corresponding container - i.e. owner_org = "exercise-container"</span></span></span>
+<span class="r-in"><span><span class="co"># p &lt;- dataset_create(metadata = m)</span></span></span>
+<span class="r-in"><span><span class="co"># p &lt;-  dataset_show('riddleapitest')</span></span></span>
+<span class="r-in"><span><span class="co"># ## Now testing adding the file "resource.R" as an attachment</span></span></span>
+<span class="r-in"><span><span class="co"># new_attachment &lt;- riddle::resource_metadata(type = "attachment",</span></span></span>
+<span class="r-in"><span><span class="co">#                        url = "resourceR", </span></span></span>
+<span class="r-in"><span><span class="co">#  upload = httr::upload_file(here::here("R","resource.R") ),</span></span></span>
+<span class="r-in"><span><span class="co">#                         name = "Rscript",</span></span></span>
+<span class="r-in"><span><span class="co">#                        format = "R",</span></span></span>
+<span class="r-in"><span><span class="co">#                        file_type = "report",</span></span></span>
+<span class="r-in"><span><span class="co">#                        version = "1",</span></span></span>
+<span class="r-in"><span><span class="co">#                        visibility = "public" )</span></span></span>
 <span class="r-in"><span> </span></span>
-<span class="r-in"><span><span class="co">## and now can search for it - checking it is correctly there... </span></span></span>
-<span class="r-in"><span><span class="co">##riddle::resource_search("name:mtcarsriddle")</span></span></span>
+<span class="r-in"><span><span class="co"># r &lt;- resource_create(package_id = p$id,  res_metadata = new_attachment )</span></span></span>
+<span class="r-in"><span><span class="co"># resource_create(package_id = p$name,  res_metadata = new_attachment )</span></span></span>
+<span class="r-in"><span><span class="co"># ## Like before, the return value is a tibble representation of the resource.</span></span></span>
+<span class="r-in"><span><span class="co"># r</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># And once we’re done experimenting with the API, we should take down our</span></span></span>
-<span class="r-in"><span><span class="co"># toy dataset since we don’t really need it on RIDL.</span></span></span>
-<span class="r-in"><span><span class="co">#riddle::dataset_delete(p$id)</span></span></span>
-<span class="r-in"><span><span class="co"># riddle::resource_delete()</span></span></span>
+<span class="r-in"><span><span class="co"># ## Another example with a data ressource</span></span></span>
+<span class="r-in"><span><span class="co"># m &lt;- riddle::resource_metadata(type = "data",</span></span></span>
+<span class="r-in"><span><span class="co">#                        url = "mtcars.csv",</span></span></span>
+<span class="r-in"><span><span class="co">#   upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),         </span></span></span>
+<span class="r-in"><span><span class="co">#                        name = "mtcars.csv",</span></span></span>
+<span class="r-in"><span><span class="co">#                        format = "csv",</span></span></span>
+<span class="r-in"><span><span class="co">#                        file_type = "microdata",</span></span></span>
+<span class="r-in"><span><span class="co">#                        date_range_start = "1973-01-01",</span></span></span>
+<span class="r-in"><span><span class="co">#                        date_range_end = "1973-12-31",</span></span></span>
+<span class="r-in"><span><span class="co">#                        version = "1",</span></span></span>
+<span class="r-in"><span><span class="co">#                        visibility = "public",</span></span></span>
+<span class="r-in"><span><span class="co">#                        process_status = "raw",</span></span></span>
+<span class="r-in"><span><span class="co">#                        identifiability = "anonymized_public")</span></span></span>
+<span class="r-in"><span><span class="co"># r &lt;- resource_create(package_id = p$id, </span></span></span>
+<span class="r-in"><span><span class="co">#                          res_metadata = m )</span></span></span>
+<span class="r-in"><span><span class="co"># ## let's get again the details of the dataset we want to add the resource in..</span></span></span>
+<span class="r-in"><span><span class="co"># r </span></span></span>
+<span class="r-in"><span> </span></span>
+<span class="r-in"><span><span class="co"># ## and now can search for it - checking it is correctly there... </span></span></span>
+<span class="r-in"><span><span class="co">#  resource_search("name:mtcarsriddle")</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ## And once we’re done experimenting with the API, we should take down our</span></span></span>
+<span class="r-in"><span><span class="co"># ## toy dataset since we don’t really need it on RIDL.</span></span></span>
+<span class="r-in"><span><span class="co"># dataset_delete(p$id)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The return value is a representation of the dataset we just created in</span></span></span>
+<span class="r-in"><span><span class="co"># RIDL that you could inspect like any other R object.</span></span></span>
+<span class="r-in"><span><span class="co"># p</span></span></span>
+<span class="r-in"><span><span class="co">## Now deleting this!</span></span></span>
+<span class="r-in"><span><span class="co"># dataset_delete(id = p$id)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

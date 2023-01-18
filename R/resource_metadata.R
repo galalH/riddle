@@ -26,6 +26,7 @@
 #'
 #' @return A list with the provided metadata.
 #' @export
+
 #' @examples
 #' #resource_metadata()
 #' m <- riddle::resource_metadata(type = "data",

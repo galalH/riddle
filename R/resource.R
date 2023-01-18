@@ -23,7 +23,7 @@
 #'
 #' @param res_metadata Metadata created by \code{\link{resource_metadata()}}.
 #' @param id The id or name of the resource.
-#' @param dataset_id The id or name of the dataset to which this resource belongs to.
+#' @param package_id The id or name of the dataset to which this resource belongs to.
 #' 
 #' @importFrom httr upload_file
 
@@ -31,92 +31,94 @@
 #' @return metadata resource.
 #' @export
 #' @examples
-#' ## let's get again the details of the dataset we want to add the resource in..
+#' # ## Full example available with the fetch function..
 #' #-----
-#' # Test search in prod
-#' Sys.unsetenv("USE_UAT")
+#' # ## Test search in prod
+#' # Sys.unsetenv("USE_UAT")
 #' # p <-  dataset_search("rms_v4")
 #' # p
+#' # list_of_resources <- p[["resources"]][[1]]
+#' # knitr::kable(list_of_resources)
 #' 
 #' #-----
-#' # Test search in uat
-#' Sys.setenv(USE_UAT=1)
+#' # ## Test search in uat
+#' # Sys.setenv(USE_UAT=1)
 #' # p <-  dataset_search("tests")
 #' # p
 #' # ##take the first one
 #' # ridlid <- as.character(p[9, c("id")])
 #' 
-#' 
-#' 
-#' 
 #' #-----
-#' # Test search in prod
-#' Sys.unsetenv("USE_UAT")
-#' # p <- riddle::dataset_show('rms_v4')
-#' # dataset_id_rms <- p$id
-#' # list_of_ressources <- p[["resources"]][[1]]
-#' # knitr::kable(list_of_ressources)
-#' 
-#' new_attachment <- riddle::resource_metadata(type = "attachment",
-#'                        url = "resource.R", 
-#' # upload = httr::upload_file(here::here("R","resource.R") ),
-#' ## # Error:
-#' # ! All columns in a tibble must be vectors.
-#' # ✖ Column `upload` is a `form_file` object.
-#'                        name = "Rscript",
-#'                        format = "R",
-#'                        file_type = "report",
-#'                        version = "1",
-#'                        visibility = "public" )
-#' 
-#' ## Now testing adding the file "resource.R" as an attachment in the 
-#' ## dataset 'rms_v4'
-#' 
-#' # but not working.... 
-#' # resource_create(dataset_id = dataset_id_rms, 
-#' #                         res_metadata = new_attachment )
-#' # Error in ridl(action = "resource_create", dataset_id = dataset_id, !!!res_metadata, : 
-#' # __type: Not Found Error
-#' # message: Not found: No dataset id provided, cannot check auth.
-#' 
-#' m <- riddle::resource_metadata(type = "data",
-#'                        url = "mtcars.csv",
-#'   upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),         
-#' 
-#'                        name = "mtcars.csv",
-#'                        format = "csv",
-#'                        file_type = "microdata",
-#'                        date_range_start = "1973-01-01",
-#'                        date_range_end = "1973-12-31",
-#'                        version = "1",
-#'                        visibility = "public",
-#'                        process_status = "raw",
-#'                        identifiability = "anonymized_public")
-#' # same pb... 
-#' # resource_create(dataset_id = dataset_id_rms, 
-#' #                          res_metadata = m )
-#' # Error in ridl(action = "resource_create", dataset_id = dataset_id, !!!res_metadata, : 
-#' # __type: Not Found Error
-#' # message: Not found: No dataset id provided, cannot check auth.
-#' 
-#' ## let's get again the details of the dataset we want to add the resource in..
-#' #r <- riddle::resource_create(dataset_id = ridlid, res_metadata = m)
-#' # Like before, the return value is a tibble representation of the resource.
-#' #r
+#' # ## Test resource in UAT
+#' # Sys.setenv(USE_UAT=1)
+#' # m <- riddle::dataset_metadata(title = "Testing Riddle Interface",
+#' #                       name = "riddleapitest",
+#' #                       notes = "Making an API test",
+#' #                       owner_org = "americas",  ## be careful- all lower case!!!
+#' #                       visibility = "public",
+#' #                       geographies = "UNSPECIFIED",
+#' #                       external_access_level = "open_access",
+#' #                       data_collector = "myself",
+#' #                       keywords = keywords[c("Environment", "Other")],
+#' #                       unit_of_measurement = "byte",
+#' #                       data_collection_technique = "oth",
+#' #                       archived = "False")
+#' # ## For the above to work - you need to make sure you have at least editor access
+#' # ## to the corresponding container - i.e. owner_org = "exercise-container"
+#' # p <- dataset_create(metadata = m)
+#' # p <-  dataset_show('riddleapitest')
+#' # ## Now testing adding the file "resource.R" as an attachment
+#' # new_attachment <- riddle::resource_metadata(type = "attachment",
+#' #                        url = "resourceR", 
+#' #  upload = httr::upload_file(here::here("R","resource.R") ),
+#' #                         name = "Rscript",
+#' #                        format = "R",
+#' #                        file_type = "report",
+#' #                        version = "1",
+#' #                        visibility = "public" )
 #'  
-#' ## and now can search for it - checking it is correctly there... 
-#' ##riddle::resource_search("name:mtcarsriddle")
+#' # r <- resource_create(package_id = p$id,  res_metadata = new_attachment )
+#' # resource_create(package_id = p$name,  res_metadata = new_attachment )
+#' # ## Like before, the return value is a tibble representation of the resource.
+#' # r
 #' 
-#' # And once we’re done experimenting with the API, we should take down our
-#' # toy dataset since we don’t really need it on RIDL.
-#' #riddle::dataset_delete(p$id)
-#' # riddle::resource_delete()
+#' # ## Another example with a data ressource
+#' # m <- riddle::resource_metadata(type = "data",
+#' #                        url = "mtcars.csv",
+#' #   upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),         
+#' #                        name = "mtcars.csv",
+#' #                        format = "csv",
+#' #                        file_type = "microdata",
+#' #                        date_range_start = "1973-01-01",
+#' #                        date_range_end = "1973-12-31",
+#' #                        version = "1",
+#' #                        visibility = "public",
+#' #                        process_status = "raw",
+#' #                        identifiability = "anonymized_public")
+#' # r <- resource_create(package_id = p$id, 
+#' #                          res_metadata = m )
+#' # ## let's get again the details of the dataset we want to add the resource in..
+#' # r 
+#'  
+#' # ## and now can search for it - checking it is correctly there... 
+#' #  resource_search("name:mtcarsriddle")
 #' 
-resource_create <- function(dataset_id, res_metadata) {
+#' # ## And once we’re done experimenting with the API, we should take down our
+#' # ## toy dataset since we don’t really need it on RIDL.
+#' # dataset_delete(p$id)
+#' 
+#' # The return value is a representation of the dataset we just created in
+#' # RIDL that you could inspect like any other R object.
+#' # p
+#' ## Now deleting this!
+#' # dataset_delete(id = p$id)
+#' 
+#' 
+resource_create <- function(package_id, res_metadata) {
   ## enc needs to be adjusted to multipart in case a file is uploaded...
   enc <- if(is.null(res_metadata$upload)) "json" else "multipart"
   ridl(action ="resource_create", 
-       dataset_id = dataset_id,
+       package_id = package_id,
        !!!res_metadata,
        .encoding = enc) -> r
     r$result %>% 

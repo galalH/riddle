@@ -101,7 +101,7 @@
 <span><span class="st">                      US magazine, and comprises fuel consumption and 10 aspects</span></span>
 <span><span class="st">                      of automobile design and performance for 32 automobiles </span></span>
 <span><span class="st">                      (1973–74 models)."</span>,</span>
-<span>                      owner_org <span class="op">=</span> <span class="st">"exercise-container"</span>,</span>
+<span>                      owner_org <span class="op">=</span> <span class="st">"americas"</span>,</span>
 <span>                      visibility <span class="op">=</span> <span class="st">"public"</span>,</span>
 <span>                      geographies <span class="op">=</span> <span class="st">"UNSPECIFIED"</span>,</span>
 <span>                      external_access_level <span class="op">=</span> <span class="st">"open_access"</span>,</span>
@@ -122,7 +122,7 @@
 <span><span class="co">#&gt; [1] "The data was extracted from the 1974 Motor Trend \n                      US magazine, and comprises fuel consumption and 10 aspects\n                      of automobile design and performance for 32 automobiles \n                      (1973–74 models)."</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $owner_org</span></span>
-<span><span class="co">#&gt; [1] "exercise-container"</span></span>
+<span><span class="co">#&gt; [1] "americas"</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $visibility</span></span>
 <span><span class="co">#&gt; [1] "public"</span></span>
@@ -159,7 +159,7 @@
 <span><span class="st">                      US magazine, and comprises fuel consumption and 10 aspects</span></span>
 <span><span class="st">                      of automobile design and performance for 32 automobiles </span></span>
 <span><span class="st">                      (1973–74 models)."</span>,</span>
-<span>                      owner_org <span class="op">=</span> <span class="st">"exercise-container"</span>,</span>
+<span>                      owner_org <span class="op">=</span> <span class="st">"americas"</span>,  <span class="co">## becarefull- all lower case!!!</span></span>
 <span>                      visibility <span class="op">=</span> <span class="st">"public"</span>,</span>
 <span>                      geographies <span class="op">=</span> <span class="st">"UNSPECIFIED"</span>,</span>
 <span>                      external_access_level <span class="op">=</span> <span class="st">"open_access"</span>,</span>
@@ -174,7 +174,7 @@
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 1 × 12</span></span></span>
 <span><span class="co">#&gt;   title      name  notes owner…¹ visib…² exter…³ data_…⁴ keywo…⁵ unit_…⁶ geogr…⁷</span></span>
 <span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Motor Tre… mtca… <span style="color: #949494;">"</span>The… exerci… public  open_a… Motor … &lt;chr&gt;   car     UNSPEC…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> Motor Tre… mtca… <span style="color: #949494;">"</span>The… americ… public  open_a… Motor … &lt;chr&gt;   car     UNSPEC…</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># … with 2 more variables: data_collection_technique &lt;chr&gt;, archived &lt;chr&gt;, and</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   abbreviated variable names ¹​owner_org, ²​visibility, ³​external_access_level,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   ⁴​data_collector, ⁵​keywords, ⁶​unit_of_measurement, ⁷​geographies</span></span></span></code></pre></div>
@@ -199,20 +199,10 @@
 <span><span class="co">#-----</span></span>
 <span><span class="co"># Test create in UAT</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>USE_UAT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># p &lt;- riddle::dataset_show('testedouard2')</span></span>
-<span></span>
-<span><span class="co">### TO FIX -- geographies: Missing value</span></span>
-<span><span class="co">## __type: Validation Error ---</span></span>
-<span><span class="co">## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682</span></span>
-<span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="../reference/dataset_metadata.html">dataset_metadata</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Motor Trend Car Road Test two"</span>,</span>
-<span>                      name <span class="op">=</span> <span class="st">"mtcars_ed"</span>,</span>
-<span>                      notes <span class="op">=</span> <span class="st">"The data was extracted from the 1974 Motor Trend</span></span>
-<span><span class="st">                      US magazine, and comprises fuel consumption and 10 aspects</span></span>
-<span><span class="st">                      of automobile design and performance for 32 automobiles</span></span>
-<span><span class="st">                      (1973–74 models)."</span>,</span>
-<span>                      owner_org <span class="op">=</span> <span class="st">"Americas"</span>,</span>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="../reference/dataset_metadata.html">dataset_metadata</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Testing Riddle Interface"</span>,</span>
+<span>                      name <span class="op">=</span> <span class="st">"riddleapitest"</span>,</span>
+<span>                      notes <span class="op">=</span> <span class="st">"Making an API test"</span>,</span>
+<span>                      owner_org <span class="op">=</span> <span class="st">"americas"</span>,  <span class="co">## be careful- all lower case!!!</span></span>
 <span>                      visibility <span class="op">=</span> <span class="st">"public"</span>,</span>
 <span>                      geographies <span class="op">=</span> <span class="st">"UNSPECIFIED"</span>,</span>
 <span>                      external_access_level <span class="op">=</span> <span class="st">"open_access"</span>,</span>
@@ -223,11 +213,13 @@
 <span>                      archived <span class="op">=</span> <span class="st">"False"</span><span class="op">)</span></span>
 <span><span class="co"># ## For the above to work - you need to make sure you have at least editor access</span></span>
 <span><span class="co"># to the corresponding container - i.e. owner_org = "exercise-container"</span></span>
-<span><span class="co"># p &lt;- riddle::dataset_create(metadata = m)</span></span>
+<span><span class="co"># p &lt;- dataset_create(metadata = m)</span></span>
 <span></span>
 <span><span class="co"># The return value is a representation of the dataset we just created in</span></span>
 <span><span class="co"># RIDL that you could inspect like any other R object.</span></span>
 <span><span class="co"># p</span></span>
+<span><span class="co">## Now deleting this!</span></span>
+<span><span class="co"># dataset_delete(id = p$id)</span></span>
 <span></span>
 <span><span class="co">#-----</span></span>
 <span><span class="co"># Test create in prod</span></span>
@@ -235,7 +227,7 @@
 <span><span class="co"># m1 &lt;- riddle::dataset_metadata(title = "Test",</span></span>
 <span><span class="co">#                       name = "Test",</span></span>
 <span><span class="co">#                       notes = "The data was extracted from kobo.",</span></span>
-<span><span class="co">#                       owner_org = "Americas : Regional Datasets",</span></span>
+<span><span class="co">#                       owner_org = "americas-regional-dataset",</span></span>
 <span><span class="co">#                       visibility = "public",</span></span>
 <span><span class="co">#                       geographies = "UNSPECIFIED",</span></span>
 <span><span class="co">#                       external_access_level = "open_access",</span></span>
@@ -261,7 +253,7 @@
 <span><span class="co">#-----</span></span>
 <span><span class="co"># Test create in UAT</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>USE_UAT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="co">#p2 &lt;- dataset_search(q = "testedouard2")</span></span></code></pre></div>
+<span><span class="co"># p2 &lt;- dataset_search(q = "testedouard2")</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="resource_metadata">resource_metadata<a class="anchor" aria-label="anchor" href="#resource_metadata"></a>
@@ -319,10 +311,7 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="../reference/resource_metadata.html">resource_metadata</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"data"</span>,</span>
 <span>                       url <span class="op">=</span> <span class="st">"mtcars.csv"</span>,</span>
-<span><span class="co">#  upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),</span></span>
-<span><span class="co">## # Error:</span></span>
-<span><span class="co"># ! All columns in a tibble must be vectors.</span></span>
-<span><span class="co"># ✖ Column `upload` is a `form_file` object.</span></span>
+<span> <span class="co"># upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),</span></span>
 <span>                       name <span class="op">=</span> <span class="st">"mtcars.csv"</span>,</span>
 <span>                       format <span class="op">=</span> <span class="st">"csv"</span>,</span>
 <span>                       file_type <span class="op">=</span> <span class="st">"microdata"</span>,</span>
@@ -350,118 +339,118 @@
 <h2 id="resource">resource<a class="anchor" aria-label="anchor" href="#resource"></a>
 </h2>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## let's get again the details of the dataset we want to add the resource in..</span></span>
+<code class="sourceCode R"><span><span class="co"># ## Full example available with the fetch function..</span></span>
 <span><span class="co">#-----</span></span>
-<span><span class="co"># Test search in prod</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"USE_UAT"</span><span class="op">)</span></span>
+<span><span class="co"># ## Test search in prod</span></span>
+<span><span class="co"># Sys.unsetenv("USE_UAT")</span></span>
 <span><span class="co"># p &lt;-  dataset_search("rms_v4")</span></span>
 <span><span class="co"># p</span></span>
+<span><span class="co"># list_of_resources &lt;- p[["resources"]][[1]]</span></span>
+<span><span class="co"># knitr::kable(list_of_resources)</span></span>
 <span></span>
 <span><span class="co">#-----</span></span>
-<span><span class="co"># Test search in uat</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>USE_UAT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co"># ## Test search in uat</span></span>
+<span><span class="co"># Sys.setenv(USE_UAT=1)</span></span>
 <span><span class="co"># p &lt;-  dataset_search("tests")</span></span>
 <span><span class="co"># p</span></span>
 <span><span class="co"># ##take the first one</span></span>
 <span><span class="co"># ridlid &lt;- as.character(p[9, c("id")])</span></span>
 <span></span>
-<span></span>
-<span></span>
-<span></span>
 <span><span class="co">#-----</span></span>
-<span><span class="co"># Test search in prod</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"USE_UAT"</span><span class="op">)</span></span>
-<span><span class="co"># p &lt;- riddle::dataset_show('rms_v4')</span></span>
-<span><span class="co"># dataset_id_rms &lt;- p$id</span></span>
-<span><span class="co"># list_of_ressources &lt;- p[["resources"]][[1]]</span></span>
-<span><span class="co"># knitr::kable(list_of_ressources)</span></span>
-<span></span>
-<span><span class="va">new_attachment</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="../reference/resource_metadata.html">resource_metadata</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"attachment"</span>,</span>
-<span>                       url <span class="op">=</span> <span class="st">"resource.R"</span>, </span>
-<span><span class="co"># upload = httr::upload_file(here::here("R","resource.R") ),</span></span>
-<span><span class="co">## # Error:</span></span>
-<span><span class="co"># ! All columns in a tibble must be vectors.</span></span>
-<span><span class="co"># ✖ Column `upload` is a `form_file` object.</span></span>
-<span>                       name <span class="op">=</span> <span class="st">"Rscript"</span>,</span>
-<span>                       format <span class="op">=</span> <span class="st">"R"</span>,</span>
-<span>                       file_type <span class="op">=</span> <span class="st">"report"</span>,</span>
-<span>                       version <span class="op">=</span> <span class="st">"1"</span>,</span>
-<span>                       visibility <span class="op">=</span> <span class="st">"public"</span> <span class="op">)</span></span>
-<span></span>
-<span><span class="co">## Now testing adding the file "resource.R" as an attachment in the </span></span>
-<span><span class="co">## dataset 'rms_v4'</span></span>
-<span></span>
-<span><span class="co"># but not working.... </span></span>
-<span><span class="co"># resource_create(dataset_id = dataset_id_rms, </span></span>
-<span><span class="co">#                         res_metadata = new_attachment )</span></span>
-<span><span class="co"># Error in ridl(action = "resource_create", dataset_id = dataset_id, !!!res_metadata, : </span></span>
-<span><span class="co"># __type: Not Found Error</span></span>
-<span><span class="co"># message: Not found: No dataset id provided, cannot check auth.</span></span>
-<span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="../reference/resource_metadata.html">resource_metadata</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"data"</span>,</span>
-<span>                       url <span class="op">=</span> <span class="st">"mtcars.csv"</span>,</span>
-<span>  upload <span class="op">=</span> <span class="fu">httr</span><span class="fu">::</span><span class="fu"><a href="https://httr.r-lib.org/reference/upload_file.html" class="external-link">upload_file</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/mtcars.csv"</span>, package <span class="op">=</span> <span class="st">"readr"</span><span class="op">)</span><span class="op">)</span>,         </span>
-<span></span>
-<span>                       name <span class="op">=</span> <span class="st">"mtcars.csv"</span>,</span>
-<span>                       format <span class="op">=</span> <span class="st">"csv"</span>,</span>
-<span>                       file_type <span class="op">=</span> <span class="st">"microdata"</span>,</span>
-<span>                       date_range_start <span class="op">=</span> <span class="st">"1973-01-01"</span>,</span>
-<span>                       date_range_end <span class="op">=</span> <span class="st">"1973-12-31"</span>,</span>
-<span>                       version <span class="op">=</span> <span class="st">"1"</span>,</span>
-<span>                       visibility <span class="op">=</span> <span class="st">"public"</span>,</span>
-<span>                       process_status <span class="op">=</span> <span class="st">"raw"</span>,</span>
-<span>                       identifiability <span class="op">=</span> <span class="st">"anonymized_public"</span><span class="op">)</span></span>
-<span><span class="co"># same pb... </span></span>
-<span><span class="co"># resource_create(dataset_id = dataset_id_rms, </span></span>
-<span><span class="co">#                          res_metadata = m )</span></span>
-<span><span class="co"># Error in ridl(action = "resource_create", dataset_id = dataset_id, !!!res_metadata, : </span></span>
-<span><span class="co"># __type: Not Found Error</span></span>
-<span><span class="co"># message: Not found: No dataset id provided, cannot check auth.</span></span>
-<span></span>
-<span><span class="co">## let's get again the details of the dataset we want to add the resource in..</span></span>
-<span><span class="co">#r &lt;- riddle::resource_create(dataset_id = ridlid, res_metadata = m)</span></span>
-<span><span class="co"># Like before, the return value is a tibble representation of the resource.</span></span>
-<span><span class="co">#r</span></span>
+<span><span class="co"># ## Test resource in UAT</span></span>
+<span><span class="co"># Sys.setenv(USE_UAT=1)</span></span>
+<span><span class="co"># m &lt;- riddle::dataset_metadata(title = "Testing Riddle Interface",</span></span>
+<span><span class="co">#                       name = "riddleapitest",</span></span>
+<span><span class="co">#                       notes = "Making an API test",</span></span>
+<span><span class="co">#                       owner_org = "americas",  ## be careful- all lower case!!!</span></span>
+<span><span class="co">#                       visibility = "public",</span></span>
+<span><span class="co">#                       geographies = "UNSPECIFIED",</span></span>
+<span><span class="co">#                       external_access_level = "open_access",</span></span>
+<span><span class="co">#                       data_collector = "myself",</span></span>
+<span><span class="co">#                       keywords = keywords[c("Environment", "Other")],</span></span>
+<span><span class="co">#                       unit_of_measurement = "byte",</span></span>
+<span><span class="co">#                       data_collection_technique = "oth",</span></span>
+<span><span class="co">#                       archived = "False")</span></span>
+<span><span class="co"># ## For the above to work - you need to make sure you have at least editor access</span></span>
+<span><span class="co"># ## to the corresponding container - i.e. owner_org = "exercise-container"</span></span>
+<span><span class="co"># p &lt;- dataset_create(metadata = m)</span></span>
+<span><span class="co"># p &lt;-  dataset_show('riddleapitest')</span></span>
+<span><span class="co"># ## Now testing adding the file "resource.R" as an attachment</span></span>
+<span><span class="co"># new_attachment &lt;- riddle::resource_metadata(type = "attachment",</span></span>
+<span><span class="co">#                        url = "resourceR", </span></span>
+<span><span class="co">#  upload = httr::upload_file(here::here("R","resource.R") ),</span></span>
+<span><span class="co">#                         name = "Rscript",</span></span>
+<span><span class="co">#                        format = "R",</span></span>
+<span><span class="co">#                        file_type = "report",</span></span>
+<span><span class="co">#                        version = "1",</span></span>
+<span><span class="co">#                        visibility = "public" )</span></span>
 <span> </span>
-<span><span class="co">## and now can search for it - checking it is correctly there... </span></span>
-<span><span class="co">##riddle::resource_search("name:mtcarsriddle")</span></span>
+<span><span class="co"># r &lt;- resource_create(package_id = p$id,  res_metadata = new_attachment )</span></span>
+<span><span class="co"># resource_create(package_id = p$name,  res_metadata = new_attachment )</span></span>
+<span><span class="co"># ## Like before, the return value is a tibble representation of the resource.</span></span>
+<span><span class="co"># r</span></span>
 <span></span>
-<span><span class="co"># And once we’re done experimenting with the API, we should take down our</span></span>
-<span><span class="co"># toy dataset since we don’t really need it on RIDL.</span></span>
-<span><span class="co">#riddle::dataset_delete(p$id)</span></span>
-<span><span class="co"># riddle::resource_delete()</span></span></code></pre></div>
+<span><span class="co"># ## Another example with a data ressource</span></span>
+<span><span class="co"># m &lt;- riddle::resource_metadata(type = "data",</span></span>
+<span><span class="co">#                        url = "mtcars.csv",</span></span>
+<span><span class="co">#   upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),         </span></span>
+<span><span class="co">#                        name = "mtcars.csv",</span></span>
+<span><span class="co">#                        format = "csv",</span></span>
+<span><span class="co">#                        file_type = "microdata",</span></span>
+<span><span class="co">#                        date_range_start = "1973-01-01",</span></span>
+<span><span class="co">#                        date_range_end = "1973-12-31",</span></span>
+<span><span class="co">#                        version = "1",</span></span>
+<span><span class="co">#                        visibility = "public",</span></span>
+<span><span class="co">#                        process_status = "raw",</span></span>
+<span><span class="co">#                        identifiability = "anonymized_public")</span></span>
+<span><span class="co"># r &lt;- resource_create(package_id = p$id, </span></span>
+<span><span class="co">#                          res_metadata = m )</span></span>
+<span><span class="co"># ## let's get again the details of the dataset we want to add the resource in..</span></span>
+<span><span class="co"># r </span></span>
+<span> </span>
+<span><span class="co"># ## and now can search for it - checking it is correctly there... </span></span>
+<span><span class="co">#  resource_search("name:mtcarsriddle")</span></span>
+<span></span>
+<span><span class="co"># ## And once we’re done experimenting with the API, we should take down our</span></span>
+<span><span class="co"># ## toy dataset since we don’t really need it on RIDL.</span></span>
+<span><span class="co"># dataset_delete(p$id)</span></span>
+<span></span>
+<span><span class="co"># The return value is a representation of the dataset we just created in</span></span>
+<span><span class="co"># RIDL that you could inspect like any other R object.</span></span>
+<span><span class="co"># p</span></span>
+<span><span class="co">## Now deleting this!</span></span>
+<span><span class="co"># dataset_delete(id = p$id)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="resource_fetch">resource_fetch<a class="anchor" aria-label="anchor" href="#resource_fetch"></a>
 </h2>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#-----</span></span>
-<span><span class="co"># Test search in prod</span></span>
-<span><span class="co">#Sys.unsetenv("USE_UAT")</span></span>
-<span></span>
-<span></span>
+<code class="sourceCode R"><span></span>
 <span><span class="co">## Example 1: with a direct URL</span></span>
-<span><span class="co"># resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',</span></span>
-<span><span class="co">#                        path = tempfile())</span></span>
+<span><span class="co">#-----</span></span>
+<span><span class="co"># Test search in prod</span></span>
+<span><span class="co"># Sys.unsetenv("USE_UAT")</span></span>
+<span></span>
+<span></span>
+<span><span class="co"># resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',   path = tempfile())</span></span>
+<span></span>
 <span></span>
 <span><span class="co">## Example 2: Let's try to identify a resource - then fetch it locally and update it back... as from here</span></span>
 <span><span class="co"># https://github.com/unhcr-americas/darien_gap_human_mobility/blob/main/report.Rmd#L38</span></span>
-<span></span>
+<span><span class="co"># Sys.unsetenv("USE_UAT")</span></span>
+<span><span class="co"># ## Get the dataset metadata based on its canonical name</span></span>
 <span><span class="co"># p &lt;- riddle::dataset_show('rms_v4')</span></span>
-<span><span class="co"># ## let's get the fifth resource</span></span>
+<span><span class="co"># ## Let's get the fifth resource within this dataset</span></span>
 <span><span class="co"># test_ressources &lt;- p[["resources"]][[1]] |&gt; dplyr::slice(5)</span></span>
 <span><span class="co">#</span></span>
-<span><span class="co"># ## Get the resource locally..</span></span>
-<span><span class="co">#resource_fetch(url = test_ressources$url,   path =  here::here("file"))</span></span>
-<span><span class="co">#</span></span>
+<span><span class="co"># ## Download the resource locally in a file name file..</span></span>
+<span><span class="co"># resource_fetch(url = test_ressources$url,   path =  here::here("file"))</span></span>
+<span><span class="co"># test_ressources$url</span></span>
 <span><span class="co"># # Rebuild the metadata</span></span>
 <span><span class="co"># m &lt;- resource_metadata(type = test_ressources$type, #"data",</span></span>
 <span><span class="co">#                          url = "df_gender_2020.csv",</span></span>
-<span><span class="co"># upload = httr::upload_file(here::here("data.csv")),</span></span>
-<span><span class="co"># ## # Error:</span></span>
-<span><span class="co"># # ! All columns in a tibble must be vectors.</span></span>
-<span><span class="co"># # ✖ Column `upload` is a `form_file` object.</span></span>
-<span><span class="co">#                          name = test_ressources$name, # "Irregular entries by gender in 2022",</span></span>
+<span><span class="co"># upload = httr::upload_file(here::here("file")),</span></span>
+<span> <span class="co">#                          name = test_ressources$name, # "Irregular entries by gender in 2022",</span></span>
 <span><span class="co">#                          format = test_ressources$format, #"csv",</span></span>
 <span><span class="co">#                          file_type =  test_ressources$file_type, #"microdata",</span></span>
 <span><span class="co">#                          visibility = test_ressources$visibility, # "public",</span></span>
@@ -472,11 +461,9 @@
 <span><span class="co">#                          identifiability = test_ressources$identifiability, #"anonymized_public"</span></span>
 <span><span class="co">#   )</span></span>
 <span></span>
-<span><span class="co">## Update back -- Does not work...</span></span>
+<span></span>
 <span><span class="co">#r &lt;- resource_update(id = test_ressources$id,  res_metadata = m)</span></span>
-<span><span class="co">### Error when using the upload...</span></span>
-<span><span class="co"># No encoding supplied: defaulting to UTF-8.</span></span>
-<span><span class="co"># Error in !r$success : invalid argument type</span></span></code></pre></div>
+<span> </span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="summary_report">summary_report<a class="anchor" aria-label="anchor" href="#summary_report"></a>

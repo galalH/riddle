@@ -69,14 +69,9 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="warning-this-package-is-under-development---a-recent-api-update-requires-code-update--">
-<strong>WARNING</strong> This package is under development - a recent API update requires code update -<a class="anchor" aria-label="anchor" href="#warning-this-package-is-under-development---a-recent-api-update-requires-code-update--"></a>
+<div class="page-header"><h1 id="riddle">riddle<a class="anchor" aria-label="anchor" href="#riddle"></a>
 </h1></div>
-</div>
-<div class="section level1">
-<h1 id="riddle">riddle<a class="anchor" aria-label="anchor" href="#riddle"></a>
-</h1>
-<p>This is a minimal package for programatically interacting with the <a href="https://ridl.unhcr.org" class="external-link">UNHCR Raw Internal Data Library (RIDL)</a>. The main purpose served by this package is to make the RIDL API documentation more readily accessible within an R ecosystem for better automation.</p>
+<p>This is a minimal package for programatically interacting with the <a href="https://ridl.unhcr.org" class="external-link">UNHCR Raw Internal Data Library (RIDL)</a>. The main purpose served by this package is to make the <a href="https://docs.ckan.org/en/2.9/api/index.html" class="external-link">RIDL API documentation</a> more readily accessible within an R ecosystem for better automation.</p>
 <div class="section level2">
 <h2 id="install-and-configure-authentication-token">Install and configure authentication token<a class="anchor" aria-label="anchor" href="#install-and-configure-authentication-token"></a>
 </h2>
@@ -136,14 +131,17 @@
 </h3>
 <p>To create a dataset, you need first to document the dataset metadata, including the reference to the container where you would like the new dataset to be created. Once the dataset is created, you can add as many resources as required (either <code>data</code> or <code>attachment</code>).</p>
 <pre class="{r}"><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://edouard-legoupil.github.io/riddle/" class="external-link">riddle</a></span><span class="op">)</span></span>
+<span><span class="co">## let use UAT </span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>USE_UAT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">## First we create the dataset metadata</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dataset_metadata.html">dataset_metadata</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Motor Trend Car Road Tests"</span>,</span>
-<span>                      name <span class="op">=</span> <span class="st">"mtcars"</span>,</span>
+<span>                      name <span class="op">=</span> <span class="st">"testing-riddle"</span>,</span>
 <span>                      notes <span class="op">=</span> <span class="st">"The data was extracted from the 1974 Motor Trend </span></span>
 <span><span class="st">                      US magazine, and comprises fuel consumption and 10 aspects</span></span>
 <span><span class="st">                      of automobile design and performance for 32 automobiles </span></span>
 <span><span class="st">                      (1973–74 models)."</span>,</span>
-<span>                      owner_org <span class="op">=</span> <span class="st">"exercise-container"</span>,</span>
+<span>                      owner_org <span class="op">=</span> <span class="st">"americas"</span>, <span class="co">## becarefull this is the </span></span>
+<span>                                             <span class="co">##canonincal name of the container</span></span>
 <span>                      visibility <span class="op">=</span> <span class="st">"public"</span>,</span>
 <span>                      external_access_level <span class="op">=</span> <span class="st">"open_access"</span>,</span>
 <span>                      data_collector <span class="op">=</span> <span class="st">"Motor Trend"</span>,</span>
@@ -153,15 +151,15 @@
 <span>                      archived <span class="op">=</span> <span class="st">"False"</span><span class="op">)</span></span>
 <span>                      </span>
 <span><span class="co">## For the above to work - you need to make sure you have at least editor access</span></span>
-<span><span class="co"># to the corresponding container - i.e. owner_org = "exercise-container"</span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dataset.html">dataset_create</a></span><span class="op">(</span><span class="va">m</span>, uat <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co"># to the corresponding container - i.e. owner_org = "americas"</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/dataset.html">dataset_create</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># The return value is a representation of the dataset we just created in</span></span>
 <span><span class="co"># RIDL that you could inspect like any other R object.</span></span>
 <span><span class="va">p</span> </span></code></pre>
 </div>
 <div class="section level3">
-<h3 id="use-case-2-replace-data-file">Use case 2: replace data file<a class="anchor" aria-label="anchor" href="#use-case-2-replace-data-file"></a>
+<h3 id="use-case-2-replace-data-file-within-dataset">Use case 2: replace data file within dataset<a class="anchor" aria-label="anchor" href="#use-case-2-replace-data-file-within-dataset"></a>
 </h3>
 <p>Ideally, data resources from kobotoolbox should be added using the API connection as described in <a href="https://im.unhcr.org/ridl/#Link_kobo_ridl" class="external-link">Part 4 of the documentation</a>.</p>
 <p>Though, there might be specific cases where you are building an operational dataset, scrapping an official data source from the web or within a PDF and want to add this on a regular basis as a new <code>data</code> resource within an existing dataset. You can check a practical example of such use case here:<a href="https://github.com/unhcr-americas/darien_gap_human_mobility/tree/main/R" class="external-link">darien_gap_human_mobility</a></p>
@@ -169,7 +167,11 @@
 <pre class="{r}"><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://edouard-legoupil.github.io/riddle/" class="external-link">riddle</a></span><span class="op">)</span></span>
 <span><span class="co">## let's get again the details of the dataset we want to add the resource in </span></span>
 <span><span class="co"># based on a search...</span></span>
-<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/search.html">dataset_search</a></span><span class="op">(</span><span class="st">"tests"</span><span class="op">)</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/search.html">dataset_search</a></span><span class="op">(</span><span class="st">"testing-riddle"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## and now can search for it - checking it is correctly there... </span></span>
+<span><span class="fu"><a href="reference/search.html">resource_search</a></span><span class="op">(</span><span class="st">"name:mtcars"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/resource_metadata.html">resource_metadata</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"data"</span>,</span>
 <span>                       url <span class="op">=</span> <span class="st">"mtcars.csv"</span>,</span>
 <span>                       name <span class="op">=</span> <span class="st">"mtcars.csv"</span>,</span>
@@ -182,38 +184,56 @@
 <span>                       process_status <span class="op">=</span> <span class="st">"raw"</span>,</span>
 <span>                       identifiability <span class="op">=</span> <span class="st">"anonymized_public"</span><span class="op">)</span></span>
 <span><span class="co">## let's get again the details of the dataset we want to add the resource in..</span></span>
-<span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/resource.html">resource_create</a></span><span class="op">(</span><span class="va">p</span><span class="op">$</span><span class="va">id</span>, <span class="va">m</span>, uat <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/resource.html">resource_update</a></span><span class="op">(</span><span class="va">p</span><span class="op">$</span><span class="va">id</span>, <span class="va">m</span>, uat <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Like before, the return value is a tibble representation of the</span></span>
 <span><span class="co"># resource.</span></span>
 <span><span class="va">r</span></span>
-<span></span>
-<span><span class="co"># But so far we’ve only created the metadata for the resource. The next</span></span>
-<span><span class="co"># step is to upload the data.</span></span>
-<span><span class="co">## not sure why this function is not there...</span></span>
-<span><span class="co">## resource_upload(r$id, path = system.file("extdata/mtcars.csv", package = "readr"))</span></span>
-<span></span>
-<span><span class="co">## and now can search for it - checking it is correctly there... </span></span>
-<span><span class="fu"><a href="reference/search.html">resource_search</a></span><span class="op">(</span><span class="st">"name:mtcars"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># And once we’re done experimenting with the API, we should take down our</span></span>
-<span><span class="co"># toy dataset since we don’t really need it on RIDL.</span></span>
-<span><span class="fu"><a href="reference/dataset.html">dataset_delete</a></span><span class="op">(</span><span class="va">p</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></code></pre>
+<span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="use-case-3-add-a-new-attachment-with-your-reproducible-analysis-code">Use case 3: Add a new attachment with your reproducible analysis code<a class="anchor" aria-label="anchor" href="#use-case-3-add-a-new-attachment-with-your-reproducible-analysis-code"></a>
 </h3>
 <p>You want to add your own initial data exploration, data interpretation presentation and/or data story telling report as a new <code>attachement</code> resource within a dataset.</p>
 <p>You can check a practical example of such use case here:<a href="https://edouard-legoupil.github.io/kobocruncher/" class="external-link">kobocruncher</a></p>
-<pre class="{r}"><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://edouard-legoupil.github.io/riddle/" class="external-link">riddle</a></span><span class="op">)</span></span></code></pre>
+<pre class="{r}"><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://edouard-legoupil.github.io/riddle/" class="external-link">riddle</a></span><span class="op">)</span></span>
+<span></span>
+<span></span>
+<span></span>
+<span><span class="co"># And once we’re done experimenting with the API, we should take down our</span></span>
+<span><span class="co"># toy dataset since we don’t really need it on RIDL.</span></span>
+<span><span class="fu"><a href="reference/dataset.html">dataset_delete</a></span><span class="op">(</span><span class="va">p</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="section level3">
+<h3 id="use-case-4-data-landscape-report">Use case 4: Data Landscape Report<a class="anchor" aria-label="anchor" href="#use-case-4-data-landscape-report"></a>
+</h3>
+<p>The package includes a parameterized notebook template (with parameter including region and year) to assess data landscape.</p>
+<p>Based on metadata, the reports looks at what type of data are available per country and provide a ways to perform data gap analysis</p>
+<ul>
+<li>How many dataset we have per country?<br>
+</li>
+<li>Data set collected at household level<br>
+</li>
+<li>Data set collected at Community level<br>
+</li>
+<li>Data by Access type<br>
+</li>
+<li>Data over time<br>
+</li>
+<li>Data Collection Mode<br>
+</li>
+<li>Data by Topic<br>
+</li>
+<li>Data linked to Kobo in RIDL<br>
+</li>
+<li>By Sampling type</li>
+</ul>
 </div>
 </div>
 </div>
-
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://cloud.r-project.org/package=riddle" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/edouard-legoupil/riddle/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/edouard-legoupil/riddle/issues" class="external-link">Report a bug</a></li>
 </ul>

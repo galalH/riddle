@@ -9,33 +9,32 @@
 #' @return Path to the downloaded file
 #' @export
 #' @examples
-#' #-----
-#' # Test search in prod
-#' #Sys.unsetenv("USE_UAT")
-#' 
 #' 
 #' ## Example 1: with a direct URL
-#' # resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',
-#' #                        path = tempfile())
+#' #-----
+#' # Test search in prod
+#' # Sys.unsetenv("USE_UAT")
+#' 
+#' 
+#' # resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',   path = tempfile())
+#' 
 #' 
 #' ## Example 2: Let's try to identify a resource - then fetch it locally and update it back... as from here
 #' # https://github.com/unhcr-americas/darien_gap_human_mobility/blob/main/report.Rmd#L38
-#' 
+#' # Sys.unsetenv("USE_UAT")
+#' # ## Get the dataset metadata based on its canonical name
 #' # p <- riddle::dataset_show('rms_v4')
-#' # ## let's get the fifth resource
+#' # ## Let's get the fifth resource within this dataset
 #' # test_ressources <- p[["resources"]][[1]] |> dplyr::slice(5)
 #' #
-#' # ## Get the resource locally..
-#' #resource_fetch(url = test_ressources$url,   path =  here::here("file"))
-#' #
+#' # ## Download the resource locally in a file name file..
+#' # resource_fetch(url = test_ressources$url,   path =  here::here("file"))
+#' # test_ressources$url
 #' # # Rebuild the metadata
 #' # m <- resource_metadata(type = test_ressources$type, #"data",
 #' #                          url = "df_gender_2020.csv",
-#' # upload = httr::upload_file(here::here("data.csv")),
-#' # ## # Error:
-#' # # ! All columns in a tibble must be vectors.
-#' # # ✖ Column `upload` is a `form_file` object.
-#' #                          name = test_ressources$name, # "Irregular entries by gender in 2022",
+#' # upload = httr::upload_file(here::here("file")),
+#'  #                          name = test_ressources$name, # "Irregular entries by gender in 2022",
 #' #                          format = test_ressources$format, #"csv",
 #' #                          file_type =  test_ressources$file_type, #"microdata",
 #' #                          visibility = test_ressources$visibility, # "public",
@@ -46,11 +45,13 @@
 #' #                          identifiability = test_ressources$identifiability, #"anonymized_public"
 #' #   )
 #' 
-#' ## Update back -- Does not work...
+#' 
 #' #r <- resource_update(id = test_ressources$id,  res_metadata = m)
-#' ### Error when using the upload...
-#' # No encoding supplied: defaulting to UTF-8.
-#' # Error in !r$success : invalid argument type
+#'  
+#' 
+#' 
+#' 
+#' 
 #' 
 resource_fetch <- function(url, 
                            path = tempfile()) {
@@ -60,12 +61,12 @@ resource_fetch <- function(url,
   
  if(Sys.setenv(USE_UAT=1) )   {
     httr::GET(url,
-            httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_KEY_UAT")),
+            httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_UAT_API_TOKEN")),
             httr::write_disk(path)) 
  }
   else  {
     httr::GET(url,
-            httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_KEY")),
+            httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_TOKEN")),
             httr::write_disk(path))    }
   cat(path)
   return()

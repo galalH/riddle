@@ -1,16 +1,10 @@
-
-
-# __WARNING__ This package is under development - a recent API update requires code update - 
-
-
-
 riddle
 ================
 
 This is a minimal package for programatically interacting with the
 [UNHCR Raw Internal Data Library (RIDL)](https://ridl.unhcr.org). 
-The main purpose served by this package is to make the RIDL API
-documentation more readily accessible within an R ecosystem for better automation.
+The main purpose served by this package is to make the [RIDL API
+documentation](https://docs.ckan.org/en/2.9/api/index.html) more readily accessible within an R ecosystem for better automation.
 
 
 
@@ -98,14 +92,17 @@ Once the dataset is created, you can add as many resources as required (either `
 
 ```{r}
 library(riddle)
+## let use UAT 
+Sys.setenv(USE_UAT=1)
 ## First we create the dataset metadata
 m <- dataset_metadata(title = "Motor Trend Car Road Tests",
-                      name = "mtcars",
+                      name = "testing-riddle",
                       notes = "The data was extracted from the 1974 Motor Trend 
                       US magazine, and comprises fuel consumption and 10 aspects
                       of automobile design and performance for 32 automobiles 
                       (1973–74 models).",
-                      owner_org = "exercise-container",
+                      owner_org = "americas", ## becarefull this is the 
+                                             ##canonincal name of the container
                       visibility = "public",
                       external_access_level = "open_access",
                       data_collector = "Motor Trend",
@@ -115,8 +112,8 @@ m <- dataset_metadata(title = "Motor Trend Car Road Tests",
                       archived = "False")
                       
 ## For the above to work - you need to make sure you have at least editor access
-# to the corresponding container - i.e. owner_org = "exercise-container"
-p <- dataset_create(m, uat = TRUE)
+# to the corresponding container - i.e. owner_org = "americas"
+p <- dataset_create(m)
 
 # The return value is a representation of the dataset we just created in
 # RIDL that you could inspect like any other R object.
@@ -125,7 +122,7 @@ p
 
 
 
-### Use case 2:  replace data file
+### Use case 2:  replace data file within dataset
 
 Ideally, data resources from kobotoolbox should be added using the API connection as described in 
 [Part 4 of the documentation](https://im.unhcr.org/ridl/#Link_kobo_ridl). 
@@ -141,7 +138,11 @@ Below is simple example using the `mtcars` dataset as an example.
 library(riddle)
 ## let's get again the details of the dataset we want to add the resource in 
 # based on a search...
-p <- dataset_search("tests")
+p <- dataset_search("testing-riddle")
+
+## and now can search for it - checking it is correctly there... 
+resource_search("name:mtcars")
+
 m <- resource_metadata(type = "data",
                        url = "mtcars.csv",
                        name = "mtcars.csv",
@@ -154,26 +155,17 @@ m <- resource_metadata(type = "data",
                        process_status = "raw",
                        identifiability = "anonymized_public")
 ## let's get again the details of the dataset we want to add the resource in..
-r <- resource_create(p$id, m, uat = TRUE)
+r <- resource_update(p$id, m, uat = TRUE)
 
 # Like before, the return value is a tibble representation of the
 # resource.
 r
 
-# But so far we’ve only created the metadata for the resource. The next
-# step is to upload the data.
-## not sure why this function is not there...
-## resource_upload(r$id, path = system.file("extdata/mtcars.csv", package = "readr"))
 
-## and now can search for it - checking it is correctly there... 
-resource_search("name:mtcars")
-
-# And once we’re done experimenting with the API, we should take down our
-# toy dataset since we don’t really need it on RIDL.
-dataset_delete(p$id)
 ```  
   
 ### Use case 3:  Add a new attachment with your reproducible analysis code 
+
 You want to add your own initial data exploration, data interpretation presentation 
 and/or data story telling report as a new `attachement` resource within a dataset. 
 
@@ -183,6 +175,28 @@ You can check a practical example of such use case here:[kobocruncher](https://e
 ```{r}
 library(riddle)
 
+
+
+# And once we’re done experimenting with the API, we should take down our
+# toy dataset since we don’t really need it on RIDL.
+dataset_delete(p$id)
+
 ```  
 
+
+### Use case 4:  Data Landscape Report
+
+The package includes a parameterized notebook template (with parameter including region and year) to assess data landscape.
+
+Based on metadata, the reports looks at what type of data are available per country and provide a ways to perform data gap analysis
+
+ *  How many dataset we have per country?  
+ *  Data set collected at household level  
+ *  Data set collected at Community level  
+ *  Data by Access type  
+ *  Data over time   
+ *  Data Collection Mode   
+ *  Data by Topic   
+ *  Data linked to Kobo in RIDL  
+ *  By Sampling type   
 

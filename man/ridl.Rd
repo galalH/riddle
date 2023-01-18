@@ -15,7 +15,8 @@ ridl(action, ..., .encoding = "json")
 \code{httr::response} object with the result of the call.
 }
 \description{
-Helper function to make API calls. Calls includes the 10 following actions:
+Helper function to make \href{https://docs.ckan.org/en/2.9/api/index.html#action-api-reference}{API calls}.
+Calls includes the 10 following actions:
 }
 \details{
 On dataset
@@ -27,7 +28,7 @@ On dataset
 \item "package_search"
 }
 
-On ressource
+On resource
 \itemize{
 \item "resource_create"
 \item "resource_update"

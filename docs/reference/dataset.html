@@ -116,20 +116,10 @@ not explicitly provided in the <code>metadata</code>.</p>
 <span class="r-in"><span><span class="co">#-----</span></span></span>
 <span class="r-in"><span><span class="co"># Test create in UAT</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span>USE_UAT<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># p &lt;- riddle::dataset_show('testedouard2')</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">### TO FIX -- geographies: Missing value</span></span></span>
-<span class="r-in"><span><span class="co">## __type: Validation Error ---</span></span></span>
-<span class="r-in"><span><span class="co">## cf https://github.com/okfn/ckanext-unhcr/blob/master/ckanext/unhcr/schemas/dataset.json#L670:L682</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="dataset_metadata.html">dataset_metadata</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Motor Trend Car Road Test two"</span>,</span></span>
-<span class="r-in"><span>                      name <span class="op">=</span> <span class="st">"mtcars_ed"</span>,</span></span>
-<span class="r-in"><span>                      notes <span class="op">=</span> <span class="st">"The data was extracted from the 1974 Motor Trend</span></span></span>
-<span class="r-in"><span><span class="st">                      US magazine, and comprises fuel consumption and 10 aspects</span></span></span>
-<span class="r-in"><span><span class="st">                      of automobile design and performance for 32 automobiles</span></span></span>
-<span class="r-in"><span><span class="st">                      (1973–74 models)."</span>,</span></span>
-<span class="r-in"><span>                      owner_org <span class="op">=</span> <span class="st">"Americas"</span>,</span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="dataset_metadata.html">dataset_metadata</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Testing Riddle Interface"</span>,</span></span>
+<span class="r-in"><span>                      name <span class="op">=</span> <span class="st">"riddleapitest"</span>,</span></span>
+<span class="r-in"><span>                      notes <span class="op">=</span> <span class="st">"Making an API test"</span>,</span></span>
+<span class="r-in"><span>                      owner_org <span class="op">=</span> <span class="st">"americas"</span>,  <span class="co">## be careful- all lower case!!!</span></span></span>
 <span class="r-in"><span>                      visibility <span class="op">=</span> <span class="st">"public"</span>,</span></span>
 <span class="r-in"><span>                      geographies <span class="op">=</span> <span class="st">"UNSPECIFIED"</span>,</span></span>
 <span class="r-in"><span>                      external_access_level <span class="op">=</span> <span class="st">"open_access"</span>,</span></span>
@@ -140,11 +130,13 @@ not explicitly provided in the <code>metadata</code>.</p>
 <span class="r-in"><span>                      archived <span class="op">=</span> <span class="st">"False"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># ## For the above to work - you need to make sure you have at least editor access</span></span></span>
 <span class="r-in"><span><span class="co"># to the corresponding container - i.e. owner_org = "exercise-container"</span></span></span>
-<span class="r-in"><span><span class="co"># p &lt;- riddle::dataset_create(metadata = m)</span></span></span>
+<span class="r-in"><span><span class="co"># p &lt;- dataset_create(metadata = m)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The return value is a representation of the dataset we just created in</span></span></span>
 <span class="r-in"><span><span class="co"># RIDL that you could inspect like any other R object.</span></span></span>
 <span class="r-in"><span><span class="co"># p</span></span></span>
+<span class="r-in"><span><span class="co">## Now deleting this!</span></span></span>
+<span class="r-in"><span><span class="co"># dataset_delete(id = p$id)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#-----</span></span></span>
 <span class="r-in"><span><span class="co"># Test create in prod</span></span></span>
@@ -152,7 +144,7 @@ not explicitly provided in the <code>metadata</code>.</p>
 <span class="r-in"><span><span class="co"># m1 &lt;- riddle::dataset_metadata(title = "Test",</span></span></span>
 <span class="r-in"><span><span class="co">#                       name = "Test",</span></span></span>
 <span class="r-in"><span><span class="co">#                       notes = "The data was extracted from kobo.",</span></span></span>
-<span class="r-in"><span><span class="co">#                       owner_org = "Americas : Regional Datasets",</span></span></span>
+<span class="r-in"><span><span class="co">#                       owner_org = "americas-regional-dataset",</span></span></span>
 <span class="r-in"><span><span class="co">#                       visibility = "public",</span></span></span>
 <span class="r-in"><span><span class="co">#                       geographies = "UNSPECIFIED",</span></span></span>
 <span class="r-in"><span><span class="co">#                       external_access_level = "open_access",</span></span></span>
