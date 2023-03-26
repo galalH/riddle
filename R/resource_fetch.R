@@ -59,7 +59,7 @@ resource_fetch <- function(url,
   ## Remove file if it exist..
   if (file.exists(path)) file.remove(path)
   
- if(Sys.setenv(USE_UAT=1) )   {
+ if(Sys.getenv("USE_UAT")==1)   {
     httr::GET(url,
             httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_UAT_API_TOKEN")),
             httr::write_disk(path)) 
@@ -68,6 +68,5 @@ resource_fetch <- function(url,
     httr::GET(url,
             httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_TOKEN")),
             httr::write_disk(path))    }
-  cat(path)
-  return()
+  path
 }
