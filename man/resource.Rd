@@ -4,6 +4,7 @@
 \alias{resource}
 \alias{resource_create}
 \alias{resource_update}
+\alias{resource_upload}
 \alias{resource_patch}
 \alias{resource_delete}
 \title{Work with RIDL resources (files)}
@@ -11,6 +12,8 @@
 resource_create(package_id, res_metadata)
 
 resource_update(id, res_metadata)
+
+resource_upload(package_id, res_metadata)
 
 resource_patch(id, res_metadata)
 
@@ -27,6 +30,8 @@ resource_delete(id)
 metadata resource.
 
 updated metadata resource.
+
+upload metadata resource.
 }
 \description{
 Work with RIDL resources (files)
@@ -35,9 +40,15 @@ Work with RIDL resources (files)
 You must have the necessary permissions to create, edit, or delete
 datasets and their resources.
 
-Note that several fields are required for \code{resource_create()} and
+Note that several fields are required for \code{resource_update()}, \code{resource_create()} and
 \code{resource_update()} operations to succeed.
 Consult \code{\link{resource_metadata()}} for the details.
+
+\code{resource_update()} will check if the resource exists in the dataset.
+If the resource name does not exist in the dataset, \code{resource_update()} will
+create a new resource. If the resource name already exists in the dataset,
+\code{resource_update()} will upload the resource and also increase the number
+in the version.
 
 For \code{resource_update()}/\code{resource_patch()} operations, it is recommended to
 call \code{resource_show()}, make the desired changes to the result, and then

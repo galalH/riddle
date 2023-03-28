@@ -8,9 +8,16 @@
 #' @details You must have the necessary permissions to create, edit, or delete 
 #'          datasets and their resources.
 #'
-#' Note that several fields are required for `resource_create()` and 
+#' Note that several fields are required for `resource_update()`, `resource_create()` and 
 #' `resource_update()` operations to succeed. 
-#'   Consult \code{\link{resource_metadata()}} for the details.
+#' Consult \code{\link{resource_metadata()}} for the details.
+#'
+#' `resource_update()` will check if the resource exists in the dataset. 
+#' If the resource name does not exist in the dataset, `resource_update()` will 
+#' create a new resource. If the resource name already exists in the dataset, 
+#' `resource_update()` will upload the resource and also increase the number 
+#' in the version.
+#'  
 #'
 #' For `resource_update()`/`resource_patch()` operations, it is recommended to 
 #' call `resource_show()`, make the desired changes to the result, and then 
@@ -159,6 +166,45 @@ resource_update <- function(id, res_metadata) {
   
   return(res)
 }
+
+#' @rdname resource
+#' @return upload metadata resource.
+#' @export
+resource_upload <- function(package_id, res_metadata) {
+  
+  resources_in_dataset <- dataset_show(package_id) |> 
+    select(resources)
+  
+  if(m$name %in% resources_in_dataset[[1]][[1]][["name"]]) {
+    
+    # Increase version in Metadata
+    res_metadata$version <- as.character(as.numeric(resources_in_dataset$resources[[1]][resources_in_dataset$resources[[1]]["name"] == res_metadata$name, c("version")][[1]]) + 1L)
+    
+    enc <- if(is.null(res_metadata$upload)) "json" else "multipart"
+    ridl(action ="resource_update",
+         id = resources_in_dataset$resources[[1]][resources_in_dataset$resources[[1]]["name"] == res_metadata$name, c("id")][[1]],  # find the resource ID
+         !!!res_metadata,
+         .encoding = enc) -> r
+    r$result %>% 
+      resource_tibblify()-> res
+    
+    return(res)
+    
+  } else {
+    ## enc needs to be adjusted to multipart in case a file is uploaded...
+    enc <- if(is.null(res_metadata$upload)) "json" else "multipart"
+    ridl(action ="resource_create", 
+         package_id = package_id,
+         !!!res_metadata,
+         .encoding = enc) -> r
+    r$result %>% 
+      resource_tibblify() -> res
+    
+    return(res)
+  }
+  
+}
+
 
 #' @rdname resource
 #' @export
