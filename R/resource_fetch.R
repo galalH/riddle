@@ -68,5 +68,5 @@ resource_fetch <- function(url,
     httr::GET(url,
             httr::add_headers("X-CKAN-API-Key" = Sys.getenv("RIDL_API_TOKEN")),
             httr::write_disk(path))    }
-  path
+  return(path)
 }
