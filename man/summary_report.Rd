@@ -4,11 +4,9 @@
 \alias{summary_report}
 \title{Generate a RIDL factsheet}
 \usage{
-summary_report(year = 2022, region = "Americas")
+summary_report(container = "Americas")
 }
 \arguments{
-\item{year}{Numeric value of the year (for instance 2020)}
-
 \item{container}{list of container to generate the factsheet to generate}
 }
 \description{

@@ -33,6 +33,7 @@ knitr::kable(riddle::keywords)
 
 
 
+
 # ridl
     
 ```{r function-ridl}
@@ -63,6 +64,8 @@ knitr::kable(riddle::keywords)
 #'
 #' @param action Operation to execute. See [CKAN's API documentation](https://docs.ckan.org/en/2.9/api/) for details.
 #' @param .encoding HTTP POST encoding to use - one of `json`, `form`, or `multipart`.
+#' @param ... whatever is needed
+#' @param verbose TRUE FALSE to display info on the console about the API call
 #' @importFrom httr POST
 #'
 #'
@@ -71,18 +74,21 @@ knitr::kable(riddle::keywords)
 
 ridl <- function(action,
                  ...,
-                 .encoding = "json") {
+                 .encoding = "json",
+                 verbose = FALSE) {
      # if(Sys.setenv(USE_UAT=1))  {
-    
-      print( c("Running ridl action", action))
+      if(verbose == TRUE) {print( c("Running ridl action", action))}
+      
 
       # It's ok to check the environment using Sys.setenv()?
       # Should Sys.getenv() will be better?
       if(Sys.getenv("USE_UAT") == 1)  {
         token <- Sys.getenv("RIDL_UAT_API_TOKEN")
-        print(" - env: UAT")
+        if(verbose == TRUE) {print(" - env: UAT")}
+        #print(" - env: UAT")
         #nchar(token) - show the end of the token as the beginning is more likely to be the same... 
-        print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )
+        if(verbose == TRUE) {print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )}
+        #print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )
       
         r <- httr::POST("https://ridl-uat.unhcr.org/",
                  path = glue::glue("/api/action/{action}"),
@@ -96,9 +102,12 @@ ridl <- function(action,
     } else    {
       
       token <- Sys.getenv("RIDL_API_TOKEN")
-      print(" - env: PRODUCTION")
+        if(verbose == TRUE) {print(" - env: PRODUCTION")}
+        # print(" - env: PRODUCTION")
+      
       #nchar(token) - show the end of the token as the beginning is more likely to be the same... 
-      print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )
+        if(verbose == TRUE) { print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )}
+       #  print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )
     
       r <- httr::POST("https://ridl.unhcr.org/",
                  path = glue::glue("/api/action/{action}"),
@@ -112,7 +121,8 @@ ridl <- function(action,
        }
   
   ## Display results in console
-  message(r$result)
+    if(verbose == TRUE) {message(r$result)}
+  
   ## Error catching
   if (!r$success)
     stop(r$error %>%
@@ -139,6 +149,150 @@ test_that("ridl works", {
  # expect_error(ridl(action = "invalid"), "Invalid action: invalid")
   })
 ```
+
+# container_show
+    
+```{r function-container_show}
+#' container_show  
+#' 
+#' Get an overview of accessible infos about all containers in RIDL
+#'  Use https://docs.ckan.org/en/2.9/api/index.html#ckan.logic.action.get.organization_show  
+#' @param id id or name of the container
+#' @return a dataframe with container metadata
+#' 
+#' @export
+container_show <- function(id) {
+      ridl(action ="organization_show",
+           include_datasets = TRUE,
+           id = id)-> r
+    r$result %>% 
+    dataset_tibblify() -> res
+}
+```
+  
+```{r example-container_show}
+# americasdataset <- container_show( id = "americas-regional-dataset")
+```
+  
+```{r tests-container_show}
+test_that("container_show works", {
+  expect_true(inherits(container_show, "function")) 
+})
+```
+
+
+# container_list
+    
+```{r function-container_list}
+#' container_list
+#' 
+#' Provide a list of all child containers for a specific container
+#' 
+#' This function is used to generate a regional dashbaord..
+#' Be carefull - it's an expansive functions at it needs to parse the entire 
+#' content of the server.... 
+#' 
+#' uses https://docs.ckan.org/en/2.9/api/index.html#ckan.logic.action.get.organization_list
+#' @param parent name of the container
+#' @return catalog of containers
+#' 
+#' @importFrom tibble as_tibble
+#' @importFrom tidyr unnest_wider
+#' @importFrom purrr map list_rbind
+#' 
+#' @export
+container_list <- function(parent) {
+    
+    ## First we list all the containers in the server
+    container_get <- function() {
+      ridl(action ="organization_list",
+           type = "data-container" ) -> r
+      r$result  |> length() -> res
+    
+      return(res)  }
+    cont <- container_get()
+    
+    ## Now we build the full catalog 
+    catalog <-
+      purrr::map(seq(0, cont, by = 25),
+          \(x) ridl(action ="organization_list",
+                    type = "data-container",
+                    offset = x,
+                    all_fields = TRUE,
+                    include_groups = TRUE)  %>% .[["result"]]) |>
+      purrr::list_rbind() |>
+      tidyr::unnest_wider(groups, names_sep = "_") |>
+      tibble::as_tibble()
+    
+    return(catalog)
+}
+ 
+```
+  
+```{r example-container_list}
+# catalog <- container_list()
+# groups_name <- catalog |>
+#                   dplyr::select(groups_name) |>
+#                   dplyr::distinct()
+
+```
+  
+```{r tests-container_list}
+test_that("container_list works", {
+  expect_true(inherits(container_list, "function")) 
+})
+```
+  
+  
+# find_child_containers
+    
+```{r function-find_child_containers}
+#' find_child_containers
+#' 
+#' Provide a list of all child containers - including nested one - for a specific container
+#' 
+#' Be carefull - it's an expansive functions at it needs to parse the entire 
+#' content of the server.... 
+#' 
+#' @param parent name of the parent container
+#' @param catalog daaframe object with a catalog of container produced by container_list()
+#' 
+#' @return vector with all child container
+#' 
+#' @importFrom dplyr filter
+#' @importFrom rlang is_empty
+#' @importFrom purrr map
+#' 
+#' @export
+find_child_containers <- function(parent, catalog ) {
+   # catalog <- container_list()
+    
+    find_child_containers2 <- function(parent) {
+    ## Now we filter the catalog only for the children of the desired container
+      children <- dplyr::filter(catalog, groups_name == parent)$name
+      if (rlang::is_empty(children))
+        return(NULL)
+      c(children, unlist(purrr::map(children, find_child_containers2))) }
+    
+   result <-  find_child_containers2(parent)
+
+}
+
+```
+  
+```{r example-find_child_containers}
+#catalog <- container_list()
+# containerAmericas <- find_child_containers(parent = "americas",
+#                                            catalog = catalog)
+```
+  
+```{r tests-find_child_containers}
+test_that("find_child_containers works", {
+  expect_true(inherits(find_child_containers, "function")) 
+})
+```
+  
+
 
 # dataset_metadata
 
@@ -661,6 +815,7 @@ test_that("search works", {   expect_true(inherits(dataset_search, "function")) 
 #' @param description Description - Some usefule notes about the data.
 #' @param format File format - eg. CSV, XML, or JSON.
 #' @param file_type File type(*) - Indicates what is contained in the file. Allowed values: `microdata` (Microdata), `questionnaire` (Questionnaire), `report` (Report), `sampling_methodology` (Sampling strategy & methodology Description), `infographics` (Infographics & Dashboard), `script` (Script), `concept note` (Concept Note), `other` (Other).
+#' @param `hxl-ated` HXL-ated.
 #' @param date_range_start Data collection first date(*) - Use yyyy-mm-dd format.
 #' @param date_range_end Data collection last date(*) - Use yyyy-mm-dd format.
 #' @param upload File to upload. Passed using `httr::upload_file()`.
@@ -866,11 +1021,12 @@ resource_update <- function(id, res_metadata) {
 
 #' @rdname resource
 #' @return upload metadata resource.
+#' @importFrom dplyr select
 #' @export
 resource_upload <- function(package_id, res_metadata) {
   
   resources_in_dataset <- dataset_show(package_id) |> 
-    select(resources)
+    dplyr::select(resources)
   
   if(m$name %in% resources_in_dataset[[1]][[1]][["name"]]) {
     
@@ -1065,7 +1221,8 @@ resource_fetch <- function(url,
 # Sys.unsetenv("USE_UAT")
 
 
-# resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',   path = tempfile())
+# resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',
+# path = tempfile())
 
 
 ## Example 2: Let's try to identify a resource - then fetch it locally and update it back... as from here
@@ -1083,14 +1240,18 @@ resource_fetch <- function(url,
 # m <- resource_metadata(type = test_ressources$type, #"data",
 #                          url = "df_gender_2020.csv",
 # upload = httr::upload_file(here::here("file")),
- #                          name = test_ressources$name, # "Irregular entries by gender in 2022",
+ #                          name = test_ressources$name, 
+# "Irregular entries by gender in 2022",
 #                          format = test_ressources$format, #"csv",
 #                          file_type =  test_ressources$file_type, #"microdata",
 #                          visibility = test_ressources$visibility, # "public",
-#                          date_range_start =  test_ressources$date_range_start, # "2022-01-01",
-#                          date_range_end = test_ressources$date_range_end, #as.character(floor_date(today('America/Panama'), "month") - days(1)), #end day of last month
+#                          date_range_start =  test_ressources$date_range_start,
+# "2022-01-01",
+#                          date_range_end = test_ressources$date_range_end, #as.character(floor_date(today('America/Panama'), "month") - days(1)), 
+#end day of last month
 #                          version = test_ressources$version, # "0",
-#                          process_status = test_ressources$process_status, #"anonymized",
+#                          process_status = test_ressources$process_status, 
+#"anonymized",
 #                          identifiability = test_ressources$identifiability, #"anonymized_public"
 #   )
 
@@ -1125,42 +1286,16 @@ test_that("resource_fetch works", {
 
 #' Generate a RIDL factsheet 
 #' 
-#' @param year Numeric value of the year (for instance 2020)
 #' @param container list of container to generate the factsheet to generate
 #' @importFrom unhcrdown paged_simple
 #' 
 #' @export
-#'
-
-summary_report <- function(year = 2022,
-                                   region = "Americas") {
-  
-  #  ctr <- dplyr::left_join( x= unhcrdatapackage::end_year_population_totals_long, 
-  #                               y= unhcrdatapackage::reference, 
-  #                               by = c("CountryAsylumCode" = "iso_3")) %>%
-  #       filter(Year == year & 
-  #                UNHCRBureau == region ) %>%
-  #       group_by( CountryAsylumName, CountryAsylumCode   ) %>%
-  #       summarise(Value = sum(Value) ) %>%
-  #       ungroup() %>%
-  #       filter( Value  > 1000 )
-  # 
-  # for ( i in (1:nrow(ctr))) {
-  #   ctrname = ctr[i ,1 ]
-  #   ctrcode = ctr[i ,2 ]
-  # 
-  # rmarkdown::render(
-  #   system.file("rmarkdown/templates/summary_report/skeleton/skeleton.Rmd", package = "riddle"),
-  #   output_file = here::here(paste0('StatFactsheet-', ctrcode, '-', year, '.html') ),
-  #   params = list(countryname= ctrname,
-  #                 country =ctrcode, 
-  #                 year = year)  )
-  # 
-  # }
-   
-}
-
-
+summary_report <- function(container = "Americas") {
+  rmarkdown::render(
+    system.file("rmarkdown/templates/summary_report/skeleton/skeleton.Rmd", package = "riddle"),
+    output_file = here::here(paste0('StatFactsheet-', container,   '.html') ),
+    params = list(container = container)  )
+  }
 ```
   
 ```{r example-summary_report}

@@ -4,12 +4,16 @@
 \alias{ridl}
 \title{apihelper}
 \usage{
-ridl(action, ..., .encoding = "json")
+ridl(action, ..., .encoding = "json", verbose = FALSE)
 }
 \arguments{
 \item{action}{Operation to execute. See \href{https://docs.ckan.org/en/2.9/api/}{CKAN's API documentation} for details.}
 
+\item{...}{whatever is needed}
+
 \item{.encoding}{HTTP POST encoding to use - one of \code{json}, \code{form}, or \code{multipart}.}
+
+\item{verbose}{TRUE FALSE to display info on the console about the API call}
 }
 \value{
 \code{httr::response} object with the result of the call.

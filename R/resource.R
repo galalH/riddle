@@ -169,11 +169,12 @@ resource_update <- function(id, res_metadata) {
 
 #' @rdname resource
 #' @return upload metadata resource.
+#' @importFrom dplyr select
 #' @export
 resource_upload <- function(package_id, res_metadata) {
   
   resources_in_dataset <- dataset_show(package_id) |> 
-    select(resources)
+    dplyr::select(resources)
   
   if(m$name %in% resources_in_dataset[[1]][[1]][["name"]]) {
     

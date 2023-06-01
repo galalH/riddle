@@ -27,6 +27,8 @@
 #'
 #' @param action Operation to execute. See [CKAN's API documentation](https://docs.ckan.org/en/2.9/api/) for details.
 #' @param .encoding HTTP POST encoding to use - one of `json`, `form`, or `multipart`.
+#' @param ... whatever is needed
+#' @param verbose TRUE FALSE to display info on the console about the API call
 #' @importFrom httr POST
 #'
 #'
@@ -37,18 +39,21 @@
 #' # ridl(action ="package_search", as.list("cbi"))
 ridl <- function(action,
                  ...,
-                 .encoding = "json") {
+                 .encoding = "json",
+                 verbose = FALSE) {
      # if(Sys.setenv(USE_UAT=1))  {
-    
-      print( c("Running ridl action", action))
+      if(verbose == TRUE) {print( c("Running ridl action", action))}
+      
 
       # It's ok to check the environment using Sys.setenv()?
       # Should Sys.getenv() will be better?
       if(Sys.getenv("USE_UAT") == 1)  {
         token <- Sys.getenv("RIDL_UAT_API_TOKEN")
-        print(" - env: UAT")
+        if(verbose == TRUE) {print(" - env: UAT")}
+        #print(" - env: UAT")
         #nchar(token) - show the end of the token as the beginning is more likely to be the same... 
-        print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )
+        if(verbose == TRUE) {print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )}
+        #print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )
       
         r <- httr::POST("https://ridl-uat.unhcr.org/",
                  path = glue::glue("/api/action/{action}"),
@@ -62,9 +67,12 @@ ridl <- function(action,
     } else    {
       
       token <- Sys.getenv("RIDL_API_TOKEN")
-      print(" - env: PRODUCTION")
+        if(verbose == TRUE) {print(" - env: PRODUCTION")}
+        # print(" - env: PRODUCTION")
+      
       #nchar(token) - show the end of the token as the beginning is more likely to be the same... 
-      print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )
+        if(verbose == TRUE) { print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )}
+       #  print( c(" - key", substr(token, (nchar(token)-5) , nchar(token))  ) )
     
       r <- httr::POST("https://ridl.unhcr.org/",
                  path = glue::glue("/api/action/{action}"),
@@ -78,7 +86,8 @@ ridl <- function(action,
        }
   
   ## Display results in console
-  message(r$result)
+    if(verbose == TRUE) {message(r$result)}
+  
   ## Error catching
   if (!r$success)
     stop(r$error %>%

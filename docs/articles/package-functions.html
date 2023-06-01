@@ -9,8 +9,8 @@
 <title>Package Functions • riddle</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Lato-0.4.5/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.5/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Lato-0.4.6/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.6/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Package Functions">
@@ -92,9 +92,32 @@
 <code class="sourceCode R"><span><span class="co"># ridl(action ="package_search", as.list("cbi"))</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="dataset_metadata">dataset_metadata<a class="anchor" aria-label="anchor" href="#dataset_metadata"></a>
+<h2 id="container_show">container_show<a class="anchor" aria-label="anchor" href="#container_show"></a>
 </h2>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># americasdataset &lt;- container_show( id = "americas-regional-dataset")</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="container_list">container_list<a class="anchor" aria-label="anchor" href="#container_list"></a>
+</h2>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># catalog &lt;- container_list()</span></span>
+<span><span class="co"># groups_name &lt;- catalog |&gt;</span></span>
+<span><span class="co">#                   dplyr::select(groups_name) |&gt;</span></span>
+<span><span class="co">#                   dplyr::distinct()</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="find_child_containers">find_child_containers<a class="anchor" aria-label="anchor" href="#find_child_containers"></a>
+</h2>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#catalog &lt;- container_list()</span></span>
+<span><span class="co"># containerAmericas &lt;- find_child_containers(parent = "americas",</span></span>
+<span><span class="co">#                                            catalog = catalog)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="dataset_metadata">dataset_metadata<a class="anchor" aria-label="anchor" href="#dataset_metadata"></a>
+</h2>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dataset_metadata.html">dataset_metadata</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Motor Trend Car Road Tests"</span>,</span>
 <span>                      name <span class="op">=</span> <span class="st">"mtcars"</span>,</span>
 <span>                      notes <span class="op">=</span> <span class="st">"The data was extracted from the 1974 Motor Trend </span></span>
@@ -152,7 +175,7 @@
 <div class="section level2">
 <h2 id="dataset_tibblify">dataset_tibblify<a class="anchor" aria-label="anchor" href="#dataset_tibblify"></a>
 </h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dataset_metadata.html">dataset_metadata</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Motor Trend Car Road Tests"</span>,</span>
 <span>                      name <span class="op">=</span> <span class="st">"mtcars"</span>,</span>
 <span>                      notes <span class="op">=</span> <span class="st">"The data was extracted from the 1974 Motor Trend </span></span>
@@ -181,7 +204,7 @@
 <div class="section level2">
 <h2 id="dataset">dataset<a class="anchor" aria-label="anchor" href="#dataset"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span></span>
 <span><span class="co">#-----</span></span>
@@ -240,7 +263,7 @@
 <div class="section level2">
 <h2 id="dataset_search">dataset_search<a class="anchor" aria-label="anchor" href="#dataset_search"></a>
 </h2>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#-----</span></span>
 <span><span class="co"># Test search in prod</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.unsetenv</a></span><span class="op">(</span><span class="st">"USE_UAT"</span><span class="op">)</span></span>
@@ -257,7 +280,7 @@
 <div class="section level2">
 <h2 id="resource_metadata">resource_metadata<a class="anchor" aria-label="anchor" href="#resource_metadata"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#resource_metadata()</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="../reference/resource_metadata.html">resource_metadata</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"data"</span>,</span>
 <span>                       url <span class="op">=</span> <span class="st">"mtcars.csv"</span>,</span>
@@ -307,7 +330,7 @@
 <div class="section level2">
 <h2 id="resource_tibblify">resource_tibblify<a class="anchor" aria-label="anchor" href="#resource_tibblify"></a>
 </h2>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">riddle</span><span class="fu">::</span><span class="fu"><a href="../reference/resource_metadata.html">resource_metadata</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">"data"</span>,</span>
 <span>                       url <span class="op">=</span> <span class="st">"mtcars.csv"</span>,</span>
 <span> <span class="co"># upload = httr::upload_file(system.file("extdata/mtcars.csv", package = "readr")),</span></span>
@@ -336,7 +359,7 @@
 <div class="section level2">
 <h2 id="resource">resource<a class="anchor" aria-label="anchor" href="#resource"></a>
 </h2>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ## Full example available with the fetch function..</span></span>
 <span><span class="co">#-----</span></span>
 <span><span class="co"># ## Test search in prod</span></span>
@@ -422,7 +445,7 @@
 <div class="section level2">
 <h2 id="resource_fetch">resource_fetch<a class="anchor" aria-label="anchor" href="#resource_fetch"></a>
 </h2>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co">## Example 1: with a direct URL</span></span>
 <span><span class="co">#-----</span></span>
@@ -430,7 +453,8 @@
 <span><span class="co"># Sys.unsetenv("USE_UAT")</span></span>
 <span></span>
 <span></span>
-<span><span class="co"># resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',   path = tempfile())</span></span>
+<span><span class="co"># resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',</span></span>
+<span><span class="co"># path = tempfile())</span></span>
 <span></span>
 <span></span>
 <span><span class="co">## Example 2: Let's try to identify a resource - then fetch it locally and update it back... as from here</span></span>
@@ -448,14 +472,18 @@
 <span><span class="co"># m &lt;- resource_metadata(type = test_ressources$type, #"data",</span></span>
 <span><span class="co">#                          url = "df_gender_2020.csv",</span></span>
 <span><span class="co"># upload = httr::upload_file(here::here("file")),</span></span>
-<span> <span class="co">#                          name = test_ressources$name, # "Irregular entries by gender in 2022",</span></span>
+<span> <span class="co">#                          name = test_ressources$name, </span></span>
+<span><span class="co"># "Irregular entries by gender in 2022",</span></span>
 <span><span class="co">#                          format = test_ressources$format, #"csv",</span></span>
 <span><span class="co">#                          file_type =  test_ressources$file_type, #"microdata",</span></span>
 <span><span class="co">#                          visibility = test_ressources$visibility, # "public",</span></span>
-<span><span class="co">#                          date_range_start =  test_ressources$date_range_start, # "2022-01-01",</span></span>
-<span><span class="co">#                          date_range_end = test_ressources$date_range_end, #as.character(floor_date(today('America/Panama'), "month") - days(1)), #end day of last month</span></span>
+<span><span class="co">#                          date_range_start =  test_ressources$date_range_start,</span></span>
+<span><span class="co"># "2022-01-01",</span></span>
+<span><span class="co">#                          date_range_end = test_ressources$date_range_end, #as.character(floor_date(today('America/Panama'), "month") - days(1)), </span></span>
+<span><span class="co">#end day of last month</span></span>
 <span><span class="co">#                          version = test_ressources$version, # "0",</span></span>
-<span><span class="co">#                          process_status = test_ressources$process_status, #"anonymized",</span></span>
+<span><span class="co">#                          process_status = test_ressources$process_status, </span></span>
+<span><span class="co">#"anonymized",</span></span>
 <span><span class="co">#                          identifiability = test_ressources$identifiability, #"anonymized_public"</span></span>
 <span><span class="co">#   )</span></span>
 <span></span>
@@ -466,7 +494,7 @@
 <div class="section level2">
 <h2 id="summary_report">summary_report<a class="anchor" aria-label="anchor" href="#summary_report"></a>
 </h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># summary_report(year = 2022,</span></span>
 <span><span class="co">#                                    region = "Americas")</span></span></code></pre></div>
 </div>

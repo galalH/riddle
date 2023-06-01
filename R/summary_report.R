@@ -11,42 +11,16 @@
 
 #' Generate a RIDL factsheet 
 #' 
-#' @param year Numeric value of the year (for instance 2020)
 #' @param container list of container to generate the factsheet to generate
 #' @importFrom unhcrdown paged_simple
 #' 
 #' @export
-#'
-
 #' @examples
 #' # summary_report(year = 2022,
 #' #                                    region = "Americas")
-summary_report <- function(year = 2022,
-                                   region = "Americas") {
-  
-  #  ctr <- dplyr::left_join( x= unhcrdatapackage::end_year_population_totals_long, 
-  #                               y= unhcrdatapackage::reference, 
-  #                               by = c("CountryAsylumCode" = "iso_3")) %>%
-  #       filter(Year == year & 
-  #                UNHCRBureau == region ) %>%
-  #       group_by( CountryAsylumName, CountryAsylumCode   ) %>%
-  #       summarise(Value = sum(Value) ) %>%
-  #       ungroup() %>%
-  #       filter( Value  > 1000 )
-  # 
-  # for ( i in (1:nrow(ctr))) {
-  #   ctrname = ctr[i ,1 ]
-  #   ctrcode = ctr[i ,2 ]
-  # 
-  # rmarkdown::render(
-  #   system.file("rmarkdown/templates/summary_report/skeleton/skeleton.Rmd", package = "riddle"),
-  #   output_file = here::here(paste0('StatFactsheet-', ctrcode, '-', year, '.html') ),
-  #   params = list(countryname= ctrname,
-  #                 country =ctrcode, 
-  #                 year = year)  )
-  # 
-  # }
-   
-}
-
-
+summary_report <- function(container = "Americas") {
+  rmarkdown::render(
+    system.file("rmarkdown/templates/summary_report/skeleton/skeleton.Rmd", package = "riddle"),
+    output_file = here::here(paste0('StatFactsheet-', container,   '.html') ),
+    params = list(container = container)  )
+  }

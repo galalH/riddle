@@ -32,6 +32,55 @@ library(riddle)
 
   
 
+# container_show
+
+    
+
+  
+
+```{r example-container_show}
+# americasdataset <- container_show( id = "americas-regional-dataset")
+```
+
+  
+
+# container_list
+
+    
+
+  
+
+```{r example-container_list}
+# catalog <- container_list()
+# groups_name <- catalog |>
+#                   dplyr::select(groups_name) |>
+#                   dplyr::distinct()
+
+```
+
+  
+
+  
+  
+
+# find_child_containers
+
+    
+
+  
+
+```{r example-find_child_containers}
+#catalog <- container_list()
+# containerAmericas <- find_child_containers(parent = "americas",
+#                                            catalog = catalog)
+```
+
+  
+
+  
+
+
+
 # dataset_metadata
 
   
@@ -341,7 +390,8 @@ m1
 # Sys.unsetenv("USE_UAT")
 
 
-# resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',   path = tempfile())
+# resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',
+# path = tempfile())
 
 
 ## Example 2: Let's try to identify a resource - then fetch it locally and update it back... as from here
@@ -359,14 +409,18 @@ m1
 # m <- resource_metadata(type = test_ressources$type, #"data",
 #                          url = "df_gender_2020.csv",
 # upload = httr::upload_file(here::here("file")),
- #                          name = test_ressources$name, # "Irregular entries by gender in 2022",
+ #                          name = test_ressources$name, 
+# "Irregular entries by gender in 2022",
 #                          format = test_ressources$format, #"csv",
 #                          file_type =  test_ressources$file_type, #"microdata",
 #                          visibility = test_ressources$visibility, # "public",
-#                          date_range_start =  test_ressources$date_range_start, # "2022-01-01",
-#                          date_range_end = test_ressources$date_range_end, #as.character(floor_date(today('America/Panama'), "month") - days(1)), #end day of last month
+#                          date_range_start =  test_ressources$date_range_start,
+# "2022-01-01",
+#                          date_range_end = test_ressources$date_range_end, #as.character(floor_date(today('America/Panama'), "month") - days(1)), 
+#end day of last month
 #                          version = test_ressources$version, # "0",
-#                          process_status = test_ressources$process_status, #"anonymized",
+#                          process_status = test_ressources$process_status, 
+#"anonymized",
 #                          identifiability = test_ressources$identifiability, #"anonymized_public"
 #   )
 

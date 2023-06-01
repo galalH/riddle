@@ -14,6 +14,7 @@
 #' @param description Description - Some usefule notes about the data.
 #' @param format File format - eg. CSV, XML, or JSON.
 #' @param file_type File type(*) - Indicates what is contained in the file. Allowed values: `microdata` (Microdata), `questionnaire` (Questionnaire), `report` (Report), `sampling_methodology` (Sampling strategy & methodology Description), `infographics` (Infographics & Dashboard), `script` (Script), `concept note` (Concept Note), `other` (Other).
+#' @param `hxl-ated` HXL-ated.
 #' @param date_range_start Data collection first date(*) - Use yyyy-mm-dd format.
 #' @param date_range_end Data collection last date(*) - Use yyyy-mm-dd format.
 #' @param upload File to upload. Passed using `httr::upload_file()`.

@@ -5,7 +5,8 @@ Authors@R: c(
     person("Hisham", "Galal", , "galalh@unhcr.org", role = c("aut", "cre")),
     person("Edouard", "Legoupil", , "legoupil@unhcr.org", role = "aut")
   )
-Description: Wrapper functions to work with the RIDL API from R
+Description: The package wraps functions to work with the RIDL API
+    ridl.unhcr.org from R.
 License: MIT + file LICENSE
 URL: https://edouard-legoupil.github.io/riddle/
 BugReports: https://github.com/edouard-legoupil/riddle/issues
@@ -14,17 +15,19 @@ Depends:
 Imports: 
     dplyr,
     glue,
+    here,
     httr,
     magrittr,
     purrr,
     rlang,
+    rmarkdown,
     stringr,
     tibble,
+    tidyr,
     tidyselect,
     unhcrdown
 Suggests: 
     knitr,
-    rmarkdown,
     testthat
 VignetteBuilder: 
     knitr

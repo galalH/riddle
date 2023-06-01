@@ -25,7 +25,8 @@ Fetch resource from RIDL
 # Sys.unsetenv("USE_UAT")
 
 
-# resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',   path = tempfile())
+# resource_fetch(url = 'https://ridl.unhcr.org/dataset/a60f4b79-8acc-4893-8fb9-d52f94416b19/resource/daa2b9e4-bf97-4302-86a5-08bb62a5a937/download/df_age_2022.csv',
+# path = tempfile())
 
 
 ## Example 2: Let's try to identify a resource - then fetch it locally and update it back... as from here
@@ -43,14 +44,18 @@ Fetch resource from RIDL
 # m <- resource_metadata(type = test_ressources$type, #"data",
 #                          url = "df_gender_2020.csv",
 # upload = httr::upload_file(here::here("file")),
- #                          name = test_ressources$name, # "Irregular entries by gender in 2022",
+ #                          name = test_ressources$name, 
+# "Irregular entries by gender in 2022",
 #                          format = test_ressources$format, #"csv",
 #                          file_type =  test_ressources$file_type, #"microdata",
 #                          visibility = test_ressources$visibility, # "public",
-#                          date_range_start =  test_ressources$date_range_start, # "2022-01-01",
-#                          date_range_end = test_ressources$date_range_end, #as.character(floor_date(today('America/Panama'), "month") - days(1)), #end day of last month
+#                          date_range_start =  test_ressources$date_range_start,
+# "2022-01-01",
+#                          date_range_end = test_ressources$date_range_end, #as.character(floor_date(today('America/Panama'), "month") - days(1)), 
+#end day of last month
 #                          version = test_ressources$version, # "0",
-#                          process_status = test_ressources$process_status, #"anonymized",
+#                          process_status = test_ressources$process_status, 
+#"anonymized",
 #                          identifiability = test_ressources$identifiability, #"anonymized_public"
 #   )
 
